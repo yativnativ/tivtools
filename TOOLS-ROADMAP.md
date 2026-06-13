@@ -5,48 +5,49 @@ Bewertungslogik: Suchvolumen/SEO-Potenzial × Eigenständigkeit (eigene URL-Clus
 Conversion/Goal × Bau-Aufwand. Alles statisch, ein Datensatz wird zu vielen
 indexierbaren Seiten, deploybar per `git push`.
 
-## Live
+## Live (Stand 13.6.2026)
 
 1. **E-Nummern-Checker** (`/e-nummern/`) — 113 Zusatzstoffe, je eine SEO-Seite.
    Long-tail "E… vegan", "ist … vegan". Traffic-Anker.
 2. **Vegan-Ersatz-Finder** (`/vegan-ersetzen/`) — 17 Zutaten (Ei, Butter, Milch,
-   Käse, Gelatine …). Riesiges evergreen Volumen ("X vegan ersetzen", "X-Ersatz").
-   Hohe Praxis-Intention, verlinkt natürlich zu Rezepten und Produkten.
+   Käse, Gelatine …). Evergreen "X vegan ersetzen". Praxis-Intention, Rezept-Bezug.
+3. **Nährstoff-Rechner** (`/naehrstoffrechner/`) — Protein, B12, Eisen, Omega-3,
+   Calcium, personalisiert. 5 Detailseiten. Ziel: Umsatz (Supplement/Protein).
+4. **Impact-Rechner** (`/impact-rechner/`) — gerettete Tiere, CO2, Wasser, Fläche.
+   Share-/Backlink-stark, Tierschutz-Mission. Transparente Methodik.
+5. **Ist das vegan?** (`/ist-das-vegan/`) — 40 Lebensmittel (Wein, Brot, Pommes …).
+   Greift die Masse der "ist X vegan"-Suchen ab. Ergänzt E-Nummern.
+6. **Saisonkalender** (`/saisonkalender/`) — 45 Sorten, 12 Monatsseiten.
+   Wiederkehrender Saison-Traffic, Freiland/Lager, starke interne Verlinkung.
 
-## Tier 1 — als Nächstes bauen (höchster Hebel)
+Gesamt: rund 195 Seiten, alle mit FAQ- + Breadcrumb-Schema, Canonical, OG.
 
-3. **Veganer Nährstoff-Bedarf-Rechner** (Protein, B12, Eisen, Omega-3, Calcium)
-   - Eingabe Gewicht/Aktivität → Tagesbedarf + beste pflanzliche Quellen je Nährstoff.
-   - Warum: hohe Intention ("veganer Proteinbedarf", "B12 Bedarf vegan"), Rechner
-     ziehen Backlinks, und es ist der natürliche Ort für die Supplement- und
-     Proteinpulver-Empfehlungen (Nutri+ zuerst). **Goal: Umsatz + Autorität.**
-   - Achtung: keine Heilversprechen, konservative Werte, Quellen-Disclaimer
-     (Bedarf höher als DGE, 1,2–1,6 g/kg Protein). Werte als Orientierung framen.
+## Nächste Ideen (priorisiert)
 
-4. **Impact-Rechner "Was deine Ernährung bewirkt"**
-   - Eingabe Tage/Jahre vegan → gerettete Tiere, CO2, Wasser, Land gespart.
-   - Warum: emotional, extrem teilbar → Social-Traffic + Backlinks, zahlt direkt
-     auf die Tierschutz-Mission ein. **Goal: Reichweite + Marke.**
-   - Achtung: nur belegbare, klar zitierte Zahlen (Mittelwerte aus Studien),
-     transparente Methodik-Box, eher konservativ rechnen.
-
-## Tier 2 — danach
-
-5. **"Ist das vegan?" Lebensmittel- und Marken-Checker** — breiter als E-Nummern
-   (Wein, Gnocchi, Pesto, Süßigkeiten, Marken). Deckt die Masse an "ist X vegan"-Suchen.
-6. **Vegan-Saisonkalender** — welches Gemüse/Obst hat gerade Saison, mit Rezept-Links.
-   Wiederkehrender Saison-Traffic, starke interne Verlinkung.
-7. **Rezept-Nährwert-/Protein-pro-Portion-Rechner** — ergänzt Tool 3, Foodie-Intention.
-
-## Tier 3 — nice to have
-
-8. Vegan-auf-Reisen-Sätze (Übersetzungs-Spickzettel), Einkaufslisten-Generator,
-   Etiketten-Scanner (braucht Backend, später).
+7. **"Ist das vegan?" ausbauen** auf 100+ Lebensmittel und echte Marken
+   (Markenname + Produkt). Marken-Suchen sind riesig und kaum bedient.
+8. **Protein-pro-Gericht-Rechner** — Lebensmittel kombinieren, Protein/Portion sehen.
+   Ergänzt den Nährstoff-Rechner, Foodie-Intention, Affiliate-Bezug.
+9. **Vegane-Reise-Spickzettel** — "Ich bin vegan"-Sätze + versteckt-tierisch-Begriffe
+   pro Sprache. Nische, aber teilbar und ohne Konkurrenz.
+10. **Pflanzendrink-Vergleich** — Hafer/Soja/Mandel etc. nach Eignung (Kaffee, Backen,
+    Protein, CO2). Kauf-Intention, Affiliate.
+11. **Saisonkalender erweitern**: pro Sorte eine Seite ("Erdbeeren Saison") mit
+    Rezept-Links, plus Kräuter und Salate.
 
 ## Bauprinzip für jedes Tool
 
 - Ein JSON-Datensatz in `data/`, eine `build_<tool>()`-Funktion, Hub-Card ergänzen,
-  ItemList-Schema im Hub erweitern. Pro Eintrag eine indexierbare Seite mit
-  FAQ- + Breadcrumb-Schema, Canonical, OG, interne Links zu Magazin/Rezepten.
-- Voice: locker, direkt, keine Floskeln, keine Em-Dashes, sentence case.
-- Bei allem mit Gesundheitsbezug: Orientierung statt Beratung, Disclaimer, Quellen.
+  ItemList-Schema im Hub erweitern, in `main()` registrieren. Pro Eintrag eine
+  indexierbare Seite mit FAQ- + Breadcrumb-Schema, Canonical, OG, interne Links.
+- Voice: locker, direkt, keine Floskeln, kein KI-Wording, keine Em-Dashes, sentence case.
+- Responsive ist durch die bestehenden CSS-Muster abgedeckt (Grids auto-fit,
+  Rechner stapeln unter 620px). Neue Tools die Muster wiederverwenden.
+- Bei allem mit Gesundheits- oder Umweltbezug: Orientierung statt Beratung,
+  Disclaimer, konservative Werte, transparente Methodik.
+
+## Offen (Infrastruktur)
+
+- Subdomain `tools.this-is-vegan.com` ans Worker hängen (Subdomain-Delegation zu
+  Cloudflare, Kinsta bleibt Host). Danach `workers_dev: false` setzen.
+- Später optional Subdirectory `this-is-vegan.com/tools/` plus WP-Menü/Ads-Nachbau.
