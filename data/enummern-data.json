@@ -1,0 +1,821 @@
+{
+  "meta": {
+    "version": 1,
+    "lastUpdated": "2026-06-12",
+    "statusValues": {
+      "yes": "vegan (pflanzlich, mineralisch oder synthetisch)",
+      "no": "nicht vegan (tierischen Ursprungs)",
+      "maybe": "kommt drauf an (kann tierisch oder pflanzlich sein)"
+    },
+    "sources": [
+      "PETA Deutschland – E-Nummern nicht vegan",
+      "Verbraucherzentrale (via CareElite Zusammenstellung)",
+      "vegpool.de Inhaltsstoff-Datenbank",
+      "this-is-vegan.com – versteckte tierische Inhaltsstoffe",
+      "VeganBlatt / veganivore (L-Cystein)"
+    ],
+    "disclaimer": "Angaben ohne Gewähr. Orientierungshilfe. Bei Fettsaeuren, Emulgatoren und Geschmacksverstaerkern haengt die Herkunft vom Hersteller ab und ist auf der Verpackung oft nicht erkennbar."
+  },
+  "additives": [
+    {
+      "code": "E120",
+      "name": "Karmin (Echtes Karmin, Cochenille)",
+      "class": "Farbstoff",
+      "status": "no",
+      "info": "Roter Farbstoff aus getrockneten Schildläusen (Cochenille-Läuse)."
+    },
+    {
+      "code": "E441",
+      "name": "Gelatine",
+      "class": "Geliermittel",
+      "status": "no",
+      "info": "Aus dem Bindegewebe und der Haut von Schweinen und Rindern."
+    },
+    {
+      "code": "E542",
+      "name": "Knochenphosphat",
+      "class": "Trennmittel",
+      "status": "no",
+      "info": "Wird direkt aus Tierknochen (meist Schwein, Rind) gewonnen."
+    },
+    {
+      "code": "E901",
+      "name": "Bienenwachs",
+      "class": "Überzugsmittel",
+      "status": "no",
+      "info": "Aus den Waben von Honigbienen, durch Ausschmelzen gewonnen."
+    },
+    {
+      "code": "E904",
+      "name": "Schellack",
+      "class": "Überzugsmittel",
+      "status": "no",
+      "info": "Aus den Ausscheidungen der Lackschildlaus."
+    },
+    {
+      "code": "E913",
+      "name": "Lanolin (Wollwachs)",
+      "class": "Überzugsmittel",
+      "status": "no",
+      "info": "Aus dem Wollfett von Schafen. Eher in Kaugummi und Kosmetik."
+    },
+    {
+      "code": "E966",
+      "name": "Lactit",
+      "class": "Süßungsmittel",
+      "status": "no",
+      "info": "Wird aus Milchzucker (Lactose) hergestellt, also aus Kuhmilch."
+    },
+    {
+      "code": "E1105",
+      "name": "Lysozym",
+      "class": "Konservierungsstoff",
+      "status": "no",
+      "info": "Aus dem Eiklar von Hühnereiern. Oft in Hartkäse."
+    },
+    {
+      "code": "E153",
+      "name": "Pflanzenkohle",
+      "class": "Farbstoff",
+      "status": "maybe",
+      "info": "In der EU pflanzlich, historisch konnte Kohleschwarz aber aus Knochen stammen.",
+      "note": "Bei zertifizierten EU-Produkten meist unkritisch."
+    },
+    {
+      "code": "E322",
+      "name": "Lecithin",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Meist aus Soja oder Sonnenblume (vegan), kann aber aus Eigelb gewonnen werden.",
+      "note": "Soja- und Sonnenblumenlecithin sind vegan. Eilecithin ist selten, aber möglich."
+    },
+    {
+      "code": "E422",
+      "name": "Glycerin (Glycerol)",
+      "class": "Feuchthaltemittel",
+      "status": "maybe",
+      "info": "Lässt sich aus pflanzlichen oder aus tierischen Fetten herstellen."
+    },
+    {
+      "code": "E431",
+      "name": "Polyoxyethylenstearat",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Basiert auf Stearinsäure, die tierisch oder pflanzlich sein kann."
+    },
+    {
+      "code": "E433",
+      "name": "Polysorbat 80",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Fettsäurebasis kann tierischen oder pflanzlichen Ursprungs sein."
+    },
+    {
+      "code": "E435",
+      "name": "Polysorbat 60",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Fettsäurebasis kann tierischen oder pflanzlichen Ursprungs sein."
+    },
+    {
+      "code": "E470a",
+      "name": "Natrium-, Kalium-, Calciumsalze von Speisefettsäuren",
+      "class": "Trennmittel",
+      "status": "maybe",
+      "info": "Fettsäuren können tierischen oder pflanzlichen Ursprungs sein."
+    },
+    {
+      "code": "E470b",
+      "name": "Magnesiumsalze von Speisefettsäuren",
+      "class": "Trennmittel",
+      "status": "maybe",
+      "info": "Fettsäuren können tierischen oder pflanzlichen Ursprungs sein."
+    },
+    {
+      "code": "E471",
+      "name": "Mono- und Diglyceride von Speisefettsäuren",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Sehr häufiger Emulgator. Die Fette können tierisch oder pflanzlich sein.",
+      "note": "Eine der häufigsten Fallen überhaupt. Ohne Herstellerangabe nicht sicher vegan."
+    },
+    {
+      "code": "E472a",
+      "name": "Essigsäureester von Mono- und Diglyceriden",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Fettbasis kann tierisch oder pflanzlich sein."
+    },
+    {
+      "code": "E472b",
+      "name": "Milchsäureester von Mono- und Diglyceriden",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Fettbasis kann tierisch oder pflanzlich sein."
+    },
+    {
+      "code": "E472c",
+      "name": "Citronensäureester von Mono- und Diglyceriden",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Fettbasis kann tierisch oder pflanzlich sein."
+    },
+    {
+      "code": "E472e",
+      "name": "Mono- und Diacetylweinsäureester (DATEM)",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Häufig in Backwaren. Fettbasis kann tierisch oder pflanzlich sein."
+    },
+    {
+      "code": "E472f",
+      "name": "Gemischte Wein- und Essigsäureester",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Fettbasis kann tierisch oder pflanzlich sein."
+    },
+    {
+      "code": "E473",
+      "name": "Zuckerester von Speisefettsäuren",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Fettsäureanteil kann tierisch oder pflanzlich sein."
+    },
+    {
+      "code": "E474",
+      "name": "Zuckerglyceride",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Fettsäureanteil kann tierisch oder pflanzlich sein."
+    },
+    {
+      "code": "E475",
+      "name": "Polyglycerinester von Speisefettsäuren",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Fettsäureanteil kann tierisch oder pflanzlich sein."
+    },
+    {
+      "code": "E477",
+      "name": "Propylenglycolester von Speisefettsäuren",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Fettsäureanteil kann tierisch oder pflanzlich sein."
+    },
+    {
+      "code": "E481",
+      "name": "Natriumstearoyllactylat",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Stearinsäurebasis kann tierisch oder pflanzlich sein."
+    },
+    {
+      "code": "E482",
+      "name": "Calciumstearoyllactylat",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Stearinsäurebasis kann tierisch oder pflanzlich sein."
+    },
+    {
+      "code": "E491",
+      "name": "Sorbitanmonostearat",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Stearinsäure kann tierisch oder pflanzlich sein."
+    },
+    {
+      "code": "E492",
+      "name": "Sorbitantristearat",
+      "class": "Emulgator",
+      "status": "maybe",
+      "info": "Stearinsäure kann tierisch oder pflanzlich sein."
+    },
+    {
+      "code": "E570",
+      "name": "Stearinsäure / Speisefettsäuren",
+      "class": "Trennmittel",
+      "status": "maybe",
+      "info": "Fettsäuren können tierischen oder pflanzlichen Ursprungs sein."
+    },
+    {
+      "code": "E572",
+      "name": "Magnesiumstearat",
+      "class": "Trennmittel",
+      "status": "maybe",
+      "info": "Stearinsäurebasis kann tierisch oder pflanzlich sein."
+    },
+    {
+      "code": "E585",
+      "name": "Eisen-II-lactat (Eisenlactat)",
+      "class": "Farbstabilisator",
+      "status": "maybe",
+      "info": "Lactatanteil meist pflanzlich, wird aber von strengen Listen als grenzwertig geführt."
+    },
+    {
+      "code": "E627",
+      "name": "Dinatriumguanylat",
+      "class": "Geschmacksverstärker",
+      "status": "maybe",
+      "info": "Kann aus Hefe (pflanzlich) oder aus Fisch und Fleisch stammen."
+    },
+    {
+      "code": "E631",
+      "name": "Dinatriuminosinat",
+      "class": "Geschmacksverstärker",
+      "status": "maybe",
+      "info": "Wird oft aus Fisch oder Fleisch gewonnen, kann aber auch aus Tapioka stammen.",
+      "note": "Häufig in Chips und Fertiggerichten. Ohne Angabe eher kritisch."
+    },
+    {
+      "code": "E635",
+      "name": "Dinatriumribonukleotide",
+      "class": "Geschmacksverstärker",
+      "status": "maybe",
+      "info": "Mischung aus Guanylat und Inosinat, oft mit tierischem Anteil."
+    },
+    {
+      "code": "E640",
+      "name": "Glycin und Glycinsalze",
+      "class": "Geschmacksverstärker",
+      "status": "maybe",
+      "info": "Meist synthetisch, kann aber aus Gelatine gewonnen werden."
+    },
+    {
+      "code": "E920",
+      "name": "L-Cystein",
+      "class": "Mehlbehandlungsmittel",
+      "status": "maybe",
+      "info": "Oft aus Schweineborsten oder Federn, zunehmend auch mikrobiell hergestellt.",
+      "note": "Häufig in Brötchen und Backwaren. Als technisches Hilfsmittel oft nicht deklariert."
+    },
+    {
+      "code": "E921",
+      "name": "L-Cystin",
+      "class": "Mehlbehandlungsmittel",
+      "status": "maybe",
+      "info": "Wie L-Cystein: kann aus Haaren oder Federn stammen oder mikrobiell sein."
+    },
+    {
+      "code": "E1100",
+      "name": "Amylasen",
+      "class": "Enzyme",
+      "status": "maybe",
+      "info": "Enzyme können mikrobiellen, pflanzlichen oder tierischen Ursprungs sein."
+    },
+    {
+      "code": "E1518",
+      "name": "Glycerintriacetat (Triacetin)",
+      "class": "Trägerstoff",
+      "status": "maybe",
+      "info": "Glycerinbasis kann tierisch oder pflanzlich sein."
+    },
+    {
+      "code": "E100",
+      "name": "Kurkumin",
+      "class": "Farbstoff",
+      "status": "yes",
+      "info": "Gelber Farbstoff aus der Kurkumawurzel."
+    },
+    {
+      "code": "E101",
+      "name": "Riboflavin (Vitamin B2)",
+      "class": "Farbstoff",
+      "status": "yes",
+      "info": "Heute überwiegend durch Fermentation hergestellt."
+    },
+    {
+      "code": "E140",
+      "name": "Chlorophyll / Chlorophylline",
+      "class": "Farbstoff",
+      "status": "yes",
+      "info": "Grüner Farbstoff aus Pflanzen."
+    },
+    {
+      "code": "E150a",
+      "name": "Zuckerkulör (Karamell)",
+      "class": "Farbstoff",
+      "status": "yes",
+      "info": "Aus karamellisiertem Zucker."
+    },
+    {
+      "code": "E160a",
+      "name": "Carotin (Beta-Carotin)",
+      "class": "Farbstoff",
+      "status": "yes",
+      "info": "Pflanzlich oder synthetisch, oranger Farbstoff."
+    },
+    {
+      "code": "E160c",
+      "name": "Paprikaextrakt",
+      "class": "Farbstoff",
+      "status": "yes",
+      "info": "Aus Paprikaschoten."
+    },
+    {
+      "code": "E162",
+      "name": "Beetenrot (Betanin)",
+      "class": "Farbstoff",
+      "status": "yes",
+      "info": "Aus Roter Bete."
+    },
+    {
+      "code": "E163",
+      "name": "Anthocyane",
+      "class": "Farbstoff",
+      "status": "yes",
+      "info": "Aus Pflanzen wie Trauben, Beeren und Rotkohl."
+    },
+    {
+      "code": "E170",
+      "name": "Calciumcarbonat",
+      "class": "Farbstoff / Trennmittel",
+      "status": "yes",
+      "info": "Mineralisch (Kalk)."
+    },
+    {
+      "code": "E171",
+      "name": "Titandioxid",
+      "class": "Farbstoff",
+      "status": "yes",
+      "info": "Mineralischer Weißmacher.",
+      "note": "In der EU seit 2022 als Lebensmittelzusatzstoff nicht mehr zugelassen."
+    },
+    {
+      "code": "E200",
+      "name": "Sorbinsäure",
+      "class": "Konservierungsstoff",
+      "status": "yes",
+      "info": "Synthetisch hergestellt."
+    },
+    {
+      "code": "E202",
+      "name": "Kaliumsorbat",
+      "class": "Konservierungsstoff",
+      "status": "yes",
+      "info": "Synthetisch, Salz der Sorbinsäure."
+    },
+    {
+      "code": "E211",
+      "name": "Natriumbenzoat",
+      "class": "Konservierungsstoff",
+      "status": "yes",
+      "info": "Synthetisch hergestellt."
+    },
+    {
+      "code": "E223",
+      "name": "Natriummetabisulfit",
+      "class": "Konservierungsstoff",
+      "status": "yes",
+      "info": "Mineralisch / synthetisch."
+    },
+    {
+      "code": "E250",
+      "name": "Natriumnitrit",
+      "class": "Konservierungsstoff",
+      "status": "yes",
+      "info": "Der Zusatzstoff selbst ist synthetisch und vegan.",
+      "note": "Steckt aber fast nur in Fleisch- und Wurstwaren (Pökeln)."
+    },
+    {
+      "code": "E260",
+      "name": "Essigsäure",
+      "class": "Säuerungsmittel",
+      "status": "yes",
+      "info": "Durch Fermentation oder synthetisch."
+    },
+    {
+      "code": "E270",
+      "name": "Milchsäure",
+      "class": "Säuerungsmittel",
+      "status": "yes",
+      "info": "Klingt tierisch, ist es aber nicht. Entsteht durch Fermentation von Zucker und steckt auch in Sauerkraut.",
+      "note": "Klassische Verwechslung. Kommt NICHT aus Milch und ist in der Praxis vegan."
+    },
+    {
+      "code": "E290",
+      "name": "Kohlendioxid",
+      "class": "Treibgas",
+      "status": "yes",
+      "info": "Gas, zum Beispiel in Sprudel."
+    },
+    {
+      "code": "E296",
+      "name": "Äpfelsäure",
+      "class": "Säuerungsmittel",
+      "status": "yes",
+      "info": "Synthetisch oder aus Früchten."
+    },
+    {
+      "code": "E300",
+      "name": "Ascorbinsäure (Vitamin C)",
+      "class": "Antioxidationsmittel",
+      "status": "yes",
+      "info": "Synthetisch, meist aus Glukose."
+    },
+    {
+      "code": "E301",
+      "name": "Natriumascorbat",
+      "class": "Antioxidationsmittel",
+      "status": "yes",
+      "info": "Salz der Ascorbinsäure."
+    },
+    {
+      "code": "E306",
+      "name": "Tocopherole (Vitamin E)",
+      "class": "Antioxidationsmittel",
+      "status": "yes",
+      "info": "Meist aus pflanzlichen Ölen."
+    },
+    {
+      "code": "E325",
+      "name": "Natriumlactat",
+      "class": "Säureregulator",
+      "status": "yes",
+      "info": "Salz der Milchsäure, wie diese praktisch immer pflanzlich."
+    },
+    {
+      "code": "E326",
+      "name": "Kaliumlactat",
+      "class": "Säureregulator",
+      "status": "yes",
+      "info": "Salz der Milchsäure, praktisch immer pflanzlich."
+    },
+    {
+      "code": "E330",
+      "name": "Citronensäure",
+      "class": "Säuerungsmittel",
+      "status": "yes",
+      "info": "Durch Fermentation mit dem Schimmelpilz Aspergillus."
+    },
+    {
+      "code": "E331",
+      "name": "Natriumcitrat",
+      "class": "Säureregulator",
+      "status": "yes",
+      "info": "Salz der Citronensäure."
+    },
+    {
+      "code": "E333",
+      "name": "Calciumcitrat",
+      "class": "Säureregulator",
+      "status": "yes",
+      "info": "Salz der Citronensäure."
+    },
+    {
+      "code": "E334",
+      "name": "Weinsäure",
+      "class": "Säuerungsmittel",
+      "status": "yes",
+      "info": "Fällt bei der Weinherstellung an, pflanzlich."
+    },
+    {
+      "code": "E338",
+      "name": "Phosphorsäure",
+      "class": "Säuerungsmittel",
+      "status": "yes",
+      "info": "Mineralisch."
+    },
+    {
+      "code": "E340",
+      "name": "Kaliumphosphate",
+      "class": "Säureregulator",
+      "status": "yes",
+      "info": "Mineralisch."
+    },
+    {
+      "code": "E392",
+      "name": "Rosmarinextrakt",
+      "class": "Antioxidationsmittel",
+      "status": "yes",
+      "info": "Aus Rosmarin."
+    },
+    {
+      "code": "E400",
+      "name": "Alginsäure",
+      "class": "Verdickungsmittel",
+      "status": "yes",
+      "info": "Aus Braunalgen."
+    },
+    {
+      "code": "E401",
+      "name": "Natriumalginat",
+      "class": "Verdickungsmittel",
+      "status": "yes",
+      "info": "Aus Algen."
+    },
+    {
+      "code": "E406",
+      "name": "Agar-Agar",
+      "class": "Geliermittel",
+      "status": "yes",
+      "info": "Aus Rotalgen. Beliebte pflanzliche Gelatine-Alternative."
+    },
+    {
+      "code": "E407",
+      "name": "Carrageen",
+      "class": "Geliermittel",
+      "status": "yes",
+      "info": "Aus Rotalgen."
+    },
+    {
+      "code": "E410",
+      "name": "Johannisbrotkernmehl",
+      "class": "Verdickungsmittel",
+      "status": "yes",
+      "info": "Aus den Samen des Johannisbrotbaums."
+    },
+    {
+      "code": "E412",
+      "name": "Guarkernmehl",
+      "class": "Verdickungsmittel",
+      "status": "yes",
+      "info": "Aus der Guarbohne."
+    },
+    {
+      "code": "E414",
+      "name": "Gummi arabicum (Akaziengummi)",
+      "class": "Verdickungsmittel",
+      "status": "yes",
+      "info": "Aus dem Harz von Akazienbäumen."
+    },
+    {
+      "code": "E415",
+      "name": "Xanthan",
+      "class": "Verdickungsmittel",
+      "status": "yes",
+      "info": "Durch Fermentation hergestellt."
+    },
+    {
+      "code": "E418",
+      "name": "Gellan",
+      "class": "Geliermittel",
+      "status": "yes",
+      "info": "Durch Fermentation hergestellt."
+    },
+    {
+      "code": "E420",
+      "name": "Sorbit",
+      "class": "Süßungsmittel",
+      "status": "yes",
+      "info": "Aus Glukose, meist aus Mais oder Weizen."
+    },
+    {
+      "code": "E421",
+      "name": "Mannit",
+      "class": "Süßungsmittel",
+      "status": "yes",
+      "info": "Pflanzlich oder synthetisch."
+    },
+    {
+      "code": "E440",
+      "name": "Pektin",
+      "class": "Geliermittel",
+      "status": "yes",
+      "info": "Aus Früchten wie Äpfeln und Zitrusschalen."
+    },
+    {
+      "code": "E460",
+      "name": "Cellulose",
+      "class": "Trägerstoff",
+      "status": "yes",
+      "info": "Aus Pflanzenfasern."
+    },
+    {
+      "code": "E464",
+      "name": "Hydroxypropylmethylcellulose",
+      "class": "Verdickungsmittel",
+      "status": "yes",
+      "info": "Aus Cellulose, oft in veganen Kapseln."
+    },
+    {
+      "code": "E476",
+      "name": "Polyglycerin-Polyricinoleat (PGPR)",
+      "class": "Emulgator",
+      "status": "yes",
+      "info": "Aus Rizinusöl, häufig in Schokolade. Gilt als vegan."
+    },
+    {
+      "code": "E500",
+      "name": "Natriumcarbonate (Backsoda)",
+      "class": "Backtriebmittel",
+      "status": "yes",
+      "info": "Mineralisch."
+    },
+    {
+      "code": "E501",
+      "name": "Kaliumcarbonate",
+      "class": "Säureregulator",
+      "status": "yes",
+      "info": "Mineralisch."
+    },
+    {
+      "code": "E503",
+      "name": "Ammoniumcarbonate",
+      "class": "Backtriebmittel",
+      "status": "yes",
+      "info": "Modernes Hirschhornsalz ist synthetisch und vegan, trotz des alten Namens."
+    },
+    {
+      "code": "E509",
+      "name": "Calciumchlorid",
+      "class": "Festigungsmittel",
+      "status": "yes",
+      "info": "Mineralisch."
+    },
+    {
+      "code": "E516",
+      "name": "Calciumsulfat (Gips)",
+      "class": "Festigungsmittel",
+      "status": "yes",
+      "info": "Mineralisch, oft bei Tofu."
+    },
+    {
+      "code": "E551",
+      "name": "Siliciumdioxid (Kieselsäure)",
+      "class": "Trennmittel",
+      "status": "yes",
+      "info": "Mineralisch."
+    },
+    {
+      "code": "E575",
+      "name": "Glucono-delta-Lacton",
+      "class": "Säureregulator",
+      "status": "yes",
+      "info": "Aus Glukose."
+    },
+    {
+      "code": "E621",
+      "name": "Mononatriumglutamat (MSG)",
+      "class": "Geschmacksverstärker",
+      "status": "yes",
+      "info": "Durch Fermentation von pflanzlicher Stärke oder Melasse.",
+      "note": "Trotz schlechtem Ruf nicht tierisch und vegan."
+    },
+    {
+      "code": "E622",
+      "name": "Monokaliumglutamat",
+      "class": "Geschmacksverstärker",
+      "status": "yes",
+      "info": "Wie E621 durch Fermentation hergestellt."
+    },
+    {
+      "code": "E625",
+      "name": "Magnesiumdiglutamat",
+      "class": "Geschmacksverstärker",
+      "status": "yes",
+      "info": "Wie E621 durch Fermentation hergestellt."
+    },
+    {
+      "code": "E900",
+      "name": "Dimethylpolysiloxan",
+      "class": "Entschäumer",
+      "status": "yes",
+      "info": "Silikon, synthetisch."
+    },
+    {
+      "code": "E938",
+      "name": "Argon",
+      "class": "Packgas",
+      "status": "yes",
+      "info": "Gas."
+    },
+    {
+      "code": "E941",
+      "name": "Stickstoff",
+      "class": "Packgas",
+      "status": "yes",
+      "info": "Gas, hält Verpackungen frisch."
+    },
+    {
+      "code": "E948",
+      "name": "Sauerstoff",
+      "class": "Packgas",
+      "status": "yes",
+      "info": "Gas."
+    },
+    {
+      "code": "E950",
+      "name": "Acesulfam K",
+      "class": "Süßstoff",
+      "status": "yes",
+      "info": "Synthetisch hergestellt."
+    },
+    {
+      "code": "E951",
+      "name": "Aspartam",
+      "class": "Süßstoff",
+      "status": "yes",
+      "info": "Synthetisch hergestellt."
+    },
+    {
+      "code": "E952",
+      "name": "Cyclamat",
+      "class": "Süßstoff",
+      "status": "yes",
+      "info": "Synthetisch hergestellt."
+    },
+    {
+      "code": "E954",
+      "name": "Saccharin",
+      "class": "Süßstoff",
+      "status": "yes",
+      "info": "Synthetisch hergestellt."
+    },
+    {
+      "code": "E955",
+      "name": "Sucralose",
+      "class": "Süßstoff",
+      "status": "yes",
+      "info": "Synthetisch, aus Zucker abgewandelt."
+    },
+    {
+      "code": "E957",
+      "name": "Thaumatin",
+      "class": "Süßstoff",
+      "status": "yes",
+      "info": "Aus der westafrikanischen Katemfe-Frucht."
+    },
+    {
+      "code": "E960",
+      "name": "Steviolglycoside (Stevia)",
+      "class": "Süßstoff",
+      "status": "yes",
+      "info": "Aus den Blättern der Stevia-Pflanze."
+    },
+    {
+      "code": "E965",
+      "name": "Maltit",
+      "class": "Süßungsmittel",
+      "status": "yes",
+      "info": "Aus Stärke."
+    },
+    {
+      "code": "E967",
+      "name": "Xylit (Xylitol)",
+      "class": "Süßungsmittel",
+      "status": "yes",
+      "info": "Aus Pflanzenfasern, etwa Birke oder Mais."
+    },
+    {
+      "code": "E968",
+      "name": "Erythrit",
+      "class": "Süßungsmittel",
+      "status": "yes",
+      "info": "Durch Fermentation hergestellt."
+    },
+    {
+      "code": "E1400",
+      "name": "Modifizierte Stärken",
+      "class": "Verdickungsmittel",
+      "status": "yes",
+      "info": "Aus Pflanzenstärke (Mais, Kartoffel, Tapioka)."
+    },
+    {
+      "code": "E1505",
+      "name": "Triethylcitrat",
+      "class": "Trägerstoff",
+      "status": "yes",
+      "info": "Synthetisch, auf Citrat-Basis."
+    }
+  ]
+}

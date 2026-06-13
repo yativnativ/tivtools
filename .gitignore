@@ -1,0 +1,14 @@
+# generierte Ausgabe (wird von build.py erzeugt, baut Cloudflare bei jedem Push neu)
+dist/
+
+# Deploy-Artefakte
+*.zip
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# macOS / Editor
+.DS_Store
+.claude/
