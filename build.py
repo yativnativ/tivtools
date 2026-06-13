@@ -285,6 +285,17 @@ CSS += """
 .stat .seq{font-size:12px;color:#3a5856;margin-top:6px;line-height:1.4}
 """
 
+# Zusatz-Styles für den Saisonkalender
+CSS += """
+.months{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:24px auto 0;max-width:640px}
+.months button{cursor:pointer;border:1px solid var(--line);background:rgba(248,222,205,.05);color:var(--peach);font-family:'Figtree';font-weight:600;font-size:13px;padding:8px 13px;border-radius:999px;transition:all .14s}
+.months button:hover{background:rgba(248,222,205,.12)}
+.months button.on{background:var(--peach);color:var(--ink);border-color:var(--peach)}
+.subhead{font-family:'Gabarito';font-weight:800;font-size:18px;margin:30px 0 12px;color:var(--peach);display:flex;align-items:center;gap:9px}
+.subhead .swatch{width:10px;height:10px;border-radius:50%;background:var(--yes)}
+.subhead.lager .swatch{background:var(--maybe)}
+"""
+
 # ---------------------------------------------------------------- JS (Checker)
 
 CHECKER_JS = r"""
@@ -540,6 +551,31 @@ document.querySelectorAll(".filt").forEach(f => f.addEventListener("click", () =
 }));
 """.strip()
 
+# ---------------------------------------------------------------- JS (Saisonkalender)
+
+SAISON_JS = r"""
+const D = __DATA__;
+const MO = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
+let m = (new Date()).getMonth() + 1;
+function cards(arr){
+  if(!arr.length) return '<div class="empty" style="display:block">In diesem Monat ist regional nichts dabei.</div>';
+  return arr.map(d => {
+    const lager = !d.f.includes(m) && d.l.includes(m);
+    return '<div class="item '+(lager?'maybe':'yes')+'"><span class="bar"></span><div>'+
+      '<div class="en">'+d.name+'</div><div class="nm">'+(lager?'aus dem Lager':'Freiland')+'</div></div></div>';
+  }).join('');
+}
+function render(){
+  document.querySelectorAll('[data-m]').forEach(b => b.classList.toggle('on', (+b.dataset.m)===m));
+  document.getElementById('motitle').textContent = 'Saison im ' + MO[m-1];
+  const inS = D.filter(d => d.f.includes(m) || d.l.includes(m));
+  document.getElementById('gem').innerHTML = cards(inS.filter(d => d.type==='gemuese'));
+  document.getElementById('obs').innerHTML = cards(inS.filter(d => d.type==='obst'));
+}
+document.querySelectorAll('[data-m]').forEach(b => b.addEventListener('click', () => { m = +b.dataset.m; render(); }));
+render();
+""".strip()
+
 # ---------------------------------------------------------------- page shell
 
 
@@ -659,6 +695,12 @@ def build_hub(meta, adds, ings, nutrients):
       <p>Lebensmittel eingeben und sofort sehen, ob es vegan ist und wo die versteckten tierischen Zutaten lauern, von Wein bis Gummibärchen.</p>
       <span class="meta">Lebensmittel prüfen →</span>
     </a>
+    <a class="toolcard" href="{url(SAISON_BASE)}">
+      <span class="badge">Live</span>
+      <h3>Saisonkalender</h3>
+      <p>Monat wählen und sehen, welches Obst und Gemüse regional gerade Saison hat, frisch vom Feld oder aus dem Lager. Für jeden Monat eine eigene Übersicht.</p>
+      <span class="meta">Saison checken →</span>
+    </a>
     <div class="toolcard soon">
       <span class="badge">In Arbeit</span>
       <h3>Mehr Tools kommen</h3>
@@ -719,6 +761,12 @@ def build_hub(meta, adds, ings, nutrients):
                         "position": 5,
                         "name": "Ist das vegan? Lebensmittel-Checker",
                         "url": BASE_URL + url(FOOD_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 6,
+                        "name": "Vegan-Saisonkalender",
+                        "url": BASE_URL + url(SAISON_BASE),
                     },
                 ],
             },
@@ -1709,6 +1757,176 @@ def build_impact(meta):
     )
 
 
+SAISON_BASE = "/saisonkalender/"
+MONTHS = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"]
+MONTH_SLUGS = ["januar", "februar", "maerz", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "dezember"]
+MONTH_ABBR = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"]
+
+
+def _produce_cards(items, m):
+    if not items:
+        return '<div class="empty" style="display:block">In diesem Monat ist regional nichts dabei.</div>'
+    out = []
+    for d in items:
+        lager = m not in d["f"] and m in d["l"]
+        cls = "maybe" if lager else "yes"
+        label = "aus dem Lager" if lager else "Freiland"
+        out.append(
+            f'    <div class="item {cls}"><span class="bar"></span><div>'
+            f'<div class="en">{esc(d["name"])}</div><div class="nm">{label}</div></div></div>'
+        )
+    return "\n".join(out)
+
+
+def build_saison_hub(meta, produce):
+    compact = [{"name": p["name"], "type": p["type"], "f": p["f"], "l": p["l"]} for p in produce]
+    js = SAISON_JS.replace("__DATA__", json.dumps(compact, ensure_ascii=False, separators=(",", ":")))
+    month_btns = "\n".join(
+        f'    <button type="button" data-m="{i+1}">{MONTH_ABBR[i]}</button>' for i in range(12)
+    )
+    month_links = "\n".join(
+        f'    <a href="{url(SAISON_BASE + MONTH_SLUGS[i] + "/")}">{MONTHS[i]}<span class="arrow">→</span></a>'
+        for i in range(12)
+    )
+
+    body = site_header("Saisonkalender") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>Saisonkalender</nav>
+<section class="hero">
+  <div class="eyebrow">Regional und im richtigen Moment</div>
+  <h1>Was hat gerade <span class="q">Saison?</span></h1>
+  <p class="sub">Monat wählen und sehen, welches Obst und Gemüse regional gerade frisch vom Feld kommt oder aus dem Lager verfügbar ist.</p>
+  <div class="months">
+{month_btns}
+  </div>
+</section>
+
+<section class="listsec">
+  <h2 id="motitle">Saison</h2>
+  <div class="subhead"><span class="swatch"></span>Gemüse</div>
+  <div class="grid" id="gem"></div>
+  <div class="subhead"><span class="swatch" style="background:var(--terra)"></span>Obst</div>
+  <div class="grid" id="obs"></div>
+  <div class="infobox">{esc(meta["disclaimer"])}</div>
+</section>
+
+<section class="section">
+  <h2>Alle Monate</h2>
+  <p class="lead">Jeder Monat hat seine eigene Saison-Seite mit allem, was frisch ist.</p>
+  <div class="linklist" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));display:grid">
+{month_links}
+  </div>
+</section>
+""" + site_footer(meta, full_disclaimer=False) + f"\n<script>{js}</script>"
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Vegan-Saisonkalender",
+            "url": BASE_URL + url(SAISON_BASE),
+            "applicationCategory": "LifestyleApplication",
+            "operatingSystem": "Web",
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+            "description": "Saisonkalender für regionales Obst und Gemüse in Deutschland, Monat für Monat, mit Freiland- und Lagerware.",
+            "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Saisonkalender", "item": BASE_URL + url(SAISON_BASE)},
+            ],
+        },
+    ]
+    return page(
+        "Vegan-Saisonkalender: was hat gerade Saison? | This Is Vegan",
+        "Monat wählen und sehen, welches Obst und Gemüse regional gerade Saison hat, frisch vom Feld oder aus dem Lager. Kostenloser Saisonkalender für Deutschland.",
+        SAISON_BASE,
+        body,
+        jsonld,
+    )
+
+
+def build_saison_month(idx, meta, produce):
+    m = idx + 1
+    month = MONTHS[idx]
+    path = SAISON_BASE + MONTH_SLUGS[idx] + "/"
+    in_season = [p for p in produce if m in p["f"] or m in p["l"]]
+    gem = [p for p in in_season if p["type"] == "gemuese"]
+    obs = [p for p in in_season if p["type"] == "obst"]
+
+    prev_i, next_i = (idx - 1) % 12, (idx + 1) % 12
+    names = ", ".join(p["name"] for p in in_season[:8])
+
+    body = site_header("Saisonkalender") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span><a href="{url(SAISON_BASE)}">Saisonkalender</a><span>›</span>{month}</nav>
+<section class="hero left">
+  <div class="eyebrow">Saisonkalender</div>
+  <h1 class="detail">Saison im <span class="q">{month}</span></h1>
+  <p class="sub" style="margin-left:0">Diese {len(in_season)} Obst- und Gemüsesorten haben im {month} in Deutschland regional Saison, frisch vom Feld oder aus heimischer Lagerung.</p>
+</section>
+
+<section class="section">
+  <div class="subhead"><span class="swatch"></span>Gemüse</div>
+  <div class="grid">
+{_produce_cards(gem, m)}
+  </div>
+</section>
+
+<section class="section">
+  <div class="subhead"><span class="swatch" style="background:var(--terra)"></span>Obst</div>
+  <div class="grid">
+{_produce_cards(obs, m)}
+  </div>
+</section>
+
+<div class="cta">
+  <div>
+    <h2>Anderer Monat?</h2>
+    <p>Im interaktiven Kalender springst du mit einem Klick durch das ganze Jahr.</p>
+  </div>
+  <a class="btn" href="{url(SAISON_BASE)}">Zum Kalender →</a>
+</div>
+
+<section class="section">
+  <h2>Weiter im Jahr</h2>
+  <div class="linklist">
+    <a href="{url(SAISON_BASE + MONTH_SLUGS[prev_i] + "/")}"><span class="arrow" style="transform:rotate(180deg)">→</span>{MONTHS[prev_i]}</a>
+    <a href="{url(SAISON_BASE + MONTH_SLUGS[next_i] + "/")}">{MONTHS[next_i]}<span class="arrow">→</span></a>
+  </div>
+</section>
+""" + site_footer(meta, full_disclaimer=False)
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": f"Welches Obst und Gemüse hat im {month} Saison?",
+                 "acceptedAnswer": {"@type": "Answer", "text": f"Im {month} haben unter anderem {names} regional Saison. Insgesamt sind es {len(in_season)} Sorten, frisch vom Feld oder aus dem Lager."}},
+            ],
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Saisonkalender", "item": BASE_URL + url(SAISON_BASE)},
+                {"@type": "ListItem", "position": 3, "name": month, "item": BASE_URL + url(path)},
+            ],
+        },
+    ]
+    return page(
+        f"Saisonkalender {month}: Obst und Gemüse mit Saison | This Is Vegan",
+        f"Welches Obst und Gemüse hat im {month} Saison? {len(in_season)} regionale Sorten frisch vom Feld oder aus dem Lager, im veganen Saisonkalender von This Is Vegan.",
+        path,
+        body,
+        jsonld,
+        og_type="article",
+    )
+
+
 def build_404(meta):
     body = site_header("Tools") + f"""
 <section class="hero">
@@ -1747,6 +1965,9 @@ def main():
     food_data = json.loads((ROOT / "data" / "lebensmittel-data.json").read_text(encoding="utf-8"))
     food_meta, foods = food_data["meta"], food_data["foods"]
 
+    saison_data = json.loads((ROOT / "data" / "saison-data.json").read_text(encoding="utf-8"))
+    saison_meta, produce = saison_data["meta"], saison_data["produce"]
+
     if DIST.exists():
         shutil.rmtree(DIST)
     DIST.mkdir(parents=True)
@@ -1779,6 +2000,11 @@ def main():
     pages[FOOD_BASE] = build_food_hub(food_meta, foods)
     for f in foods:
         pages[FOOD_BASE + f["slug"] + "/"] = build_food_detail(f, food_meta, foods)
+
+    # Saisonkalender
+    pages[SAISON_BASE] = build_saison_hub(saison_meta, produce)
+    for i in range(12):
+        pages[SAISON_BASE + MONTH_SLUGS[i] + "/"] = build_saison_month(i, saison_meta, produce)
 
     for path, content in pages.items():
         out = DIST / path.lstrip("/") / "index.html"
@@ -1818,7 +2044,7 @@ def main():
     )
 
     n = len(pages) + 1
-    print(f"OK: {n} Seiten nach {DIST} gebaut ({len(adds)} Zusatzstoffe, {len(ings)} Ersatz-Zutaten, {len(nutrients)} Nährstoffe, {len(foods)} Lebensmittel).")
+    print(f"OK: {n} Seiten nach {DIST} gebaut ({len(adds)} Zusatzstoffe, {len(ings)} Ersatz-Zutaten, {len(nutrients)} Nährstoffe, {len(foods)} Lebensmittel, Saisonkalender).")
 
 
 if __name__ == "__main__":
