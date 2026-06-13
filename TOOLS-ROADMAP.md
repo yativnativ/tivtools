@@ -19,21 +19,26 @@ indexierbaren Seiten, deploybar per `git push`.
    Greift die Masse der "ist X vegan"-Suchen ab. Ergänzt E-Nummern.
 6. **Saisonkalender** (`/saisonkalender/`) — 45 Sorten, 12 Monatsseiten.
    Wiederkehrender Saison-Traffic, Freiland/Lager, starke interne Verlinkung.
+7. **Pflanzendrink-Vergleich** (`/pflanzendrink-vergleich/`) — 8 Drinks, Use-Case-Ranking
+   (Kaffee, Backen, Protein, Klima), Nährwerte, 8 Detailseiten. Kauf-Intention.
+8. **Protein-Tabelle** (`/protein-tabelle/`) — 42 Lebensmittel, durchsuchbar/sortierbar,
+   Eiweiß pro 100 g. Targets "veganes protein tabelle", verlinkt zum Nährstoff-Rechner.
 
-Gesamt: rund 195 Seiten, alle mit FAQ- + Breadcrumb-Schema, Canonical, OG.
+Gesamt: rund 205 Seiten, alle mit FAQ- + Breadcrumb-Schema, Canonical, OG.
 
 ## Nächste Ideen (priorisiert)
 
-7. **"Ist das vegan?" ausbauen** auf 100+ Lebensmittel und echte Marken
-   (Markenname + Produkt). Marken-Suchen sind riesig und kaum bedient.
-8. **Protein-pro-Gericht-Rechner** — Lebensmittel kombinieren, Protein/Portion sehen.
-   Ergänzt den Nährstoff-Rechner, Foodie-Intention, Affiliate-Bezug.
-9. **Vegane-Reise-Spickzettel** — "Ich bin vegan"-Sätze + versteckt-tierisch-Begriffe
-   pro Sprache. Nische, aber teilbar und ohne Konkurrenz.
-10. **Pflanzendrink-Vergleich** — Hafer/Soja/Mandel etc. nach Eignung (Kaffee, Backen,
-    Protein, CO2). Kauf-Intention, Affiliate.
-11. **Saisonkalender erweitern**: pro Sorte eine Seite ("Erdbeeren Saison") mit
+9. **"Ist das vegan?" ausbauen** auf 100+ Lebensmittel und echte Marken
+   (Markenname + Produkt). Marken-Suchen sind riesig und kaum bedient. Achtung:
+   Markenrezepturen ändern sich, defensiv formulieren und datieren.
+10. **Protein-pro-Gericht-Rechner** — mehrere Lebensmittel + Menge kombinieren,
+    Protein pro Portion summieren. Ergänzt Protein-Tabelle und Nährstoff-Rechner.
+11. **Vegane-Reise-Spickzettel** — "Ich bin vegan"-Sätze + versteckt-tierisch-Begriffe
+    pro Sprache. Nische, teilbar, ohne Konkurrenz.
+12. **Saisonkalender erweitern**: pro Sorte eine Seite ("Erdbeeren Saison") mit
     Rezept-Links, plus Kräuter und Salate.
+13. **Zucker-/Kalorien-Vergleich pflanzlicher Süßungsmittel** oder **CO2-Vergleich
+    Lebensmittel** als weitere Datentools.
 
 ## Bauprinzip für jedes Tool
 
