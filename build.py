@@ -475,6 +475,71 @@ document.querySelectorAll('[data-unit]').forEach(b=>b.addEventListener('click',(
 render();
 """.strip()
 
+# ---------------------------------------------------------------- JS (Lebensmittel-Checker)
+
+FOOD_JS = r"""
+const DATA = __DATA__;
+const L = {
+  yes:{t:"In der Regel vegan", s:"meist ohne Tierisches", i:"✓"},
+  maybe:{t:"Kommt drauf an", s:"oft versteckt tierisch", i:"?"},
+  no:{t:"Meist nicht vegan", s:"enthält in der Regel Tierisches", i:"✕"}
+};
+const norm = s => s.toLowerCase().replace(/\s+/g,"").replace(/[^a-z0-9äöüß]/g,"");
+function find(query){
+  const q = norm(query);
+  if(!q) return null;
+  return DATA.find(d => norm(d.name) === q)
+    || DATA.find(d => d.aka.some(a => norm(a) === q))
+    || DATA.find(d => norm(d.name).startsWith(q))
+    || DATA.find(d => norm(d.name).includes(q) || d.aka.some(a => norm(a).includes(q)))
+    || null;
+}
+function render(item){
+  const r = document.getElementById("result");
+  if(!item){
+    r.innerHTML = '<div class="miss"><h3>Dazu habe ich noch keinen Eintrag</h3>'+
+      '<p>Versuch ein anderes Lebensmittel oder die Grundzutat. Die Liste wächst laufend.</p></div>';
+    return;
+  }
+  const x = L[item.s];
+  r.innerHTML =
+    '<div class="card"><div class="verdict '+item.s+'"><div class="mark">'+x.i+'</div>'+
+    '<div class="vtext">'+x.t+'<small>'+x.s+'</small></div></div>'+
+    '<div class="card-body"><div class="enum">'+item.name+'</div>'+
+    '<span class="klasse">'+item.cat+'</span><p class="info">'+item.info+'</p>'+
+    (item.note ? '<div class="note"><span>!</span><span><b>Achte drauf:</b> '+item.note+'</span></div>' : '')+
+    '<a class="detail-link" href="'+item.u+'">Ist '+item.name+' vegan? Alle Details →</a></div></div>';
+}
+function search(){
+  const v = document.getElementById("q").value;
+  if(!v.trim()){ document.getElementById("result").innerHTML=""; return; }
+  render(find(v));
+}
+document.getElementById("go").addEventListener("click", search);
+document.getElementById("q").addEventListener("keydown", e => { if(e.key==="Enter") search(); });
+document.getElementById("q").addEventListener("input", e => {
+  if(e.target.value.trim().length >= 2) search();
+  else document.getElementById("result").innerHTML="";
+});
+document.querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => {
+  document.getElementById("q").value = c.dataset.c;
+  search();
+  document.getElementById("result").scrollIntoView({behavior:"smooth", block:"center"});
+}));
+document.querySelectorAll(".filt").forEach(f => f.addEventListener("click", () => {
+  document.querySelectorAll(".filt").forEach(x=>x.classList.remove("active"));
+  f.classList.add("active");
+  const flt = f.dataset.f;
+  let shown = 0;
+  document.querySelectorAll("#grid .item").forEach(el => {
+    const show = flt==="all" || el.classList.contains(flt);
+    el.classList.toggle("hidden", !show);
+    if(show) shown++;
+  });
+  document.querySelector("#grid .empty").style.display = shown ? "none" : "block";
+}));
+""".strip()
+
 # ---------------------------------------------------------------- page shell
 
 
@@ -588,6 +653,12 @@ def build_hub(meta, adds, ings, nutrients):
       <p>Sieh, was deine vegane Ernährung bewegt: gerettete Tiere, gespartes CO2, Wasser und Ackerland. Zeitraum eingeben, Ergebnis teilen.</p>
       <span class="meta">Wirkung sehen →</span>
     </a>
+    <a class="toolcard" href="{url(FOOD_BASE)}">
+      <span class="badge">Live</span>
+      <h3>Ist das vegan?</h3>
+      <p>Lebensmittel eingeben und sofort sehen, ob es vegan ist und wo die versteckten tierischen Zutaten lauern, von Wein bis Gummibärchen.</p>
+      <span class="meta">Lebensmittel prüfen →</span>
+    </a>
     <div class="toolcard soon">
       <span class="badge">In Arbeit</span>
       <h3>Mehr Tools kommen</h3>
@@ -642,6 +713,12 @@ def build_hub(meta, adds, ings, nutrients):
                         "position": 4,
                         "name": "Veganer Impact-Rechner",
                         "url": BASE_URL + url(IMPACT_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 5,
+                        "name": "Ist das vegan? Lebensmittel-Checker",
+                        "url": BASE_URL + url(FOOD_BASE),
                     },
                 ],
             },
@@ -1348,6 +1425,209 @@ def build_naehrstoff_detail(n, meta, nutrients):
     return page(titles.get(s, f"{name} vegan: Bedarf und Quellen | This Is Vegan"), desc, path, body, jsonld, og_type="article")
 
 
+FOOD_BASE = "/ist-das-vegan/"
+
+FOOD_LABEL = {
+    "yes": {"t": "In der Regel vegan", "s": "meist ohne Tierisches", "icon": "✓"},
+    "maybe": {"t": "Kommt drauf an", "s": "oft versteckt tierisch", "icon": "?"},
+    "no": {"t": "Meist nicht vegan", "s": "enthält in der Regel Tierisches", "icon": "✕"},
+}
+
+FOOD_POPULAR = ["Wein", "Pommes frites", "Brot", "Gummibärchen", "Dunkle Schokolade", "Honig"]
+
+
+def build_food_hub(meta, foods):
+    order = {"no": 0, "maybe": 1, "yes": 2}
+    sorted_foods = sorted(foods, key=lambda x: (order[x["status"]], x["name"].lower()))
+    items = "\n".join(
+        f'    <a class="item {f["status"]}" href="{url(FOOD_BASE + f["slug"] + "/")}">'
+        f'<span class="bar"></span><div><div class="en">{esc(f["name"])}</div>'
+        f'<div class="nm">{esc(f["category"])}</div></div></a>'
+        for f in sorted_foods
+    )
+    compact = [
+        {"name": f["name"], "aka": f.get("aka", []), "cat": f["category"], "s": f["status"],
+         "info": f["info"], **({"note": f["note"]} if f.get("note") else {}),
+         "u": url(FOOD_BASE + f["slug"] + "/")}
+        for f in foods
+    ]
+    js = FOOD_JS.replace("__DATA__", json.dumps(compact, ensure_ascii=False, separators=(",", ":")))
+    chips = "\n".join(f'    <button class="chip" data-c="{esc(c)}">{esc(c)}</button>' for c in FOOD_POPULAR)
+    counts = {s: sum(1 for f in foods if f["status"] == s) for s in ("yes", "no", "maybe")}
+
+    body = site_header("Ist das vegan?") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>Ist das vegan?</nav>
+<section class="hero">
+  <div class="eyebrow">Der schnelle Check fürs Regal</div>
+  <h1>Ist das <span class="q">vegan?</span></h1>
+  <p class="sub">Lebensmittel eingeben und sofort sehen, ob es in der Regel vegan ist, wo die versteckten Fallen liegen und worauf du achten musst.</p>
+
+  <div class="search-shell">
+    <div class="search-box">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+      <input id="q" type="text" autocomplete="off" placeholder="z. B. Wein, Brot oder Gummibärchen" aria-label="Lebensmittel suchen">
+      <button class="go" id="go">Prüfen</button>
+    </div>
+  </div>
+
+  <div class="chips">
+    <span>Häufig gesucht:</span>
+{chips}
+  </div>
+
+  <div id="result" aria-live="polite"></div>
+</section>
+
+<section class="listsec">
+  <div class="listhead">
+    <div>
+      <h2>Alle Lebensmittel</h2>
+      <p>{len(foods)} Einträge: {counts['yes']} meist vegan, {counts['maybe']} kommt drauf an, {counts['no']} meist nicht vegan.</p>
+    </div>
+    <div class="filters" id="filters">
+      <button class="filt active" data-f="all">Alle</button>
+      <button class="filt s-yes" data-f="yes"><span class="swatch"></span>Vegan</button>
+      <button class="filt s-maybe" data-f="maybe"><span class="swatch"></span>Kommt drauf an</button>
+      <button class="filt s-no" data-f="no"><span class="swatch"></span>Nicht vegan</button>
+    </div>
+  </div>
+  <div class="grid" id="grid">
+{items}
+    <div class="empty">Keine Einträge in diesem Filter.</div>
+  </div>
+</section>
+""" + site_footer(meta) + f"\n<script>{js}</script>"
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Ist das vegan? Lebensmittel-Checker",
+            "url": BASE_URL + url(FOOD_BASE),
+            "applicationCategory": "UtilityApplication",
+            "operatingSystem": "Web",
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+            "description": f"Checker für {len(foods)} Lebensmittel: sofort sehen, ob ein Produkt vegan ist und wo die versteckten tierischen Zutaten liegen.",
+            "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Ist das vegan?", "item": BASE_URL + url(FOOD_BASE)},
+            ],
+        },
+    ]
+    return page(
+        "Ist das vegan? Der Lebensmittel-Checker | This Is Vegan",
+        f"Lebensmittel eingeben und sofort sehen, ob es vegan ist, von Wein über Brot bis Gummibärchen. {len(foods)} Produkte mit den versteckten Fallen. Kostenlos.",
+        FOOD_BASE,
+        body,
+        jsonld,
+    )
+
+
+def build_food_detail(f, meta, foods):
+    name = f["name"]
+    s = f["slug"]
+    status = f["status"]
+    path = FOOD_BASE + s + "/"
+    L = FOOD_LABEL[status]
+    note_html = ""
+    if f.get("note"):
+        note_html = f'<div class="note"><span>!</span><span><b>Achte drauf:</b> {esc(f["note"])}</span></div>'
+
+    related = [x for x in foods if x["category"] == f["category"] and x["slug"] != s][:6]
+    if len(related) < 4:
+        related += [x for x in foods if x["slug"] != s and x not in related][: 4 - len(related)]
+    rel_html = "\n".join(
+        f'    <a class="item {r["status"]}" href="{url(FOOD_BASE + r["slug"] + "/")}">'
+        f'<span class="bar"></span><div><div class="en">{esc(r["name"])}</div>'
+        f'<div class="nm">{esc(r["category"])}</div></div></a>'
+        for r in related
+    )
+
+    verdict_long = {
+        "yes": f"{name} ist in der Regel vegan. Du kannst meist ohne langes Prüfen zugreifen, ein kurzer Blick auf die Zutatenliste schadet bei verarbeiteten Produkten trotzdem nie.",
+        "maybe": f"Ob {name} vegan ist, hängt vom Produkt ab. Es gibt vegane und nicht vegane Varianten, und die Herkunft steht nicht immer offensichtlich auf der Packung. Im Zweifel hilft das Vegan-Siegel.",
+        "no": f"{name} ist in der klassischen Form nicht vegan. Die gute Nachricht: Für fast alles gibt es heute eine pflanzliche Alternative, oft direkt daneben im Regal.",
+    }[status]
+
+    body = site_header("Ist das vegan?") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span><a href="{url(FOOD_BASE)}">Ist das vegan?</a><span>›</span>{esc(name)}</nav>
+<section class="hero left">
+  <div class="eyebrow">{esc(f["category"])} · Vegan-Check</div>
+  <h1 class="detail">Ist {esc(name)} <span class="q">vegan?</span></h1>
+</section>
+
+<div id="result" style="margin:24px 0 0;max-width:620px">
+  <div class="card" style="animation:none">
+    <div class="verdict {status}">
+      <div class="mark">{L["icon"]}</div>
+      <div class="vtext">{L["t"]}<small>{L["s"]}</small></div>
+    </div>
+    <div class="card-body">
+      <div class="enum">{esc(name)}</div>
+      <span class="klasse">{esc(f["category"])}</span>
+      <p class="info">{esc(f["info"])}</p>
+      {note_html}
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <h2>Was heißt das für dich?</h2>
+  <p class="prose">{esc(verdict_long)}</p>
+</section>
+
+<section class="section">
+  <h2>Ähnliche Lebensmittel</h2>
+  <div class="related">
+{rel_html}
+  </div>
+</section>
+
+<div class="cta">
+  <div>
+    <h2>Noch was prüfen?</h2>
+    <p>Der Checker kennt {len(foods)} Lebensmittel und zeigt dir sofort, ob etwas vegan ist.</p>
+  </div>
+  <a class="btn" href="{url(FOOD_BASE)}">Zum Checker →</a>
+</div>
+""" + site_footer(meta)
+
+    answer = f"{L['t']}. {f['info']}"
+    if f.get("note"):
+        answer += f" {f['note']}"
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": f"Ist {name} vegan?",
+                 "acceptedAnswer": {"@type": "Answer", "text": answer}},
+            ],
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Ist das vegan?", "item": BASE_URL + url(FOOD_BASE)},
+                {"@type": "ListItem", "position": 3, "name": name, "item": BASE_URL + url(path)},
+            ],
+        },
+    ]
+    lead = {"yes": f"{name} ist in der Regel vegan.", "maybe": f"{name} ist nicht immer vegan.", "no": f"{name} ist meist nicht vegan."}[status]
+    desc = f"{lead} {f['info']} Status, Erklärung und Fallen im Vegan-Checker von This Is Vegan."
+    if len(desc) > 155:
+        desc = f"{lead} {f['info']}"
+        if len(desc) > 155:
+            desc = desc[:152].rstrip() + "..."
+    return page(f"Ist {name} vegan? | This Is Vegan", desc, path, body, jsonld, og_type="article")
+
+
 IMPACT_BASE = "/impact-rechner/"
 
 
@@ -1464,6 +1744,9 @@ def main():
         "methodik": impact_full["methodik"],
     }
 
+    food_data = json.loads((ROOT / "data" / "lebensmittel-data.json").read_text(encoding="utf-8"))
+    food_meta, foods = food_data["meta"], food_data["foods"]
+
     if DIST.exists():
         shutil.rmtree(DIST)
     DIST.mkdir(parents=True)
@@ -1491,6 +1774,11 @@ def main():
 
     # Impact-Rechner
     pages[IMPACT_BASE] = build_impact(impact_cfg)
+
+    # Ist das vegan? Lebensmittel-Checker
+    pages[FOOD_BASE] = build_food_hub(food_meta, foods)
+    for f in foods:
+        pages[FOOD_BASE + f["slug"] + "/"] = build_food_detail(f, food_meta, foods)
 
     for path, content in pages.items():
         out = DIST / path.lstrip("/") / "index.html"
@@ -1530,7 +1818,7 @@ def main():
     )
 
     n = len(pages) + 1
-    print(f"OK: {n} Seiten nach {DIST} gebaut ({len(adds)} Zusatzstoffe, {len(ings)} Ersatz-Zutaten, {len(nutrients)} Nährstoffe).")
+    print(f"OK: {n} Seiten nach {DIST} gebaut ({len(adds)} Zusatzstoffe, {len(ings)} Ersatz-Zutaten, {len(nutrients)} Nährstoffe, {len(foods)} Lebensmittel).")
 
 
 if __name__ == "__main__":
