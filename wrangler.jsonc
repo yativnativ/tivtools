@@ -1,0 +1,13 @@
+{
+  // Statische Tool-Seite als Cloudflare Worker mit Static Assets.
+  // Build erzeugt ./dist (python3 build.py), wrangler deployt diesen Ordner.
+  "name": "tivtools",
+  "compatibility_date": "2025-06-01",
+  "assets": {
+    "directory": "./dist",
+    // /e-nummern/e471/index.html wird unter /e-nummern/e471/ ausgeliefert
+    "html_handling": "auto-trailing-slash",
+    // unbekannte Pfade bekommen unsere 404.html
+    "not_found_handling": "404-page"
+  }
+}
