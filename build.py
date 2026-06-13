@@ -297,6 +297,18 @@ CSS += """
 .subhead.lager .swatch{background:var(--maybe)}
 """
 
+# Zusatz-Styles für die Protein-Tabelle
+CSS += """
+.psort{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:16px auto 0}
+.ptable{margin-top:10px;display:flex;flex-direction:column;max-width:720px;margin-left:auto;margin-right:auto}
+.prow{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 4px;border-bottom:1px solid var(--line)}
+.prow .pname{font-family:'Gabarito';font-weight:700;font-size:16px;color:var(--peach)}
+.prow .pcat{font-size:12px;opacity:.6;margin-top:1px}
+.prow .pval{font-family:'Gabarito';font-weight:900;font-size:22px;letter-spacing:-.02em;color:var(--green);white-space:nowrap}
+.prow .pval small{font-size:11px;font-weight:600;opacity:.6;color:var(--peach)}
+.prow.top .pval{color:var(--terra-light)}
+"""
+
 # ---------------------------------------------------------------- JS (Checker)
 
 CHECKER_JS = r"""
@@ -603,6 +615,32 @@ document.querySelectorAll('[data-uc]').forEach(b => b.addEventListener('click', 
 render();
 """.strip()
 
+# ---------------------------------------------------------------- JS (Protein-Tabelle)
+
+PROT_JS = r"""
+const F = __DATA__;
+let q = "", cat = "all", sort = "protein";
+function rowsHtml(){
+  let list = F.filter(f => (cat==="all" || f.c===cat) && (!q || f.n.toLowerCase().includes(q)));
+  list.sort((a,b) => sort==="protein" ? b.p-a.p : a.n.localeCompare(b.n,'de'));
+  if(!list.length) return '<div class="empty" style="display:block">Dazu finde ich nichts.</div>';
+  const top = new Set(list.slice(0,3).map(f => f.n));
+  return list.map(f => '<div class="prow'+(sort==="protein" && top.has(f.n)?' top':'')+'">'+
+    '<div><div class="pname">'+f.n+'</div><div class="pcat">'+f.c+'</div></div>'+
+    '<div class="pval">'+f.p+'<small> g/100g</small></div></div>').join('');
+}
+function render(){ document.getElementById('ptable').innerHTML = rowsHtml(); }
+const qi = document.getElementById('pq');
+qi.addEventListener('input', () => { q = qi.value.trim().toLowerCase(); render(); });
+document.querySelectorAll('[data-cat]').forEach(b => b.addEventListener('click', () => {
+  cat = b.dataset.cat; document.querySelectorAll('[data-cat]').forEach(x => x.classList.toggle('active', x===b)); render();
+}));
+document.querySelectorAll('[data-sort]').forEach(b => b.addEventListener('click', () => {
+  sort = b.dataset.sort; document.querySelectorAll('[data-sort]').forEach(x => x.classList.toggle('on', x===b)); render();
+}));
+render();
+""".strip()
+
 # ---------------------------------------------------------------- page shell
 
 
@@ -734,6 +772,12 @@ def build_hub(meta, adds, ings, nutrients):
       <p>Hafer, Soja, Mandel und Co. im Vergleich: welcher Drink für Kaffee, Backen, Protein oder Klima am besten passt, mit Nährwerten.</p>
       <span class="meta">Drink finden →</span>
     </a>
+    <a class="toolcard" href="{url(PROT_BASE)}">
+      <span class="badge">Live</span>
+      <h3>Protein-Tabelle</h3>
+      <p>Die proteinreichsten pflanzlichen Lebensmittel, durchsuchbar und sortierbar, mit Eiweiß pro 100 Gramm. Von Tofu über Linsen bis Hanfsamen.</p>
+      <span class="meta">Protein finden →</span>
+    </a>
     <div class="toolcard soon">
       <span class="badge">In Arbeit</span>
       <h3>Mehr Tools kommen</h3>
@@ -806,6 +850,12 @@ def build_hub(meta, adds, ings, nutrients):
                         "position": 7,
                         "name": "Pflanzendrink-Vergleich",
                         "url": BASE_URL + url(PFLANZ_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 8,
+                        "name": "Vegane Protein-Tabelle",
+                        "url": BASE_URL + url(PROT_BASE),
                     },
                 ],
             },
@@ -2146,6 +2196,107 @@ def build_drink_detail(d, meta, drinks, usecases):
     )
 
 
+PROT_BASE = "/protein-tabelle/"
+
+
+def _prot_num(p):
+    return str(int(p)) if float(p) == int(p) else str(p)
+
+
+def build_protein(meta, foods, categories):
+    compact = [{"n": f["name"], "c": f["category"], "p": f["protein"]} for f in foods]
+    js = PROT_JS.replace("__DATA__", json.dumps(compact, ensure_ascii=False, separators=(",", ":")))
+
+    ranked = sorted(foods, key=lambda f: -f["protein"])
+    top_names = {f["name"] for f in ranked[:3]}
+    rows = "\n".join(
+        f'    <div class="prow{" top" if f["name"] in top_names else ""}">'
+        f'<div><div class="pname">{esc(f["name"])}</div><div class="pcat">{esc(f["category"])}</div></div>'
+        f'<div class="pval">{_prot_num(f["protein"])}<small> g/100g</small></div></div>'
+        for f in ranked
+    )
+    cat_chips = '    <button class="filt active" data-cat="all">Alle</button>\n' + "\n".join(
+        f'    <button class="filt" data-cat="{esc(c)}">{esc(c)}</button>' for c in categories
+    )
+
+    body = site_header("Protein-Tabelle") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>Protein-Tabelle</nav>
+<section class="hero">
+  <div class="eyebrow">Eiweiß ohne Tier</div>
+  <h1>Wo steckt das <span class="q">Protein?</span></h1>
+  <p class="sub">Die proteinreichsten pflanzlichen Lebensmittel auf einen Blick, durchsuchbar und sortierbar, mit Eiweiß pro 100 Gramm.</p>
+
+  <div class="search-shell">
+    <div class="search-box">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+      <input id="pq" type="text" autocomplete="off" placeholder="z. B. Tofu, Linsen oder Haferflocken" aria-label="Lebensmittel suchen">
+    </div>
+  </div>
+
+  <div class="psort">
+    <div class="seg">
+      <button type="button" data-sort="protein" class="on">Nach Protein</button>
+      <button type="button" data-sort="name">A bis Z</button>
+    </div>
+  </div>
+</section>
+
+<section class="listsec">
+  <div class="filters" id="filters" style="justify-content:center;margin-bottom:8px">
+{cat_chips}
+  </div>
+  <div class="ptable" id="ptable">
+{rows}
+  </div>
+  <div class="infobox" style="margin-left:auto;margin-right:auto">{esc(meta["disclaimer"])}</div>
+</section>
+
+<section class="section">
+  <h2>Wie viel Protein brauchst du?</h2>
+  <p class="prose">Je nach Aktivität rund 0,8 bis 1,6 g pro Kilo Körpergewicht. Wie viel genau für dich, rechnet dir der <a href="{url(NAEHR_BASE + "protein/")}" style="color:var(--green);font-weight:700;text-decoration:none">Nährstoff-Rechner</a> aus. Tipp: Kombiniere über den Tag verschiedene Quellen, dann passt auch das Aminosäureprofil.</p>
+</section>
+""" + site_footer(meta, full_disclaimer=False) + f"\n<script>{js}</script>"
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Vegane Protein-Tabelle",
+            "url": BASE_URL + url(PROT_BASE),
+            "applicationCategory": "HealthApplication",
+            "operatingSystem": "Web",
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+            "description": f"Durchsuchbare Tabelle der {len(foods)} proteinreichsten pflanzlichen Lebensmittel mit Eiweiß pro 100 Gramm.",
+            "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": "Welche veganen Lebensmittel haben am meisten Protein?",
+                 "acceptedAnswer": {"@type": "Answer", "text": f"Ganz vorn liegen {ranked[0]['name']}, {ranked[1]['name']} und {ranked[2]['name']}. Unter den Grundnahrungsmitteln sind Tofu, Tempeh, Hülsenfrüchte und Haferflocken die stärksten Proteinquellen."}},
+                {"@type": "Question", "name": "Wie viel Protein hat Tofu?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Tofu natur liefert rund 12 g Protein pro 100 g, Räuchertofu etwa 16 g und Tempeh sogar rund 19 g."}},
+            ],
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Protein-Tabelle", "item": BASE_URL + url(PROT_BASE)},
+            ],
+        },
+    ]
+    return page(
+        "Vegane Protein-Tabelle: die eiweißreichsten Lebensmittel | This Is Vegan",
+        f"Die {len(foods)} proteinreichsten pflanzlichen Lebensmittel, durchsuchbar und sortierbar, mit Eiweiß pro 100 g. Von Tofu über Linsen bis Hanfsamen. Kostenlos.",
+        PROT_BASE,
+        body,
+        jsonld,
+    )
+
+
 def build_404(meta):
     body = site_header("Tools") + f"""
 <section class="hero">
@@ -2190,6 +2341,9 @@ def main():
     drink_data = json.loads((ROOT / "data" / "pflanzendrinks-data.json").read_text(encoding="utf-8"))
     drink_meta, drinks, usecases = drink_data["meta"], drink_data["drinks"], drink_data["usecases"]
 
+    protein_data = json.loads((ROOT / "data" / "protein-data.json").read_text(encoding="utf-8"))
+    protein_meta, protein_foods, protein_cats = protein_data["meta"], protein_data["foods"], protein_data["categories"]
+
     if DIST.exists():
         shutil.rmtree(DIST)
     DIST.mkdir(parents=True)
@@ -2232,6 +2386,9 @@ def main():
     pages[PFLANZ_BASE] = build_drink_hub(drink_meta, drinks, usecases)
     for d in drinks:
         pages[PFLANZ_BASE + d["slug"] + "/"] = build_drink_detail(d, drink_meta, drinks, usecases)
+
+    # Protein-Tabelle
+    pages[PROT_BASE] = build_protein(protein_meta, protein_foods, protein_cats)
 
     for path, content in pages.items():
         out = DIST / path.lstrip("/") / "index.html"
