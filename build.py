@@ -368,8 +368,7 @@ def site_footer(meta, full_disclaimer=True):
     if full_disclaimer:
         disc = """<p class="disc">
   <b>Angaben ohne Gewähr.</b> Diese Einordnung dient der Orientierung. Bei vielen Zusatzstoffen (besonders Fettsäuren, Emulgatoren und Geschmacksverstärkern) hängt die Herkunft vom jeweiligen Hersteller ab und ist auf der Verpackung nicht erkennbar. Im Zweifel hilft nur eins: beim Hersteller nachfragen oder auf ein Vegan-Siegel achten. Zusatzstoffe, die im Endprodukt nicht mehr enthalten sind (technische Hilfsmittel wie Gelatine zur Weinklärung), müssen nicht deklariert werden.
-</p>
-<p class="sources">Quellen: PETA Deutschland, Verbraucherzentrale, vegpool.de, This Is Vegan. Stand: """ + esc(stand) + ".</p>"
+</p>"""
     else:
         disc = f'<p class="disc">Alle Tools sind kostenlos, laufen direkt im Browser und speichern nichts. Stand: {esc(stand)}.</p>'
     return f"""<footer class="site">
