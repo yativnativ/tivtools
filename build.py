@@ -234,12 +234,13 @@ footer.site{border-top:1px solid var(--line);padding:30px 0 50px;margin-top:60px
 
 # Zusatz-Styles für den Vegan-Ersatz-Finder (Substitut-Listen)
 CSS += """
-.subs{margin-top:18px;display:grid;gap:12px}
-.sub{background:rgba(255,255,255,.5);border-radius:13px;padding:14px 16px;border:1px solid rgba(10,48,48,.08)}
-.sub .sname{font-family:'Gabarito';font-weight:800;font-size:17px;color:var(--ink);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.sub .bf{font-family:'Figtree';font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--green-deep);background:rgba(41,165,121,.14);padding:3px 9px;border-radius:999px}
-.sub .ratio{margin-top:5px;font-size:14px;color:var(--teal);font-weight:600}
-.sub .nt{margin-top:5px;font-size:14px;color:#3a5856}
+.subs{margin-top:18px;display:flex;flex-direction:column;gap:12px}
+.colstack{display:flex;flex-direction:column;gap:12px}
+.optcard{background:rgba(255,255,255,.5);border-radius:13px;padding:14px 16px;border:1px solid rgba(10,48,48,.08)}
+.optcard .sname{font-family:'Gabarito';font-weight:800;font-size:17px;color:var(--ink);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.optcard .bf{font-family:'Figtree';font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--green-deep);background:rgba(41,165,121,.14);padding:3px 9px;border-radius:999px}
+.optcard .ratio{margin-top:5px;font-size:14px;color:var(--teal);font-weight:600}
+.optcard .nt{margin-top:5px;font-size:14px;color:#3a5856}
 .usecards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px}
 .usecard{background:rgba(248,222,205,.05);border:1px solid var(--line);border-radius:13px;padding:14px 16px}
 .usecard b{font-family:'Gabarito';font-weight:800;color:var(--peach);font-size:15px}
@@ -395,7 +396,7 @@ function render(item){
     return;
   }
   const subs = item.subs.map(s =>
-    '<div class="sub"><div class="sname">'+s.name+(s.bf?'<span class="bf">'+s.bf+'</span>':'')+'</div>'+
+    '<div class="optcard"><div class="sname">'+s.name+(s.bf?'<span class="bf">'+s.bf+'</span>':'')+'</div>'+
     '<div class="ratio">'+s.ratio+'</div>'+(s.nt?'<div class="nt">'+s.nt+'</div>':'')+'</div>').join("");
   r.innerHTML =
     '<div class="card"><div class="card-body">'+
@@ -576,6 +577,32 @@ document.querySelectorAll('[data-m]').forEach(b => b.addEventListener('click', (
 render();
 """.strip()
 
+# ---------------------------------------------------------------- JS (Pflanzendrink-Vergleich)
+
+PFLANZ_JS = r"""
+const D = __DATA__, U = __UC__;
+let uc = "kaffee";
+function statline(d){ return d.protein+' g Protein · '+d.kcal+' kcal pro 100 ml'+(d.barista?' · Barista-tauglich':''); }
+function render(){
+  document.querySelectorAll('[data-uc]').forEach(b => b.classList.toggle('on', b.dataset.uc===uc));
+  const u = U.find(x => x.key===uc);
+  document.getElementById('uchint').textContent = u.hint;
+  const sorted = [...D].sort((a,b) => b.r[uc]-a.r[uc] || a.name.localeCompare(b.name,'de'));
+  const max = sorted[0].r[uc];
+  document.getElementById('drinkout').innerHTML = sorted.map(d => {
+    const top = d.r[uc]===max;
+    const lvl = d.r[uc]===3?'top geeignet':(d.r[uc]===2?'gut geeignet':'weniger geeignet');
+    const badge = top ? '<span class="bf">Top-Wahl</span>'
+      : '<span class="bf" style="background:rgba(20,125,119,.12);color:var(--teal)">'+lvl+'</span>';
+    return '<div class="optcard"><div class="sname">'+d.name+badge+'</div>'+
+      '<div class="ratio">'+statline(d)+'</div><div class="nt">'+d.reason+'</div>'+
+      '<a class="more" href="'+d.u+'" style="display:inline-block;margin-top:9px;font-family:Gabarito;font-weight:700;font-size:13px;color:var(--green-deep);text-decoration:none">Mehr zu '+d.name+' →</a></div>';
+  }).join('');
+}
+document.querySelectorAll('[data-uc]').forEach(b => b.addEventListener('click', () => { uc = b.dataset.uc; render(); }));
+render();
+""".strip()
+
 # ---------------------------------------------------------------- page shell
 
 
@@ -701,6 +728,12 @@ def build_hub(meta, adds, ings, nutrients):
       <p>Monat wählen und sehen, welches Obst und Gemüse regional gerade Saison hat, frisch vom Feld oder aus dem Lager. Für jeden Monat eine eigene Übersicht.</p>
       <span class="meta">Saison checken →</span>
     </a>
+    <a class="toolcard" href="{url(PFLANZ_BASE)}">
+      <span class="badge">Live</span>
+      <h3>Pflanzendrink-Vergleich</h3>
+      <p>Hafer, Soja, Mandel und Co. im Vergleich: welcher Drink für Kaffee, Backen, Protein oder Klima am besten passt, mit Nährwerten.</p>
+      <span class="meta">Drink finden →</span>
+    </a>
     <div class="toolcard soon">
       <span class="badge">In Arbeit</span>
       <h3>Mehr Tools kommen</h3>
@@ -767,6 +800,12 @@ def build_hub(meta, adds, ings, nutrients):
                         "position": 6,
                         "name": "Vegan-Saisonkalender",
                         "url": BASE_URL + url(SAISON_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 7,
+                        "name": "Pflanzendrink-Vergleich",
+                        "url": BASE_URL + url(PFLANZ_BASE),
                     },
                 ],
             },
@@ -1143,7 +1182,7 @@ def build_ersatz_detail(ing, meta, ings):
     top = subs[0]
 
     subs_html = "\n".join(
-        f'    <div class="sub"><div class="sname">{esc(x["name"])}'
+        f'    <div class="optcard"><div class="sname">{esc(x["name"])}'
         + (f'<span class="bf">{esc(x["best_for"])}</span>' if x.get("best_for") else "")
         + f'</div><div class="ratio">{esc(x["ratio"])}</div>'
         + (f'<div class="nt">{esc(x["note"])}</div>' if x.get("note") else "")
@@ -1927,6 +1966,186 @@ def build_saison_month(idx, meta, produce):
     )
 
 
+PFLANZ_BASE = "/pflanzendrink-vergleich/"
+RATING_LABEL = {3: "top geeignet", 2: "gut geeignet", 1: "weniger geeignet"}
+
+
+def build_drink_hub(meta, drinks, usecases):
+    compact = [
+        {"name": d["name"], "protein": d["protein"], "kcal": d["kcal"], "barista": d["barista"],
+         "reason": d["reason"], "r": d["r"], "u": url(PFLANZ_BASE + d["slug"] + "/")}
+        for d in drinks
+    ]
+    js = PFLANZ_JS.replace("__DATA__", json.dumps(compact, ensure_ascii=False, separators=(",", ":")))
+    js = js.replace("__UC__", json.dumps(usecases, ensure_ascii=False, separators=(",", ":")))
+    uc_btn_list = []
+    for u in usecases:
+        on = ' class="on"' if u["key"] == "kaffee" else ""
+        uc_btn_list.append(f'    <button type="button" data-uc="{u["key"]}"{on}>{esc(u["label"])}</button>')
+    uc_btns = "\n".join(uc_btn_list)
+    detail_links = "\n".join(
+        f'    <a href="{url(PFLANZ_BASE + d["slug"] + "/")}">{esc(d["name"])}<span class="arrow">→</span></a>'
+        for d in sorted(drinks, key=lambda x: x["name"].lower())
+    )
+
+    body = site_header("Pflanzendrink-Vergleich") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>Pflanzendrink-Vergleich</nav>
+<section class="hero">
+  <div class="eyebrow">Hafer, Soja, Mandel und Co.</div>
+  <h1>Welcher Drink <span class="q">wofür?</span></h1>
+  <p class="sub">Sag, wofür du den Pflanzendrink brauchst, und sieh, welcher am besten passt, mit Nährwerten und Klimabilanz.</p>
+  <div class="months" role="group" aria-label="Einsatzzweck wählen">
+{uc_btns}
+  </div>
+  <p class="sub" id="uchint" style="margin-top:14px;font-size:15px;opacity:.7"></p>
+</section>
+
+<section class="listsec">
+  <div class="subs" id="drinkout" style="max-width:680px;margin:0 auto"></div>
+  <div class="infobox" style="margin-left:auto;margin-right:auto">{esc(meta["disclaimer"])}</div>
+</section>
+
+<section class="section">
+  <h2>Alle Drinks im Einzelporträt</h2>
+  <div class="linklist" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));display:grid">
+{detail_links}
+  </div>
+</section>
+""" + site_footer(meta, full_disclaimer=False) + f"\n<script>{js}</script>"
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Pflanzendrink-Vergleich",
+            "url": BASE_URL + url(PFLANZ_BASE),
+            "applicationCategory": "LifestyleApplication",
+            "operatingSystem": "Web",
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+            "description": "Vergleicht Hafer-, Soja-, Mandel- und weitere Pflanzendrinks nach Einsatzzweck, Nährwerten und Klimabilanz.",
+            "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": "Welche Pflanzenmilch eignet sich am besten für Kaffee?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Haferdrink in der Barista-Variante schäumt am besten und gerinnt im Kaffee nicht. Auch Soja- und Erbsendrink mit Barista-Zusatz funktionieren gut."}},
+                {"@type": "Question", "name": "Welcher Pflanzendrink hat am meisten Protein?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Sojadrink liegt mit rund 3,3 g pro 100 ml vorn, gefolgt von Erbsendrink mit etwa 2 g. Nuss- und Reisdrinks enthalten dagegen kaum Protein."}},
+            ],
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Pflanzendrink-Vergleich", "item": BASE_URL + url(PFLANZ_BASE)},
+            ],
+        },
+    ]
+    return page(
+        "Pflanzendrink-Vergleich: welche Pflanzenmilch wofür? | This Is Vegan",
+        "Hafer, Soja, Mandel und Co. im Vergleich: welcher Pflanzendrink für Kaffee, Backen, Protein oder Klima am besten passt. Mit Nährwerten. Kostenlos.",
+        PFLANZ_BASE,
+        body,
+        jsonld,
+    )
+
+
+def build_drink_detail(d, meta, drinks, usecases):
+    name = d["name"]
+    s = d["slug"]
+    path = PFLANZ_BASE + s + "/"
+    rating_html = "\n".join(
+        f'    <div class="usecard"><b>{esc(u["label"])}</b><span>{RATING_LABEL[d["r"][u["key"]]]}</span></div>'
+        for u in usecases
+    )
+    related = [x for x in drinks if x["slug"] != s][:6]
+    rel_html = "\n".join(
+        f'    <a class="item yes" href="{url(PFLANZ_BASE + r["slug"] + "/")}">'
+        f'<span class="bar"></span><div><div class="en">{esc(r["name"])}</div>'
+        f'<div class="nm">{r["protein"]} g Protein · {r["kcal"]} kcal</div></div></a>'
+        for r in related
+    )
+    barista = "Ja, in der Barista-Variante" if d["barista"] else "Eher nicht, schäumt schwach"
+
+    body = site_header("Pflanzendrink-Vergleich") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span><a href="{url(PFLANZ_BASE)}">Pflanzendrink-Vergleich</a><span>›</span>{esc(name)}</nav>
+<section class="hero left">
+  <div class="eyebrow">Im Pflanzendrink-Check</div>
+  <h1 class="detail">{esc(name)} <span class="q">im Check</span></h1>
+  <p class="sub" style="margin-left:0">{esc(d["reason"])}</p>
+</section>
+
+<section class="section">
+  <h2>Nährwerte pro 100 ml</h2>
+  <div class="usecards">
+    <div class="usecard"><b>{d["protein"]} g</b><span>Protein</span></div>
+    <div class="usecard"><b>{d["kcal"]} kcal</b><span>Energie</span></div>
+    <div class="usecard"><b>Kaffee</b><span>{esc(barista)}</span></div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Wofür eignet sich {esc(name)}?</h2>
+  <div class="usecards">
+{rating_html}
+  </div>
+</section>
+
+<section class="section">
+  <h2>Klima und Anbau</h2>
+  <p class="prose">{esc(d["eco"])}</p>
+</section>
+
+<section class="section">
+  <h2>Andere Drinks</h2>
+  <div class="related">
+{rel_html}
+  </div>
+</section>
+
+<div class="cta">
+  <div>
+    <h2>Den passenden Drink finden?</h2>
+    <p>Im Vergleich siehst du je nach Einsatzzweck die beste Wahl.</p>
+  </div>
+  <a class="btn" href="{url(PFLANZ_BASE)}">Zum Vergleich →</a>
+</div>
+""" + site_footer(meta, full_disclaimer=False)
+
+    best = max(usecases, key=lambda u: d["r"][u["key"]])
+    answer = f"{d['reason']} Besonders gut eignet sich {name} {best['label'].lower()}. Pro 100 ml stecken rund {d['protein']} g Protein und {d['kcal']} kcal drin."
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": f"Wofür eignet sich {name}?",
+                 "acceptedAnswer": {"@type": "Answer", "text": answer}},
+            ],
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Pflanzendrink-Vergleich", "item": BASE_URL + url(PFLANZ_BASE)},
+                {"@type": "ListItem", "position": 3, "name": name, "item": BASE_URL + url(path)},
+            ],
+        },
+    ]
+    return page(
+        f"{name} im Check: Nährwerte, Eignung, Klima | This Is Vegan",
+        f"{name} im Vergleich: Nährwerte, wofür er sich eignet und wie die Klimabilanz ist. {d['protein']} g Protein und {d['kcal']} kcal pro 100 ml.",
+        path,
+        body,
+        jsonld,
+        og_type="article",
+    )
+
+
 def build_404(meta):
     body = site_header("Tools") + f"""
 <section class="hero">
@@ -1968,6 +2187,9 @@ def main():
     saison_data = json.loads((ROOT / "data" / "saison-data.json").read_text(encoding="utf-8"))
     saison_meta, produce = saison_data["meta"], saison_data["produce"]
 
+    drink_data = json.loads((ROOT / "data" / "pflanzendrinks-data.json").read_text(encoding="utf-8"))
+    drink_meta, drinks, usecases = drink_data["meta"], drink_data["drinks"], drink_data["usecases"]
+
     if DIST.exists():
         shutil.rmtree(DIST)
     DIST.mkdir(parents=True)
@@ -2005,6 +2227,11 @@ def main():
     pages[SAISON_BASE] = build_saison_hub(saison_meta, produce)
     for i in range(12):
         pages[SAISON_BASE + MONTH_SLUGS[i] + "/"] = build_saison_month(i, saison_meta, produce)
+
+    # Pflanzendrink-Vergleich
+    pages[PFLANZ_BASE] = build_drink_hub(drink_meta, drinks, usecases)
+    for d in drinks:
+        pages[PFLANZ_BASE + d["slug"] + "/"] = build_drink_detail(d, drink_meta, drinks, usecases)
 
     for path, content in pages.items():
         out = DIST / path.lstrip("/") / "index.html"

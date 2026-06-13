@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "version": 1,
+    "lastUpdated": "2026-06-13",
+    "disclaimer": "Nährwerte sind ungefähre Mittelwerte für ungesüßte Drinks pro 100 ml und schwanken je nach Marke. Angereicherte Drinks liefern zusätzlich Calcium und Vitamine, achte beim Kauf aufs Etikett."
+  },
+  "usecases": [
+    {"key": "kaffee", "label": "Für Kaffee", "hint": "schäumt gut und gerinnt nicht"},
+    {"key": "backen", "label": "Zum Backen", "hint": "neutral und bindet zuverlässig"},
+    {"key": "kalt", "label": "Müsli und pur", "hint": "im Müsli und zum Trinken"},
+    {"key": "herzhaft", "label": "Herzhaft kochen", "hint": "für Saucen, Suppen und Currys"},
+    {"key": "protein", "label": "Viel Protein", "hint": "die eiweißreichsten Drinks"},
+    {"key": "kalorien", "label": "Wenig Kalorien", "hint": "die leichtesten Drinks"},
+    {"key": "klima", "label": "Klimafreundlich", "hint": "kleiner Fußabdruck"}
+  ],
+  "drinks": [
+    {"slug": "hafer", "name": "Haferdrink", "aka": ["Hafermilch", "Oatly", "Haferdrink"], "protein": 1.0, "kcal": 45, "barista": true, "eco": "Sehr klimafreundlich, regional anbaubar und sparsam im Wasserverbrauch.", "reason": "Der Allrounder: schäumt cremig, schmeckt neutral-süßlich und ist klimafreundlich.", "r": {"kaffee": 3, "backen": 3, "kalt": 3, "herzhaft": 2, "protein": 1, "kalorien": 2, "klima": 3}},
+    {"slug": "soja", "name": "Sojadrink", "aka": ["Sojamilch", "Sojadrink"], "protein": 3.3, "kcal": 39, "barista": true, "eco": "Guter Fußabdruck, das Soja für EU-Drinks stammt meist aus Europa.", "reason": "Proteinreich wie Kuhmilch, top zum Backen und für Herzhaftes.", "r": {"kaffee": 2, "backen": 3, "kalt": 2, "herzhaft": 3, "protein": 3, "kalorien": 3, "klima": 2}},
+    {"slug": "erbse", "name": "Erbsendrink", "aka": ["Erbsenmilch", "Erbsendrink"], "protein": 2.0, "kcal": 40, "barista": true, "eco": "Klimafreundlich und allergenarm, ohne Soja und Nüsse.", "reason": "Proteinreich, neutral im Geschmack und allergenarm, der unterschätzte Geheimtipp.", "r": {"kaffee": 2, "backen": 2, "kalt": 2, "herzhaft": 2, "protein": 3, "kalorien": 2, "klima": 3}},
+    {"slug": "mandel", "name": "Mandeldrink", "aka": ["Mandelmilch", "Mandeldrink"], "protein": 0.5, "kcal": 24, "barista": false, "eco": "Geschmacklich fein, aber der Mandelanbau braucht viel Wasser.", "reason": "Nussig und sehr kalorienarm, schwächelt aber bei Protein und Klimabilanz.", "r": {"kaffee": 2, "backen": 2, "kalt": 3, "herzhaft": 1, "protein": 1, "kalorien": 3, "klima": 2}},
+    {"slug": "kokos", "name": "Kokosdrink", "aka": ["Kokosmilch Drink", "Kokosdrink"], "protein": 0.2, "kcal": 35, "barista": false, "eco": "Lange Transportwege, dafür sparsam im Anbau.", "reason": "Cremig mit Kokosnote, glänzt vor allem in Currys und Desserts.", "r": {"kaffee": 2, "backen": 2, "kalt": 2, "herzhaft": 3, "protein": 1, "kalorien": 2, "klima": 2}},
+    {"slug": "reis", "name": "Reisdrink", "aka": ["Reismilch", "Reisdrink"], "protein": 0.1, "kcal": 50, "barista": false, "eco": "Reisanbau verursacht Methan, mittlere Bilanz.", "reason": "Von Natur aus süß und allergikerfreundlich, liefert aber kaum Protein.", "r": {"kaffee": 1, "backen": 2, "kalt": 3, "herzhaft": 1, "protein": 1, "kalorien": 2, "klima": 2}},
+    {"slug": "cashew", "name": "Cashewdrink", "aka": ["Cashewmilch", "Cashewdrink"], "protein": 0.5, "kcal": 25, "barista": false, "eco": "Wasserintensiv, ähnlich wie andere Nussdrinks.", "reason": "Mild und cremig, gut für Saucen, beim Protein aber schwach.", "r": {"kaffee": 1, "backen": 2, "kalt": 2, "herzhaft": 2, "protein": 1, "kalorien": 3, "klima": 2}},
+    {"slug": "dinkel", "name": "Dinkeldrink", "aka": ["Dinkelmilch", "Dinkeldrink"], "protein": 0.6, "kcal": 40, "barista": false, "eco": "Regional und klimafreundlich, ähnlich wie Hafer.", "reason": "Getreidig-mild und regional, eine schöne Alternative fürs Müsli.", "r": {"kaffee": 1, "backen": 2, "kalt": 2, "herzhaft": 2, "protein": 1, "kalorien": 2, "klima": 3}}
+  ]
+}
