@@ -1,0 +1,115 @@
+{
+  "meta": {
+    "version": 1,
+    "lastUpdated": "2026-06-13",
+    "disclaimer": "Orientierung, keine medizinische Beratung. Die Werte sind Richtwerte für gesunde Erwachsene auf Basis gängiger Referenzwerte (EFSA, DGE). Bei Schwangerschaft, Stillzeit, Krankheit oder Unsicherheit lass deine Werte ärztlich checken, vor allem B12, Eisen und Vitamin D per Bluttest."
+  },
+  "nutrients": [
+    {
+      "slug": "protein",
+      "name": "Protein",
+      "short": "Protein",
+      "unit": "g pro Tag",
+      "target_type": "protein",
+      "intro": "Protein ist vegan gut zu decken, der Bedarf liegt bei aktiven Menschen etwas höher als die oft zitierten 0,8 g pro Kilo.",
+      "why": "Protein baut und erhält Muskeln, Enzyme und Hormone. Pflanzliche Quellen liefern alle nötigen Aminosäuren, wenn du über den Tag verteilt isst und Hülsenfrüchte mit Getreide kombinierst.",
+      "targets": "Wenig aktiv: 0,8 bis 1,0 g pro kg. Aktiv: 1,2 bis 1,4 g pro kg. Kraft- oder Ausdauersport: 1,4 bis 1,6 g pro kg.",
+      "sources": [
+        {"food": "Tofu", "amount": "ca. 12 g pro 100 g"},
+        {"food": "Tempeh", "amount": "ca. 19 g pro 100 g"},
+        {"food": "Seitan", "amount": "ca. 25 g pro 100 g"},
+        {"food": "Linsen, gekocht", "amount": "ca. 9 g pro 100 g"},
+        {"food": "Kichererbsen, gekocht", "amount": "ca. 8 g pro 100 g"},
+        {"food": "Edamame", "amount": "ca. 11 g pro 100 g"},
+        {"food": "Haferflocken", "amount": "ca. 13 g pro 100 g"},
+        {"food": "Erbsenprotein-Pulver", "amount": "ca. 22 g pro Portion"}
+      ],
+      "tip": "Verteil dein Protein über den Tag statt alles in eine Mahlzeit zu packen. Eine Portion zu jeder Hauptmahlzeit reicht meistens.",
+      "supplement": {"level": "optional", "text": "Bei hohem Bedarf oder wenig Appetit füllt ein Proteinpulver (Erbse, Soja, Reis) die Lücke unkompliziert."},
+      "readmore": [["Die besten veganen Proteinpulver im Test", "/die-besten-veganen-proteinpulver/"]]
+    },
+    {
+      "slug": "b12",
+      "name": "Vitamin B12",
+      "short": "B12",
+      "unit": "µg pro Tag",
+      "target_type": "fixed",
+      "target": 4,
+      "intro": "B12 ist der einzige Nährstoff, den du bei veganer Ernährung zwingend supplementieren musst. Das ist kein Makel, sondern Fakt.",
+      "why": "B12 ist wichtig für Nerven und Blutbildung. Pflanzen produzieren es nicht in verlässlicher Form, deshalb ist ein Supplement bei veganer Ernährung Pflicht, nicht Option.",
+      "targets": "Referenzwert rund 4 µg pro Tag. Über ein Supplement gedeckt oft höher dosiert, da der Körper nur einen Teil aufnimmt.",
+      "sources": [
+        {"food": "B12-Supplement (Tropfen oder Tablette)", "amount": "der verlässliche Weg"},
+        {"food": "Angereicherte Pflanzendrinks", "amount": "ergänzend, nicht ausreichend"},
+        {"food": "Angereicherte Hefeflocken", "amount": "ergänzend"}
+      ],
+      "tip": "Cyanocobalamin ist günstig und gut erforscht, Methylcobalamin eine Alternative. Lass deinen Spiegel ab und zu per Bluttest (Holo-TC) prüfen.",
+      "supplement": {"level": "essenziell", "text": "Ein B12-Supplement ist bei veganer Ernährung nicht verhandelbar. Regelmäßig einnehmen, fertig."},
+      "readmore": [["Vitamin B12 vegan: alles zur Versorgung", "/vitamin-b12-vegan-2026/"]]
+    },
+    {
+      "slug": "eisen",
+      "name": "Eisen",
+      "short": "Eisen",
+      "unit": "mg pro Tag",
+      "target_type": "sex",
+      "target_female": 15,
+      "target_male": 10,
+      "intro": "Pflanzliches Eisen ist reichlich da, der Körper nimmt es nur etwas schlechter auf. Mit einem Trick gleichst du das locker aus.",
+      "why": "Eisen transportiert Sauerstoff im Blut. Pflanzliches Eisen (Nicht-Häm) wird schlechter aufgenommen als tierisches, lässt sich aber mit Vitamin C deutlich besser verwerten.",
+      "targets": "Frauen im Menstruationsalter rund 15 mg, Männer rund 10 mg. Veganer profitieren von etwas mehr und guter Kombination.",
+      "sources": [
+        {"food": "Linsen, gekocht", "amount": "ca. 3,3 mg pro 100 g"},
+        {"food": "Kürbiskerne", "amount": "ca. 12 mg pro 100 g"},
+        {"food": "Tofu", "amount": "ca. 2,8 mg pro 100 g"},
+        {"food": "Haferflocken", "amount": "ca. 4,3 mg pro 100 g"},
+        {"food": "Kichererbsen, gekocht", "amount": "ca. 2,9 mg pro 100 g"},
+        {"food": "Getrocknete Aprikosen", "amount": "ca. 3 mg pro 100 g"}
+      ],
+      "tip": "Kombiniere Eisen mit Vitamin C, also Paprika, Zitrone oder Orangensaft zur Mahlzeit. Kaffee und schwarzen Tee besser zwischen die Mahlzeiten legen.",
+      "supplement": {"level": "bei Bedarf", "text": "Nur bei nachgewiesenem Mangel und am besten ärztlich begleitet. Eisen einfach so zu schlucken ist nicht sinnvoll."}
+    },
+    {
+      "slug": "omega-3",
+      "name": "Omega-3",
+      "short": "Omega-3",
+      "unit": "g ALA pro Tag",
+      "target_type": "sex",
+      "target_female": 1.1,
+      "target_male": 1.6,
+      "intro": "Pflanzliches Omega-3 (ALA) ist einfach zu decken. Für die aktiven Formen EPA und DHA gibt es eine saubere vegane Lösung.",
+      "why": "Omega-3-Fettsäuren sind wichtig für Herz und Gehirn. Die pflanzliche Form ALA steckt in Leinöl und Co., die direkt wirksamen EPA und DHA kommen aus Algenöl, ganz ohne Fisch.",
+      "targets": "ALA rund 1,1 g (Frauen) bis 1,6 g (Männer) pro Tag. Zusätzlich gilt Algenöl mit EPA und DHA als sinnvolle Ergänzung.",
+      "sources": [
+        {"food": "Leinöl", "amount": "1 EL deckt den ALA-Bedarf locker"},
+        {"food": "Gemahlene Leinsamen", "amount": "1 bis 2 EL pro Tag"},
+        {"food": "Chiasamen", "amount": "ca. 18 g ALA pro 100 g"},
+        {"food": "Walnüsse", "amount": "eine Handvoll täglich"},
+        {"food": "Hanfsamen", "amount": "gutes Fettsäureverhältnis"}
+      ],
+      "tip": "Leinöl immer kalt verwenden und gekühlt lagern, Hitze zerstört die Fettsäuren. Leinsamen gemahlen nehmen, ganze gehen oft unverdaut durch.",
+      "supplement": {"level": "sinnvoll", "text": "Ein Algenöl mit EPA und DHA (rund 250 mg pro Tag) ist die vegane Alternative zu Fischöl und für viele eine sinnvolle Ergänzung."}
+    },
+    {
+      "slug": "calcium",
+      "name": "Calcium",
+      "short": "Calcium",
+      "unit": "mg pro Tag",
+      "target_type": "fixed",
+      "target": 1000,
+      "intro": "Calcium geht auch ohne Milch problemlos, wenn du auf angereicherte Drinks und ein paar Calcium-Stars setzt.",
+      "why": "Calcium hält Knochen und Zähne stabil. Pflanzliche Quellen liefern reichlich, angereicherte Drinks und calciumreiches Mineralwasser machen es einfach.",
+      "targets": "Rund 1000 mg pro Tag für Erwachsene.",
+      "sources": [
+        {"food": "Angereicherte Pflanzendrinks", "amount": "wie Kuhmilch, ca. 120 mg pro 100 ml"},
+        {"food": "Tofu mit Calciumsulfat", "amount": "ca. 200 bis 350 mg pro 100 g"},
+        {"food": "Sesam und Tahin", "amount": "sehr calciumreich"},
+        {"food": "Grünkohl und Brokkoli", "amount": "gut verwertbares Calcium"},
+        {"food": "Mandeln", "amount": "ca. 270 mg pro 100 g"},
+        {"food": "Calciumreiches Mineralwasser", "amount": "über 150 mg pro Liter"}
+      ],
+      "tip": "Achte beim Pflanzendrink aufs Etikett: Nur die angereicherten Sorten liefern Calcium. Bio-Drinks dürfen oft nicht angereichert sein.",
+      "supplement": {"level": "bei Bedarf", "text": "Über Lebensmittel meist gut machbar. Ein Supplement nur, wenn du die Menge sonst nicht erreichst."}
+    }
+  ]
+}

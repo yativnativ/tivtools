@@ -246,6 +246,32 @@ CSS += """
 .usecard span{display:block;margin-top:3px;font-size:13px;opacity:.75}
 """
 
+# Zusatz-Styles für den Nährstoff-Rechner
+CSS += """
+.calc{background:var(--peach);color:var(--ink);border-radius:20px;padding:24px;box-shadow:0 22px 60px -28px rgba(0,0,0,.55);max-width:640px;margin:30px auto 0}
+.calc-grid{display:grid;grid-template-columns:1fr;gap:18px}
+@media(min-width:620px){.calc-grid{grid-template-columns:1fr 1fr}}
+.field{display:grid;gap:8px}
+.field label{font-family:'Gabarito';font-weight:700;font-size:14px;color:var(--ink)}
+.field input[type=number]{font-family:'Gabarito';font-weight:700;font-size:20px;border:2px solid rgba(10,48,48,.15);border-radius:12px;padding:12px 14px;background:#fff;color:var(--ink);width:100%}
+.field input[type=number]:focus{outline:none;border-color:var(--green)}
+.seg{display:flex;gap:8px;flex-wrap:wrap}
+.seg button{cursor:pointer;border:2px solid rgba(10,48,48,.15);background:#fff;color:var(--ink);font-family:'Figtree';font-weight:600;font-size:14px;padding:10px 15px;border-radius:999px;transition:all .14s}
+.seg button.on{background:var(--green-deep);border-color:var(--green-deep);color:#fff}
+.nresults{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:12px;margin:24px auto 0;max-width:920px}
+.ncard{background:var(--peach);color:var(--ink);border-radius:16px;padding:18px 20px;text-align:left;display:flex;flex-direction:column}
+.ncard .nlabel{font-family:'Figtree';font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal)}
+.ncard .nval{font-family:'Gabarito';font-weight:900;font-size:28px;letter-spacing:-.02em;color:var(--ink);line-height:1.05;margin-top:2px}
+.ncard .nunit{font-size:13px;color:#3a5856;font-weight:600;margin-top:1px}
+.ncard .nsrc{margin-top:11px;font-size:13px;color:#3a5856;flex:1}
+.ncard .b2{align-self:flex-start;margin-top:11px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.b-ess{background:rgba(192,57,43,.14);color:#a02d20}
+.b-opt{background:rgba(41,165,121,.14);color:var(--green-deep)}
+.ncard .more{margin-top:11px;font-family:'Gabarito';font-weight:700;font-size:13px;color:var(--green-deep);text-decoration:none}
+.infobox{margin-top:24px;background:rgba(248,222,205,.06);border:1px solid var(--line);border-left:3px solid var(--terra);border-radius:12px;padding:16px 18px;font-size:14px;opacity:.9;max-width:920px}
+.infobox b{opacity:1}
+"""
+
 # ---------------------------------------------------------------- JS (Checker)
 
 CHECKER_JS = r"""
@@ -373,6 +399,43 @@ document.querySelectorAll(".chip").forEach(c => c.addEventListener("click", () =
 }));
 """.strip()
 
+# ---------------------------------------------------------------- JS (Nährstoff-Rechner)
+
+NAEHR_JS = r"""
+const N = __DATA__;
+let weight = 70, sex = 'f', act = 'active';
+function proteinRange(){
+  const f = {low:[0.8,1.0], active:[1.2,1.4], sport:[1.4,1.6]}[act];
+  return Math.round(weight*f[0]) + ' bis ' + Math.round(weight*f[1]);
+}
+function targetFor(n){
+  if(n.type==='protein') return proteinRange();
+  if(n.type==='sex') return String(sex==='f' ? n.tf : n.tm);
+  return String(n.target);
+}
+function badge(n){
+  if(n.sup==='essenziell') return '<span class="b2 b-ess">Supplement Pflicht</span>';
+  if(n.sup==='sinnvoll') return '<span class="b2 b-opt">Supplement sinnvoll</span>';
+  return '';
+}
+function render(){
+  document.getElementById('nresults').innerHTML = N.map(n =>
+    '<div class="ncard"><div class="nlabel">'+n.name+'</div>'+
+    '<div class="nval">'+targetFor(n)+'</div><div class="nunit">'+n.unit+'</div>'+
+    '<div class="nsrc">'+n.cover+'</div>'+badge(n)+
+    '<a class="more" href="'+n.u+'">So deckst du es →</a></div>').join('');
+}
+const w = document.getElementById('w');
+if(w){ w.addEventListener('input', () => { const v = parseFloat(w.value); if(v>0 && v<400){ weight = v; render(); } }); }
+document.querySelectorAll('[data-sex]').forEach(b => b.addEventListener('click', () => {
+  sex = b.dataset.sex; document.querySelectorAll('[data-sex]').forEach(x=>x.classList.toggle('on', x===b)); render();
+}));
+document.querySelectorAll('[data-act]').forEach(b => b.addEventListener('click', () => {
+  act = b.dataset.act; document.querySelectorAll('[data-act]').forEach(x=>x.classList.toggle('on', x===b)); render();
+}));
+render();
+""".strip()
+
 # ---------------------------------------------------------------- page shell
 
 
@@ -451,7 +514,7 @@ def site_footer(meta, full_disclaimer=True):
 # ---------------------------------------------------------------- pages
 
 
-def build_hub(meta, adds, ings):
+def build_hub(meta, adds, ings, nutrients):
     counts = {s: sum(1 for a in adds if a["status"] == s) for s in ("yes", "no", "maybe")}
     body = site_header("Tools", "Gratis · ohne Anmeldung") + f"""
 <section class="hero left">
@@ -473,6 +536,12 @@ def build_hub(meta, adds, ings):
       <h3>Vegan-Ersatz-Finder</h3>
       <p>Zutat eingeben und die besten veganen Alternativen sehen, mit Menge und Einsatzzweck. {len(ings)} Zutaten von Ei und Butter bis Käse und Gelatine.</p>
       <span class="meta">Ersatz finden →</span>
+    </a>
+    <a class="toolcard" href="{url(NAEHR_BASE)}">
+      <span class="badge">Live</span>
+      <h3>Nährstoff-Rechner</h3>
+      <p>Gewicht und Aktivität eingeben und sofort sehen, wie viel Protein, B12, Eisen, Omega-3 und Calcium du brauchst, plus die besten pflanzlichen Quellen.</p>
+      <span class="meta">Bedarf berechnen →</span>
     </a>
     <div class="toolcard soon">
       <span class="badge">In Arbeit</span>
@@ -516,6 +585,12 @@ def build_hub(meta, adds, ings):
                         "position": 2,
                         "name": "Vegan-Ersatz-Finder",
                         "url": BASE_URL + url(ERSATZ_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Veganer Nährstoff-Rechner",
+                        "url": BASE_URL + url(NAEHR_BASE),
                     },
                 ],
             },
@@ -1005,6 +1080,223 @@ def build_ersatz_detail(ing, meta, ings):
     )
 
 
+NAEHR_BASE = "/naehrstoffrechner/"
+
+
+def _cover(n):
+    return "z. B. " + ", ".join(s["food"] for s in n["sources"][:3])
+
+
+def build_naehrstoff_hub(meta, nutrients):
+    compact = [
+        {
+            "name": n["name"], "unit": n["unit"], "type": n["target_type"],
+            "target": n.get("target"), "tf": n.get("target_female"), "tm": n.get("target_male"),
+            "cover": _cover(n), "sup": n["supplement"]["level"],
+            "u": url(NAEHR_BASE + n["slug"] + "/"),
+        }
+        for n in nutrients
+    ]
+    js = NAEHR_JS.replace("__DATA__", json.dumps(compact, ensure_ascii=False, separators=(",", ":")))
+
+    blurbs = "\n".join(
+        f'  <p class="prose"><b>{esc(n["name"])}.</b> {esc(n["intro"])} '
+        f'<a href="{url(NAEHR_BASE + n["slug"] + "/")}" style="color:var(--green);font-weight:700;text-decoration:none">Mehr →</a></p>'
+        for n in nutrients
+    )
+
+    body = site_header("Nährstoff-Rechner") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>Nährstoff-Rechner</nav>
+<section class="hero">
+  <div class="eyebrow">Dein veganer Nährstoff-Check</div>
+  <h1>Deckst du deinen <span class="q">Bedarf?</span></h1>
+  <p class="sub">Gewicht und Aktivität eingeben, sofort deine Richtwerte für die fünf wichtigsten Nährstoffe sehen, mit den besten pflanzlichen Quellen.</p>
+
+  <div class="calc">
+    <div class="calc-grid">
+      <div class="field">
+        <label for="w">Dein Gewicht in kg</label>
+        <input id="w" type="number" value="70" min="30" max="250" inputmode="numeric" aria-label="Gewicht in Kilogramm">
+      </div>
+      <div class="field">
+        <label>Geschlecht</label>
+        <div class="seg">
+          <button type="button" data-sex="f" class="on">weiblich</button>
+          <button type="button" data-sex="m">männlich</button>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Wie aktiv bist du?</label>
+      <div class="seg">
+        <button type="button" data-act="low">wenig aktiv</button>
+        <button type="button" data-act="active" class="on">aktiv</button>
+        <button type="button" data-act="sport">Sport oder Kraft</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="nresults" id="nresults"></div>
+  <div class="infobox">{esc(meta["disclaimer"])}</div>
+</section>
+
+<section class="section">
+  <h2>Die fünf, auf die es ankommt</h2>
+  <p class="lead">Bei veganer Ernährung lohnt der Blick auf diese fünf Nährstoffe. Vier davon deckst du leicht über Essen, einen musst du supplementieren.</p>
+  <div style="margin-top:16px;max-width:640px">
+{blurbs}
+  </div>
+</section>
+""" + site_footer(meta, full_disclaimer=False) + f"\n<script>{js}</script>"
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Veganer Nährstoff-Rechner",
+            "url": BASE_URL + url(NAEHR_BASE),
+            "applicationCategory": "HealthApplication",
+            "operatingSystem": "Web",
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+            "description": "Berechnet Richtwerte für Protein, B12, Eisen, Omega-3 und Calcium bei veganer Ernährung, mit den besten pflanzlichen Quellen.",
+            "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": "Wie viel Protein brauche ich vegan?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Je nach Aktivität rund 0,8 bis 1,6 g pro Kilo Körpergewicht. Wenig aktiv 0,8 bis 1,0, aktiv 1,2 bis 1,4, bei Kraft- oder Ausdauersport 1,4 bis 1,6 g pro kg."}},
+                {"@type": "Question", "name": "Muss ich B12 supplementieren?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Ja. B12 ist der einzige Nährstoff, den du bei veganer Ernährung zwingend über ein Supplement zuführen musst, da Pflanzen es nicht in verlässlicher Form liefern."}},
+                {"@type": "Question", "name": "Welche Nährstoffe sind bei veganer Ernährung kritisch?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Vor allem B12 (Supplement nötig), außerdem lohnt der Blick auf Protein, Eisen, Omega-3 und Calcium. Diese vier lassen sich gut über die Ernährung decken."}},
+            ],
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Nährstoff-Rechner", "item": BASE_URL + url(NAEHR_BASE)},
+            ],
+        },
+    ]
+    return page(
+        "Veganer Nährstoff-Rechner: dein Bedarf in 10 Sekunden | This Is Vegan",
+        "Gewicht und Aktivität eingeben und sehen, wie viel Protein, B12, Eisen, Omega-3 und Calcium du als Veganer brauchst, mit den besten pflanzlichen Quellen. Kostenlos.",
+        NAEHR_BASE,
+        body,
+        jsonld,
+    )
+
+
+def build_naehrstoff_detail(n, meta, nutrients):
+    name = n["name"]
+    s = n["slug"]
+    path = NAEHR_BASE + s + "/"
+    sup = n["supplement"]
+    sup_class = "b-ess" if sup["level"] == "essenziell" else "b-opt"
+
+    sources_html = "\n".join(
+        f'    <div class="usecard"><b>{esc(src["food"])}</b><span>{esc(src["amount"])}</span></div>'
+        for src in n["sources"]
+    )
+    related = [x for x in nutrients if x["slug"] != s]
+    rel_html = "\n".join(
+        f'    <a class="item yes" href="{url(NAEHR_BASE + r["slug"] + "/")}">'
+        f'<span class="bar"></span><div><div class="en">{esc(r["name"])}</div>'
+        f'<div class="nm">{esc(r["unit"])}</div></div></a>'
+        for r in related
+    )
+    read_links = n.get("readmore", [])
+    read_html = ""
+    if read_links:
+        read_html = (
+            '<section class="section"><h2>Weiterlesen im Magazin</h2><div class="linklist">'
+            + "".join(f'<a href="{MAIN_SITE}{href}">{esc(t)}<span class="arrow">→</span></a>' for t, href in read_links)
+            + "</div></section>"
+        )
+
+    body = site_header("Nährstoff-Rechner") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span><a href="{url(NAEHR_BASE)}">Nährstoff-Rechner</a><span>›</span>{esc(name)}</nav>
+<section class="hero left">
+  <div class="eyebrow">Vegan versorgt</div>
+  <h1 class="detail">{esc(name)} <span class="q">vegan</span> decken</h1>
+  <p class="sub" style="margin-left:0">{esc(n["intro"])}</p>
+</section>
+
+<section class="section">
+  <h2>Wie viel brauchst du?</h2>
+  <p class="prose">{esc(n["targets"])}</p>
+  <div class="infobox"><b>{esc(sup["level"].capitalize())}:</b> {esc(sup["text"])}</div>
+</section>
+
+<section class="section">
+  <h2>Warum es zählt</h2>
+  <p class="prose">{esc(n["why"])}</p>
+</section>
+
+<section class="section">
+  <h2>Die besten pflanzlichen Quellen</h2>
+  <div class="usecards">
+{sources_html}
+  </div>
+  <div class="infobox"><b>Tipp:</b> {esc(n["tip"])}</div>
+</section>
+
+<section class="section">
+  <h2>Weitere Nährstoffe</h2>
+  <div class="related">
+{rel_html}
+  </div>
+</section>
+
+<div class="cta">
+  <div>
+    <h2>Deinen Bedarf berechnen?</h2>
+    <p>Der Nährstoff-Rechner zeigt dir deine persönlichen Richtwerte in zehn Sekunden.</p>
+  </div>
+  <a class="btn" href="{url(NAEHR_BASE)}">Zum Rechner →</a>
+</div>
+
+{read_html}
+""" + site_footer(meta, full_disclaimer=False)
+
+    answer = n["targets"]
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": f"Wie viel {name} brauchen Veganer?",
+                 "acceptedAnswer": {"@type": "Answer", "text": answer}},
+            ],
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Nährstoff-Rechner", "item": BASE_URL + url(NAEHR_BASE)},
+                {"@type": "ListItem", "position": 3, "name": name, "item": BASE_URL + url(path)},
+            ],
+        },
+    ]
+    first = n["intro"].split(". ")[0].rstrip(".") + "."
+    desc = f"{name} vegan decken: Bedarf, beste pflanzliche Quellen und Tipps. {first}"
+    if len(desc) > 155:
+        desc = f"{name} vegan: Bedarf, beste pflanzliche Quellen und Tipps zur Versorgung. Vom This-Is-Vegan-Nährstoff-Rechner."
+    titles = {
+        "protein": "Veganer Proteinbedarf: wie viel brauchst du wirklich? | This Is Vegan",
+        "b12": "Vitamin B12 vegan: Bedarf, Quellen und Supplement | This Is Vegan",
+        "eisen": "Eisen vegan: Bedarf und die besten Quellen | This Is Vegan",
+        "omega-3": "Omega-3 vegan: ALA, EPA, DHA und Algenöl | This Is Vegan",
+        "calcium": "Calcium vegan: Bedarf ohne Milch decken | This Is Vegan",
+    }
+    return page(titles.get(s, f"{name} vegan: Bedarf und Quellen | This Is Vegan"), desc, path, body, jsonld, og_type="article")
+
+
 def build_404(meta):
     body = site_header("Tools") + f"""
 <section class="hero">
@@ -1030,6 +1322,9 @@ def main():
     ersatz_data = json.loads((ROOT / "data" / "ersatz-data.json").read_text(encoding="utf-8"))
     ersatz_meta, ings = ersatz_data["meta"], ersatz_data["ingredients"]
 
+    naehr_data = json.loads((ROOT / "data" / "naehrstoffe-data.json").read_text(encoding="utf-8"))
+    naehr_meta, nutrients = naehr_data["meta"], naehr_data["nutrients"]
+
     if DIST.exists():
         shutil.rmtree(DIST)
     DIST.mkdir(parents=True)
@@ -1040,7 +1335,7 @@ def main():
         shutil.copy(f, DIST / f.name)
 
     pages = {}  # path -> html
-    pages["/"] = build_hub(meta, adds, ings)
+    pages["/"] = build_hub(meta, adds, ings, nutrients)
     pages["/e-nummern/"] = build_checker(meta, adds)
     for a in adds:
         pages[f"/e-nummern/{slug(a['code'])}/"] = build_detail(a, meta, adds)
@@ -1049,6 +1344,11 @@ def main():
     pages[ERSATZ_BASE] = build_ersatz_hub(ersatz_meta, ings)
     for i in ings:
         pages[ERSATZ_BASE + i["slug"] + "/"] = build_ersatz_detail(i, ersatz_meta, ings)
+
+    # Nährstoff-Rechner
+    pages[NAEHR_BASE] = build_naehrstoff_hub(naehr_meta, nutrients)
+    for nt in nutrients:
+        pages[NAEHR_BASE + nt["slug"] + "/"] = build_naehrstoff_detail(nt, naehr_meta, nutrients)
 
     for path, content in pages.items():
         out = DIST / path.lstrip("/") / "index.html"
@@ -1088,7 +1388,7 @@ def main():
     )
 
     n = len(pages) + 1
-    print(f"OK: {n} Seiten nach {DIST} gebaut ({len(adds)} Zusatzstoffe, {len(ings)} Ersatz-Zutaten).")
+    print(f"OK: {n} Seiten nach {DIST} gebaut ({len(adds)} Zusatzstoffe, {len(ings)} Ersatz-Zutaten, {len(nutrients)} Nährstoffe).")
 
 
 if __name__ == "__main__":
