@@ -272,6 +272,19 @@ CSS += """
 .infobox b{opacity:1}
 """
 
+# Zusatz-Styles für den Impact-Rechner
+CSS += """
+.iunit{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;margin:24px auto 0;max-width:560px}
+.iunit input{font-family:'Gabarito';font-weight:800;font-size:24px;width:120px;text-align:center;border:2px solid rgba(248,222,205,.22);border-radius:13px;padding:12px;background:rgba(248,222,205,.07);color:var(--peach)}
+.iunit input:focus{outline:none;border-color:var(--green)}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:30px auto 0;max-width:760px}
+@media(min-width:760px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{background:var(--peach);color:var(--ink);border-radius:18px;padding:22px 16px;text-align:center;box-shadow:0 18px 50px -28px rgba(0,0,0,.5)}
+.stat .snum{font-family:'Gabarito';font-weight:900;font-size:clamp(26px,5vw,40px);letter-spacing:-.03em;line-height:1;color:var(--green-deep)}
+.stat .slabel{font-family:'Gabarito';font-weight:700;font-size:14px;margin-top:9px;color:var(--ink)}
+.stat .seq{font-size:12px;color:#3a5856;margin-top:6px;line-height:1.4}
+"""
+
 # ---------------------------------------------------------------- JS (Checker)
 
 CHECKER_JS = r"""
@@ -436,6 +449,32 @@ document.querySelectorAll('[data-act]').forEach(b => b.addEventListener('click',
 render();
 """.strip()
 
+# ---------------------------------------------------------------- JS (Impact-Rechner)
+
+IMPACT_JS = r"""
+const P = __DATA__;
+let amount = 1, unit = 'year';
+function days(){ return amount * (unit==='day'?1:(unit==='month'?30.44:365)); }
+function fmt(x){ return Math.round(x).toLocaleString('de-DE'); }
+function card(n,l,e){ return '<div class="stat"><div class="snum">'+n+'</div><div class="slabel">'+l+'</div><div class="seq">'+e+'</div></div>'; }
+function render(){
+  const d = days();
+  const animals = P.animals*d, co2 = P.co2_kg*d, water = P.water_l*d, land = P.land_m2*d;
+  const co2str = co2>=1000 ? fmt(co2/1000)+' t' : fmt(co2)+' kg';
+  document.getElementById('stats').innerHTML =
+    card(fmt(animals), 'Tiere gerettet', 'die meisten davon Fische') +
+    card(co2str, 'CO2 gespart', 'wie rund '+fmt(co2/0.12)+' km im Auto') +
+    card(fmt(water)+' L', 'Wasser gespart', 'rund '+fmt(water/150)+' volle Badewannen') +
+    card(fmt(land)+' m²', 'Ackerland gespart', 'das sonst für Tierfutter draufginge');
+}
+const inp = document.getElementById('amt');
+if(inp){ inp.addEventListener('input', ()=>{ const v=parseFloat(inp.value); if(v>0 && v<100000){ amount=v; render(); } }); }
+document.querySelectorAll('[data-unit]').forEach(b=>b.addEventListener('click',()=>{
+  unit=b.dataset.unit; document.querySelectorAll('[data-unit]').forEach(x=>x.classList.toggle('on',x===b)); render();
+}));
+render();
+""".strip()
+
 # ---------------------------------------------------------------- page shell
 
 
@@ -543,6 +582,12 @@ def build_hub(meta, adds, ings, nutrients):
       <p>Gewicht und Aktivität eingeben und sofort sehen, wie viel Protein, B12, Eisen, Omega-3 und Calcium du brauchst, plus die besten pflanzlichen Quellen.</p>
       <span class="meta">Bedarf berechnen →</span>
     </a>
+    <a class="toolcard" href="{url(IMPACT_BASE)}">
+      <span class="badge">Live</span>
+      <h3>Impact-Rechner</h3>
+      <p>Sieh, was deine vegane Ernährung bewegt: gerettete Tiere, gespartes CO2, Wasser und Ackerland. Zeitraum eingeben, Ergebnis teilen.</p>
+      <span class="meta">Wirkung sehen →</span>
+    </a>
     <div class="toolcard soon">
       <span class="badge">In Arbeit</span>
       <h3>Mehr Tools kommen</h3>
@@ -591,6 +636,12 @@ def build_hub(meta, adds, ings, nutrients):
                         "position": 3,
                         "name": "Veganer Nährstoff-Rechner",
                         "url": BASE_URL + url(NAEHR_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Veganer Impact-Rechner",
+                        "url": BASE_URL + url(IMPACT_BASE),
                     },
                 ],
             },
@@ -1297,6 +1348,87 @@ def build_naehrstoff_detail(n, meta, nutrients):
     return page(titles.get(s, f"{name} vegan: Bedarf und Quellen | This Is Vegan"), desc, path, body, jsonld, og_type="article")
 
 
+IMPACT_BASE = "/impact-rechner/"
+
+
+def build_impact(meta):
+    js = IMPACT_JS.replace("__DATA__", json.dumps(meta["per_day"], ensure_ascii=False, separators=(",", ":")))
+    body = site_header("Impact-Rechner") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>Impact-Rechner</nav>
+<section class="hero">
+  <div class="eyebrow">Zahlen, die motivieren</div>
+  <h1>Was du wirklich <span class="q">bewegst.</span></h1>
+  <p class="sub">Gib ein, wie lange du schon vegan lebst, und sieh, was das für Tiere, Klima, Wasser und Ackerland bedeutet.</p>
+
+  <div class="iunit">
+    <input id="amt" type="number" value="1" min="1" max="99999" inputmode="numeric" aria-label="Zeitraum">
+    <div class="seg">
+      <button type="button" data-unit="day">Tage</button>
+      <button type="button" data-unit="month">Monate</button>
+      <button type="button" data-unit="year" class="on">Jahre</button>
+    </div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+  <div class="infobox" style="margin-left:auto;margin-right:auto"><b>So rechnen wir:</b> {esc(meta["methodik"])}</div>
+</section>
+
+<section class="section">
+  <h2>Warum jeder Tag zählt</h2>
+  <p class="prose">Diese Zahlen sind keine Abrechnung, sondern eine Erinnerung. Jede Mahlzeit ohne tierische Produkte senkt die Nachfrage, und Nachfrage ist am Ende das Einzige, worauf die Lebensmittelindustrie reagiert. Du musst nicht perfekt sein, damit sich etwas bewegt.</p>
+  <p class="prose">Teil dein Ergebnis mit Leuten, die noch zögern. Konkrete Zahlen überzeugen oft mehr als jedes Argument.</p>
+</section>
+
+<section class="section">
+  <h2>Mehr von This Is Vegan</h2>
+  <div class="linklist">
+""" + "\n".join(
+        f'    <a href="{href}">{esc(t)}<span class="arrow">→</span></a>' for t, href in READ_MORE
+    ) + f"""
+  </div>
+</section>
+""" + site_footer(meta, full_disclaimer=False) + f"\n<script>{js}</script>"
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Veganer Impact-Rechner",
+            "url": BASE_URL + url(IMPACT_BASE),
+            "applicationCategory": "LifestyleApplication",
+            "operatingSystem": "Web",
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+            "description": "Zeigt, wie viele Tiere, wie viel CO2, Wasser und Ackerland eine vegane Ernährung über einen Zeitraum spart.",
+            "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": "Wie viele Tiere rettet man als Veganer?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Konservativ geschätzt rund 100 Tiere pro Jahr, der größte Teil davon Fische und Meerestiere. Die Zahl beruht auf vermiedener Nachfrage und schwankt je nach Quelle zwischen etwa 30 und über 400."}},
+                {"@type": "Question", "name": "Wie viel CO2 spart eine vegane Ernährung?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Im Vergleich zu einer durchschnittlichen Ernährung rund 2,5 kg CO2-Äquivalent pro Tag, also etwa 0,9 Tonnen im Jahr. Studien zur Ernährungs-Ökobilanz nennen je nach Annahmen unterschiedliche Werte."}},
+            ],
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Impact-Rechner", "item": BASE_URL + url(IMPACT_BASE)},
+            ],
+        },
+    ]
+    return page(
+        "Veganer Impact-Rechner: Tiere, CO2 und Wasser, die du sparst | This Is Vegan",
+        "Sieh, wie viele Tiere, wie viel CO2, Wasser und Ackerland deine vegane Ernährung spart. Zeitraum eingeben, sofort dein persönliches Ergebnis sehen. Kostenlos.",
+        IMPACT_BASE,
+        body,
+        jsonld,
+    )
+
+
 def build_404(meta):
     body = site_header("Tools") + f"""
 <section class="hero">
@@ -1325,6 +1457,13 @@ def main():
     naehr_data = json.loads((ROOT / "data" / "naehrstoffe-data.json").read_text(encoding="utf-8"))
     naehr_meta, nutrients = naehr_data["meta"], naehr_data["nutrients"]
 
+    impact_full = json.loads((ROOT / "data" / "impact-data.json").read_text(encoding="utf-8"))
+    impact_cfg = {
+        "lastUpdated": impact_full["meta"]["lastUpdated"],
+        "per_day": impact_full["per_day"],
+        "methodik": impact_full["methodik"],
+    }
+
     if DIST.exists():
         shutil.rmtree(DIST)
     DIST.mkdir(parents=True)
@@ -1349,6 +1488,9 @@ def main():
     pages[NAEHR_BASE] = build_naehrstoff_hub(naehr_meta, nutrients)
     for nt in nutrients:
         pages[NAEHR_BASE + nt["slug"] + "/"] = build_naehrstoff_detail(nt, naehr_meta, nutrients)
+
+    # Impact-Rechner
+    pages[IMPACT_BASE] = build_impact(impact_cfg)
 
     for path, content in pages.items():
         out = DIST / path.lstrip("/") / "index.html"

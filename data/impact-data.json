@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "version": 1,
+    "lastUpdated": "2026-06-13"
+  },
+  "per_day": {
+    "animals": 0.27,
+    "co2_kg": 2.5,
+    "water_l": 2500,
+    "land_m2": 2.7
+  },
+  "methodik": "Das sind Schätzwerte auf Basis von Ökobilanz-Studien zu Ernährungsweisen, Daten zum Wasser- und Flächenfußabdruck tierischer Lebensmittel und Statistiken zum Pro-Kopf-Verbrauch. Verglichen wird eine vegane mit einer durchschnittlichen Ernährung. Die Zahlen schwanken je nach Quelle und Lebensstil deutlich, deshalb rechnen wir bewusst eher konservativ. Pro Tag rund: 0,27 Tiere, 2,5 kg CO2-Äquivalent, 2.500 Liter Wasser und 2,7 m² Fläche. Die Tier-Zahl bezieht sich auf vermiedene Nachfrage, der größte Teil davon sind Fische und Meerestiere."
+}
