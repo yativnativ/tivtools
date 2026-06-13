@@ -232,6 +232,20 @@ footer.site{border-top:1px solid var(--line);padding:30px 0 50px;margin-top:60px
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 """.strip()
 
+# Zusatz-Styles für den Vegan-Ersatz-Finder (Substitut-Listen)
+CSS += """
+.subs{margin-top:18px;display:grid;gap:12px}
+.sub{background:rgba(255,255,255,.5);border-radius:13px;padding:14px 16px;border:1px solid rgba(10,48,48,.08)}
+.sub .sname{font-family:'Gabarito';font-weight:800;font-size:17px;color:var(--ink);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sub .bf{font-family:'Figtree';font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--green-deep);background:rgba(41,165,121,.14);padding:3px 9px;border-radius:999px}
+.sub .ratio{margin-top:5px;font-size:14px;color:var(--teal);font-weight:600}
+.sub .nt{margin-top:5px;font-size:14px;color:#3a5856}
+.usecards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:18px}
+.usecard{background:rgba(248,222,205,.05);border:1px solid var(--line);border-radius:13px;padding:14px 16px}
+.usecard b{font-family:'Gabarito';font-weight:800;color:var(--peach);font-size:15px}
+.usecard span{display:block;margin-top:3px;font-size:13px;opacity:.75}
+"""
+
 # ---------------------------------------------------------------- JS (Checker)
 
 CHECKER_JS = r"""
@@ -304,6 +318,58 @@ document.querySelectorAll(".filt").forEach(f => f.addEventListener("click", () =
     if(show) shown++;
   });
   document.querySelector("#grid .empty").style.display = shown ? "none" : "block";
+}));
+""".strip()
+
+# ---------------------------------------------------------------- JS (Ersatz-Finder)
+
+ERSATZ_JS = r"""
+const DATA = __DATA__;
+const norm = s => s.toLowerCase().replace(/\s+/g,"").replace(/[^a-z0-9äöüß]/g,"");
+function find(query){
+  const q = norm(query);
+  if(!q) return null;
+  let hit = DATA.find(d => norm(d.name) === q);
+  if(hit) return hit;
+  hit = DATA.find(d => d.aka.some(a => norm(a) === q));
+  if(hit) return hit;
+  hit = DATA.find(d => norm(d.name).startsWith(q));
+  if(hit) return hit;
+  return DATA.find(d => norm(d.name).includes(q) || d.aka.some(a => norm(a).includes(q))) || null;
+}
+function render(item){
+  const r = document.getElementById("result");
+  if(!item){
+    r.innerHTML = '<div class="miss"><h3>Dazu habe ich noch keinen Eintrag</h3>'+
+      '<p>Versuch die Grundzutat (z. B. Ei, Butter, Milch, Käse). Wir bauen die Liste laufend aus.</p></div>';
+    return;
+  }
+  const subs = item.subs.map(s =>
+    '<div class="sub"><div class="sname">'+s.name+(s.bf?'<span class="bf">'+s.bf+'</span>':'')+'</div>'+
+    '<div class="ratio">'+s.ratio+'</div>'+(s.nt?'<div class="nt">'+s.nt+'</div>':'')+'</div>').join("");
+  r.innerHTML =
+    '<div class="card"><div class="card-body">'+
+      '<div class="enum">'+item.name+' vegan ersetzen</div>'+
+      (item.intro?'<p class="info">'+item.intro+'</p>':'')+
+      '<div class="subs">'+subs+'</div>'+
+      '<a class="detail-link" href="'+item.u+'">Alle Details und Tipps zu '+item.name+' →</a>'+
+    '</div></div>';
+}
+function search(){
+  const v = document.getElementById("q").value;
+  if(!v.trim()){ document.getElementById("result").innerHTML=""; return; }
+  render(find(v));
+}
+document.getElementById("go").addEventListener("click", search);
+document.getElementById("q").addEventListener("keydown", e => { if(e.key==="Enter") search(); });
+document.getElementById("q").addEventListener("input", e => {
+  if(e.target.value.trim().length >= 2) search();
+  else document.getElementById("result").innerHTML="";
+});
+document.querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => {
+  document.getElementById("q").value = c.dataset.c;
+  search();
+  document.getElementById("result").scrollIntoView({behavior:"smooth", block:"center"});
 }));
 """.strip()
 
@@ -385,7 +451,7 @@ def site_footer(meta, full_disclaimer=True):
 # ---------------------------------------------------------------- pages
 
 
-def build_hub(meta, adds):
+def build_hub(meta, adds, ings):
     counts = {s: sum(1 for a in adds if a["status"] == s) for s in ("yes", "no", "maybe")}
     body = site_header("Tools", "Gratis · ohne Anmeldung") + f"""
 <section class="hero left">
@@ -399,8 +465,14 @@ def build_hub(meta, adds):
     <a class="toolcard" href="{url('/e-nummern/')}">
       <span class="badge">Live</span>
       <h3>E-Nummern-Checker</h3>
-      <p>E-Nummer oder Zutat eingeben und sofort sehen, ob der Zusatzstoff vegan ist. {len(adds)} Zusatzstoffe in der Datenbank: {counts['yes']} vegan, {counts['maybe']} herkunftsabhängig, {counts['no']} immer tierisch.</p>
+      <p>E-Nummer oder Zutat eingeben und sofort sehen, ob der Zusatzstoff vegan ist. {len(adds)} Zusatzstoffe: {counts['yes']} vegan, {counts['maybe']} herkunftsabhängig, {counts['no']} immer tierisch.</p>
       <span class="meta">Jetzt prüfen →</span>
+    </a>
+    <a class="toolcard" href="{url(ERSATZ_BASE)}">
+      <span class="badge">Live</span>
+      <h3>Vegan-Ersatz-Finder</h3>
+      <p>Zutat eingeben und die besten veganen Alternativen sehen, mit Menge und Einsatzzweck. {len(ings)} Zutaten von Ei und Butter bis Käse und Gelatine.</p>
+      <span class="meta">Ersatz finden →</span>
     </a>
     <div class="toolcard soon">
       <span class="badge">In Arbeit</span>
@@ -438,7 +510,13 @@ def build_hub(meta, adds):
                         "position": 1,
                         "name": "E-Nummern-Checker: Ist das vegan?",
                         "url": BASE_URL + url("/e-nummern/"),
-                    }
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Vegan-Ersatz-Finder",
+                        "url": BASE_URL + url(ERSATZ_BASE),
+                    },
                 ],
             },
         }
@@ -713,6 +791,220 @@ def build_detail(a, meta, adds):
     return page(title, desc, path, body, jsonld, og_type="article")
 
 
+ERSATZ_BASE = "/vegan-ersetzen/"
+
+ERSATZ_POPULAR = ["Ei", "Butter", "Milch", "Schlagsahne", "Käse", "Gelatine"]
+
+
+def build_ersatz_hub(meta, ings):
+    sorted_ings = sorted(ings, key=lambda x: x["name"].lower())
+    items = "\n".join(
+        f'    <a class="item yes" href="{url(ERSATZ_BASE + i["slug"] + "/")}">'
+        f'<span class="bar"></span><div><div class="en">{esc(i["name"])}</div>'
+        f'<div class="nm">{esc(i["category"])}</div></div></a>'
+        for i in sorted_ings
+    )
+    compact = [
+        {
+            "name": i["name"], "aka": i.get("aka", []), "intro": i.get("intro", ""),
+            "subs": [
+                {"name": s["name"], "ratio": s["ratio"], "bf": s.get("best_for", ""), "nt": s.get("note", "")}
+                for s in i["substitutes"]
+            ],
+            "u": url(ERSATZ_BASE + i["slug"] + "/"),
+        }
+        for i in ings
+    ]
+    js = ERSATZ_JS.replace("__DATA__", json.dumps(compact, ensure_ascii=False, separators=(",", ":")))
+    chips = "\n".join(f'    <button class="chip" data-c="{esc(c)}">{esc(c)}</button>' for c in ERSATZ_POPULAR)
+
+    body = site_header("Vegan-Ersatz-Finder") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>Vegan-Ersatz-Finder</nav>
+<section class="hero">
+  <div class="eyebrow">Kochen und Backen ohne Tierisches</div>
+  <h1>Womit <span class="q">ersetzen?</span></h1>
+  <p class="sub">Zutat eingeben und sofort die besten veganen Alternativen sehen, mit Menge und wofür sie sich am besten eignen.</p>
+
+  <div class="search-shell">
+    <div class="search-box">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+      <input id="q" type="text" autocomplete="off" placeholder="z. B. Ei, Butter, Sahne oder Gelatine" aria-label="Zutat suchen, die du vegan ersetzen willst">
+      <button class="go" id="go">Finden</button>
+    </div>
+  </div>
+
+  <div class="chips">
+    <span>Beliebt:</span>
+{chips}
+  </div>
+
+  <div id="result" aria-live="polite"></div>
+</section>
+
+<section class="listsec">
+  <div class="listhead">
+    <div>
+      <h2>Alle Zutaten</h2>
+      <p>{len(ings)} Zutaten mit veganen Alternativen. Tipp antippen für alle Details.</p>
+    </div>
+  </div>
+  <div class="grid" id="grid">
+{items}
+  </div>
+</section>
+""" + site_footer(meta, full_disclaimer=False) + f"\n<script>{js}</script>"
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Vegan-Ersatz-Finder",
+            "url": BASE_URL + url(ERSATZ_BASE),
+            "applicationCategory": "LifestyleApplication",
+            "operatingSystem": "Web",
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+            "description": f"Kostenloser Finder für vegane Alternativen zu {len(ings)} Zutaten wie Ei, Butter, Milch und Käse, mit Mengenangaben.",
+            "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Vegan-Ersatz-Finder", "item": BASE_URL + url(ERSATZ_BASE)},
+            ],
+        },
+    ]
+    return page(
+        "Vegan ersetzen: der Ersatz-Finder für Ei, Butter, Milch und mehr | This Is Vegan",
+        f"Zutat eingeben und die besten veganen Alternativen sehen, mit Menge und Einsatzzweck. {len(ings)} Zutaten von Ei bis Gelatine. Kostenlos, ohne Anmeldung.",
+        ERSATZ_BASE,
+        body,
+        jsonld,
+    )
+
+
+def build_ersatz_detail(ing, meta, ings):
+    name = ing["name"]
+    s = ing["slug"]
+    path = ERSATZ_BASE + s + "/"
+    subs = ing["substitutes"]
+    top = subs[0]
+
+    subs_html = "\n".join(
+        f'    <div class="sub"><div class="sname">{esc(x["name"])}'
+        + (f'<span class="bf">{esc(x["best_for"])}</span>' if x.get("best_for") else "")
+        + f'</div><div class="ratio">{esc(x["ratio"])}</div>'
+        + (f'<div class="nt">{esc(x["note"])}</div>' if x.get("note") else "")
+        + "</div>"
+        for x in subs
+    )
+
+    related = [x for x in ings if x["category"] == ing["category"] and x["slug"] != s][:6]
+    if len(related) < 4:
+        related += [x for x in ings if x["slug"] != s and x not in related][: 4 - len(related)]
+    rel_html = "\n".join(
+        f'    <a class="item yes" href="{url(ERSATZ_BASE + r["slug"] + "/")}">'
+        f'<span class="bar"></span><div><div class="en">{esc(r["name"])}</div>'
+        f'<div class="nm">{esc(r["category"])}</div></div></a>'
+        for r in related
+    )
+
+    read_links = ing.get("readmore", [])
+    read_html = ""
+    if read_links:
+        read_html = (
+            '<section class="section"><h2>Weiterlesen im Magazin</h2><div class="linklist">'
+            + "".join(
+                f'<a href="{MAIN_SITE}{href}">{esc(t)}<span class="arrow">→</span></a>'
+                for t, href in read_links
+            )
+            + "</div></section>"
+        )
+
+    intro = ing.get("intro", "")
+    answer = f"Am vielseitigsten ist {top['name']} ({top['ratio']}). Insgesamt gibt es {len(subs)} gute vegane Alternativen, je nachdem, was {name} im Rezept tun soll."
+
+    body = site_header("Vegan-Ersatz-Finder") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span><a href="{url(ERSATZ_BASE)}">Vegan ersetzen</a><span>›</span>{esc(name)}</nav>
+<section class="hero left">
+  <div class="eyebrow">{esc(ing["category"])} · vegan ersetzen</div>
+  <h1 class="detail">{esc(name)} vegan <span class="q">ersetzen</span></h1>
+  <p class="sub" style="margin-left:0">{esc(intro)}</p>
+</section>
+
+<div id="result" style="margin:20px 0 0;max-width:640px">
+  <div class="card" style="animation:none"><div class="card-body">
+    <div class="enum" style="font-size:22px">Die besten Alternativen</div>
+    <div class="subs">
+{subs_html}
+    </div>
+  </div></div>
+</div>
+
+<section class="section">
+  <h2>Was eignet sich wofür?</h2>
+  <div class="usecards">
+""" + "\n".join(
+        f'    <div class="usecard"><b>{esc(x["name"])}</b><span>{esc(x.get("best_for", "Allrounder"))}</span></div>'
+        for x in subs
+    ) + f"""
+  </div>
+</section>
+
+<section class="section">
+  <h2>Ähnliche Zutaten ersetzen</h2>
+  <div class="related">
+{rel_html}
+  </div>
+</section>
+
+<div class="cta">
+  <div>
+    <h2>Noch eine Zutat ersetzen?</h2>
+    <p>Der Vegan-Ersatz-Finder kennt {len(ings)} Zutaten und zeigt dir sofort die passende Alternative.</p>
+  </div>
+  <a class="btn" href="{url(ERSATZ_BASE)}">Zum Finder →</a>
+</div>
+
+{read_html}
+""" + site_footer(meta, full_disclaimer=False)
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": f"Wie kann ich {name} vegan ersetzen?",
+                    "acceptedAnswer": {"@type": "Answer", "text": answer},
+                }
+            ],
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Vegan ersetzen", "item": BASE_URL + url(ERSATZ_BASE)},
+                {"@type": "ListItem", "position": 3, "name": name, "item": BASE_URL + url(path)},
+            ],
+        },
+    ]
+    desc = f"{name} vegan ersetzen: {len(subs)} Alternativen mit Menge und Einsatzzweck. Bester Allrounder: {top['name']}. Kostenlos im Ersatz-Finder von This Is Vegan."
+    if len(desc) > 155:
+        desc = f"{name} vegan ersetzen: {len(subs)} Alternativen mit Menge und Einsatzzweck, vom This-Is-Vegan-Ersatz-Finder."
+    return page(
+        f"{name} vegan ersetzen: die besten Alternativen | This Is Vegan",
+        desc,
+        path,
+        body,
+        jsonld,
+        og_type="article",
+    )
+
+
 def build_404(meta):
     body = site_header("Tools") + f"""
 <section class="hero">
@@ -735,6 +1027,9 @@ def main():
     data = json.loads(DATA_FILE.read_text(encoding="utf-8"))
     meta, adds = data["meta"], data["additives"]
 
+    ersatz_data = json.loads((ROOT / "data" / "ersatz-data.json").read_text(encoding="utf-8"))
+    ersatz_meta, ings = ersatz_data["meta"], ersatz_data["ingredients"]
+
     if DIST.exists():
         shutil.rmtree(DIST)
     DIST.mkdir(parents=True)
@@ -745,10 +1040,15 @@ def main():
         shutil.copy(f, DIST / f.name)
 
     pages = {}  # path -> html
-    pages["/"] = build_hub(meta, adds)
+    pages["/"] = build_hub(meta, adds, ings)
     pages["/e-nummern/"] = build_checker(meta, adds)
     for a in adds:
         pages[f"/e-nummern/{slug(a['code'])}/"] = build_detail(a, meta, adds)
+
+    # Vegan-Ersatz-Finder
+    pages[ERSATZ_BASE] = build_ersatz_hub(ersatz_meta, ings)
+    for i in ings:
+        pages[ERSATZ_BASE + i["slug"] + "/"] = build_ersatz_detail(i, ersatz_meta, ings)
 
     for path, content in pages.items():
         out = DIST / path.lstrip("/") / "index.html"
@@ -788,7 +1088,7 @@ def main():
     )
 
     n = len(pages) + 1
-    print(f"OK: {n} Seiten nach {DIST} gebaut ({len(adds)} Zusatzstoffe).")
+    print(f"OK: {n} Seiten nach {DIST} gebaut ({len(adds)} Zusatzstoffe, {len(ings)} Ersatz-Zutaten).")
 
 
 if __name__ == "__main__":

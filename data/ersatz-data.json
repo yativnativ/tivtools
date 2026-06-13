@@ -1,0 +1,216 @@
+{
+  "meta": {
+    "version": 1,
+    "lastUpdated": "2026-06-13",
+    "disclaimer": "Mengenangaben sind Richtwerte aus der Praxis. Je nach Rezept, Marke und gewünschter Konsistenz kann etwas Feinjustieren nötig sein. Bei Fertigprodukten immer auf das Vegan-Siegel achten, manche enthalten versteckt Milch oder Ei."
+  },
+  "ingredients": [
+    {
+      "slug": "ei",
+      "name": "Ei",
+      "aka": ["Eier", "Hühnerei", "Eiersatz", "Ei ersetzen", "Ei zum Backen"],
+      "category": "Backen & Eier",
+      "intro": "Ei hat im Rezept verschiedene Aufgaben: binden, lockern oder Feuchtigkeit geben. Der beste Ersatz hängt davon ab, was das Ei eigentlich tut.",
+      "substitutes": [
+        {"name": "Leinsamen-Ei", "ratio": "1 EL gemahlene Leinsamen + 3 EL Wasser, 10 Minuten quellen", "best_for": "Binden", "note": "Der Klassiker für Muffins, Brot und Pfannkuchen. Macht Gebäck etwas dichter."},
+        {"name": "Chia-Ei", "ratio": "1 EL Chiasamen + 3 EL Wasser, quellen lassen", "best_for": "Binden", "note": "Wie das Leinsamen-Ei, geschmacklich etwas neutraler."},
+        {"name": "Apfelmus", "ratio": "60 g ungesüßtes Apfelmus = 1 Ei", "best_for": "Feuchtigkeit", "note": "Hält Kuchen saftig, bindet aber kaum. Gut zusammen mit etwas mehr Backpulver."},
+        {"name": "Reife Banane", "ratio": "1/2 zerdrückte Banane = 1 Ei", "best_for": "Feuchtigkeit", "note": "Bringt Eigengeschmack mit, passt zu süßem Gebäck und Pancakes."},
+        {"name": "Aquafaba (Kichererbsenwasser)", "ratio": "3 EL = 1 Ei, 2 EL = 1 Eiweiß", "best_for": "Lockern und Aufschlagen", "note": "Lässt sich steif schlagen, ideal für Baiser, Mousse und Waffeln."},
+        {"name": "Seidentofu", "ratio": "60 g püriert = 1 Ei", "best_for": "Dichte, feuchte Backwaren", "note": "Neutral und proteinreich, super für Brownies, Käsekuchen und Quiche."},
+        {"name": "Kichererbsenmehl", "ratio": "1 EL Mehl + 3 EL Wasser verquirlt", "best_for": "Herzhaft", "note": "Die Basis für veganes Rührei und Omelett."}
+      ],
+      "readmore": [["Kichererbsen-Omelett: das vegane Rührei", "/kichererbsen-omelette-rezept/"]]
+    },
+    {
+      "slug": "butter",
+      "name": "Butter",
+      "aka": ["Butterersatz", "Butter ersetzen", "vegane Butter"],
+      "category": "Milch & Sahne",
+      "intro": "Butter lässt sich fast überall ersetzen. Die Wahl hängt davon ab, ob du backst, brätst oder streichst.",
+      "substitutes": [
+        {"name": "Vegane Margarine", "ratio": "1:1", "best_for": "Backen, Streichen, Kochen", "note": "Der direkteste Tausch. Auf das Vegan-Siegel achten, manche Margarinen enthalten Molke oder Milchpulver."},
+        {"name": "Kokosöl", "ratio": "1:1, etwas weniger nehmen", "best_for": "Backen, fester Biss", "note": "Wird kühl fest. Desodoriertes Kokosöl schmeckt neutral."},
+        {"name": "Pflanzenöl", "ratio": "etwa 3/4 der Buttermenge", "best_for": "Rührteig, Muffins", "note": "Für flüssige Teige, nicht zum Streichen."}
+      ]
+    },
+    {
+      "slug": "milch",
+      "name": "Milch",
+      "aka": ["Kuhmilch", "Milchersatz", "Milch ersetzen", "Pflanzenmilch", "Pflanzendrink"],
+      "category": "Milch & Sahne",
+      "intro": "Pflanzendrinks ersetzen Kuhmilch 1:1. Welcher am besten passt, hängt vom Gericht ab.",
+      "substitutes": [
+        {"name": "Hafermilch", "ratio": "1:1", "best_for": "Allrounder, Kaffee, Backen", "note": "Schäumt gut, leicht süßlich, der neutralste Allrounder."},
+        {"name": "Sojamilch", "ratio": "1:1", "best_for": "Backen, herzhaft, Aufschlagen", "note": "Proteinreich, gerinnt mit Säure und eignet sich so auch als Buttermilch-Ersatz."},
+        {"name": "Mandelmilch", "ratio": "1:1", "best_for": "Müsli, süßes Backen", "note": "Leicht nussig und kalorienarm."},
+        {"name": "Kokosmilch (Dose)", "ratio": "nach Bedarf", "best_for": "Currys, cremige Saucen", "note": "Sehr cremig und reichhaltig, mit deutlichem Eigengeschmack."}
+      ]
+    },
+    {
+      "slug": "schlagsahne",
+      "name": "Schlagsahne",
+      "aka": ["Sahne", "Sahneersatz", "Sahne ersetzen", "vegane Sahne", "Schlagsahne ersetzen"],
+      "category": "Milch & Sahne",
+      "intro": "Zum Aufschlagen brauchst du eine spezielle vegane Sahne oder den Trick mit Kokosmilch.",
+      "substitutes": [
+        {"name": "Vegane Aufschlagcreme (Soja oder Hafer)", "ratio": "1:1", "best_for": "Schlagsahne, Torten", "note": "Gibt es fertig im Kühlregal. Gut gekühlt aufschlagen."},
+        {"name": "Kokossahne", "ratio": "fester Teil einer gekühlten Kokosmilch-Dose", "best_for": "Schlagsahne, Desserts", "note": "Dose über Nacht kühlen, nur den festen Teil aufschlagen."},
+        {"name": "Cashewcreme", "ratio": "100 g eingeweichte Cashews + Wasser pürieren", "best_for": "Cremige Desserts", "note": "Reichhaltig, lässt sich aber nicht steif schlagen."}
+      ]
+    },
+    {
+      "slug": "kochsahne",
+      "name": "Kochsahne",
+      "aka": ["Sahne zum Kochen", "Cuisine", "Kochsahne ersetzen"],
+      "category": "Milch & Sahne",
+      "intro": "Für Saucen und Aufläufe ist pflanzliche Kochsahne der einfachste Weg.",
+      "substitutes": [
+        {"name": "Hafer- oder Soja-Cuisine", "ratio": "1:1", "best_for": "Saucen, Suppen, Aufläufe", "note": "Fertig im Regal, kocht nicht so leicht aus wie purer Pflanzendrink."},
+        {"name": "Cashewcreme", "ratio": "Cashews + Wasser pürieren", "best_for": "Cremige Saucen", "note": "Selbstgemacht, sehr cremig und neutral."},
+        {"name": "Kokosmilch", "ratio": "1:1", "best_for": "Currys, Suppen", "note": "Cremig mit Kokosnote."}
+      ]
+    },
+    {
+      "slug": "frischkaese",
+      "name": "Frischkäse",
+      "aka": ["Frischkäse ersetzen", "veganer Frischkäse", "Frischkäseersatz"],
+      "category": "Käse",
+      "intro": "Frischkäse gibt es fertig vegan oder schnell selbst gemacht aus Cashews.",
+      "substitutes": [
+        {"name": "Veganer Frischkäse", "ratio": "1:1", "best_for": "Aufstrich, Dips, Cheesecake", "note": "In vielen Sorten fertig, meist auf Soja-, Cashew- oder Kokosbasis."},
+        {"name": "Cashew-Frischkäse", "ratio": "eingeweichte Cashews + Zitrone + Salz pürieren", "best_for": "Aufstrich, herzhaft", "note": "In wenigen Minuten selbst gemacht."}
+      ]
+    },
+    {
+      "slug": "quark",
+      "name": "Quark",
+      "aka": ["Quark ersetzen", "veganer Quark", "Quarkersatz", "Skyr"],
+      "category": "Käse",
+      "intro": "Veganer Quark steht im Kühlregal, geht aber auch mit ein paar Tricks selbst.",
+      "substitutes": [
+        {"name": "Veganer Quark", "ratio": "1:1", "best_for": "Süß und herzhaft", "note": "Oft auf Soja- oder Lupinenbasis."},
+        {"name": "Sojajoghurt, abgetropft", "ratio": "über ein Tuch abtropfen lassen", "best_for": "Dips, Backen", "note": "Wird über Nacht quarkähnlich fest."},
+        {"name": "Seidentofu", "ratio": "püriert", "best_for": "Cremige Desserts, Backen", "note": "Neutral und proteinreich."}
+      ]
+    },
+    {
+      "slug": "joghurt",
+      "name": "Joghurt",
+      "aka": ["Joghurt ersetzen", "veganer Joghurt", "Joghurtersatz", "Naturjoghurt"],
+      "category": "Milch & Sahne",
+      "intro": "Pflanzenjoghurt ersetzt Naturjoghurt 1:1, die Basis bestimmt den Geschmack.",
+      "substitutes": [
+        {"name": "Sojajoghurt", "ratio": "1:1", "best_for": "Allrounder, Backen", "note": "Proteinreich und am ehesten wie Naturjoghurt."},
+        {"name": "Kokosjoghurt", "ratio": "1:1", "best_for": "Süß, Bowls", "note": "Cremig mit leichter Kokosnote."},
+        {"name": "Mandel- oder Haferjoghurt", "ratio": "1:1", "best_for": "Müsli, mild", "note": "Leicht und mild."}
+      ]
+    },
+    {
+      "slug": "kaese",
+      "name": "Käse",
+      "aka": ["Käse ersetzen", "veganer Käse", "Käseersatz", "Käse zum Überbacken"],
+      "category": "Käse",
+      "intro": "Käse vegan ersetzen heißt: für den Geschmack Hefeflocken, für die Funktion eine fertige Alternative.",
+      "substitutes": [
+        {"name": "Veganer Schmelz- oder Streukäse", "ratio": "1:1", "best_for": "Überbacken, Pizza, Toast", "note": "Schmilzt je nach Marke unterschiedlich gut, hier lohnt Ausprobieren."},
+        {"name": "Hefeflocken", "ratio": "nach Geschmack streuen", "best_for": "Käsiger Geschmack", "note": "Geben die würzige Käsenote, schmelzen aber nicht."},
+        {"name": "Cashew-Käse", "ratio": "Cashews + Hefeflocken + Salz pürieren", "best_for": "Saucen, Aufläufe", "note": "Selbstgemacht und cremig."}
+      ]
+    },
+    {
+      "slug": "parmesan",
+      "name": "Parmesan",
+      "aka": ["Parmesan ersetzen", "veganer Parmesan", "Parmesanersatz", "geriebener Käse"],
+      "category": "Käse",
+      "intro": "Den herzhaft-salzigen Parmesan-Effekt bekommst du fertig oder in zwei Minuten selbst gemixt.",
+      "substitutes": [
+        {"name": "Veganer Parmesan", "ratio": "1:1", "best_for": "Pasta, Risotto", "note": "Fertig im Regal erhältlich."},
+        {"name": "Hefeflocken-Mix", "ratio": "4 EL Cashews oder Mandeln + 2 EL Hefeflocken + 1/2 TL Salz mixen", "best_for": "Pasta, Salate", "note": "In zwei Minuten gemixt, hält wochenlang im Glas."}
+      ]
+    },
+    {
+      "slug": "buttermilch",
+      "name": "Buttermilch",
+      "aka": ["Buttermilch ersetzen", "vegane Buttermilch", "Buttermilchersatz"],
+      "category": "Backen & Eier",
+      "intro": "Buttermilch lässt sich mit einem einzigen Trick in fünf Minuten nachbauen.",
+      "substitutes": [
+        {"name": "Pflanzenmilch + Säure", "ratio": "250 ml Sojamilch + 1 EL Zitronensaft oder Essig, 5 Minuten stehen lassen", "best_for": "Backen, Pancakes", "note": "Soja gerinnt am zuverlässigsten und wird schön dicklich."}
+      ]
+    },
+    {
+      "slug": "honig",
+      "name": "Honig",
+      "aka": ["Honig ersetzen", "veganer Honig", "Honigersatz"],
+      "category": "Süßen",
+      "intro": "Flüssige Süßungsmittel ersetzen Honig fast 1:1, sie sind nur unterschiedlich süß.",
+      "substitutes": [
+        {"name": "Agavendicksaft", "ratio": "etwas weniger als die Honigmenge", "best_for": "Allrounder, kalt", "note": "Mild und sehr süß, löst sich gut auf."},
+        {"name": "Ahornsirup", "ratio": "1:1", "best_for": "Pfannkuchen, Backen", "note": "Mit feinem Eigengeschmack."},
+        {"name": "Reissirup", "ratio": "1:1", "best_for": "Mild süßen", "note": "Weniger süß, klebt schön wie Honig."},
+        {"name": "Dattelsirup", "ratio": "1:1", "best_for": "Kräftig süßen", "note": "Dunkel und malzig."}
+      ]
+    },
+    {
+      "slug": "gelatine",
+      "name": "Gelatine",
+      "aka": ["Gelatine ersetzen", "vegane Gelatine", "Gelatineersatz", "Geliermittel"],
+      "category": "Gelieren",
+      "intro": "Gelatine ist immer tierisch. Pflanzliche Geliermittel sind aber stark und vielseitig.",
+      "substitutes": [
+        {"name": "Agar-Agar", "ratio": "ca. 2 g (1 gestrichener TL) gelieren rund 500 ml, kurz aufkochen", "best_for": "Tortenguss, Gelee, Pudding", "note": "Aus Algen, geliert fester als Gelatine. Genaue Menge nach Packung."},
+        {"name": "Pektin", "ratio": "nach Packung", "best_for": "Marmelade, Konfitüre", "note": "Aus Früchten, braucht Zucker und Säure."},
+        {"name": "Johannisbrotkernmehl", "ratio": "nach Bedarf", "best_for": "Cremiges Andicken", "note": "Bindet auch kalt, macht Eis und Cremes geschmeidig."}
+      ],
+      "readmore": [["Gelatine erkennen und vegane Alternativen", "/gelatine-erkennen-und-vegane-alternativen/"]]
+    },
+    {
+      "slug": "mayonnaise",
+      "name": "Mayonnaise",
+      "aka": ["Mayo ersetzen", "vegane Mayonnaise", "Mayo", "Mayonnaise ersetzen"],
+      "category": "Herzhaft",
+      "intro": "Vegane Mayo gibt es fertig oder frisch aus Aquafaba.",
+      "substitutes": [
+        {"name": "Vegane Mayonnaise", "ratio": "1:1", "best_for": "Dips, Salate, Sandwich", "note": "Fertig im Regal, meist auf Basis von Pflanzenöl und Erbsen- oder Sojaprotein."},
+        {"name": "Aquafaba-Mayo", "ratio": "3 EL Aquafaba + 150 ml Öl + Senf + Zitrone aufmixen", "best_for": "Frische Mayo", "note": "Wird wie klassische Mayo schön cremig."}
+      ]
+    },
+    {
+      "slug": "hackfleisch",
+      "name": "Hackfleisch",
+      "aka": ["Hack ersetzen", "veganes Hack", "Hackfleischersatz", "Faschiertes"],
+      "category": "Herzhaft",
+      "intro": "Für Bolognese, Chili oder Frikadellen gibt es Alternativen mit sehr unterschiedlicher Textur.",
+      "substitutes": [
+        {"name": "Sojaschnetzel (Sojahack)", "ratio": "trocken einweichen, dann anbraten", "best_for": "Bolognese, Chili", "note": "Günstig, proteinreich, nimmt Gewürze gut auf."},
+        {"name": "Veganes Hack (Erbsenprotein)", "ratio": "1:1", "best_for": "Wie Hackfleisch", "note": "Kommt der Textur am nächsten, fertig gewürzt erhältlich."},
+        {"name": "Linsen", "ratio": "gekocht, braun oder Beluga", "best_for": "Bolognese, Füllungen", "note": "Vollwertig und natürlich, mit schöner Bissfestigkeit."},
+        {"name": "Walnüsse + Pilze", "ratio": "fein gehackt, angeröstet", "best_for": "Bolognese, Tacos", "note": "Gibt herzhafte, fleischige Textur ganz ohne Fertigprodukt."}
+      ]
+    },
+    {
+      "slug": "speck",
+      "name": "Speck",
+      "aka": ["Bacon", "Speck ersetzen", "veganer Speck", "Schinkenwürfel"],
+      "category": "Herzhaft",
+      "intro": "Die rauchig-herzhafte Speck-Note kommt aus Räuchertofu oder geräuchertem Paprikapulver.",
+      "substitutes": [
+        {"name": "Räuchertofu", "ratio": "in Streifen knusprig braten", "best_for": "Pfanne, Aufläufe", "note": "Rauchig und herzhaft."},
+        {"name": "Geräuchertes Paprikapulver", "ratio": "zum Würzen", "best_for": "Speck-Aroma", "note": "Bringt die Rauchnote in Saucen und Eintöpfe."},
+        {"name": "Veganer Bacon", "ratio": "1:1", "best_for": "Frühstück, Burger", "note": "Fertig aus Reispapier, Soja oder Seitan."}
+      ]
+    },
+    {
+      "slug": "schmand",
+      "name": "Schmand und Crème fraîche",
+      "aka": ["Schmand ersetzen", "Creme fraiche ersetzen", "veganer Schmand", "saure Sahne"],
+      "category": "Milch & Sahne",
+      "intro": "Die säuerlich-cremige Note bekommst du fertig vegan oder aus Cashews.",
+      "substitutes": [
+        {"name": "Veganer Schmand", "ratio": "1:1", "best_for": "Dips, Saucen, Backen", "note": "Fertig im Kühlregal, meist auf Sojabasis."},
+        {"name": "Cashewcreme + Zitrone", "ratio": "Cashews + Wasser + Zitrone pürieren", "best_for": "Cremige Saucen", "note": "Mit Zitrone säuerlich abschmecken für die typische Note."}
+      ]
+    }
+  ]
+}
