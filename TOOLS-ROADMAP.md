@@ -41,9 +41,12 @@ C2. **Bild freistellen** (`/creator/bild-freistellen/`) — Hintergrund-Entferne
     ein KI-Modell komplett im Browser lädt (@imgly/background-removal via CDN). Kein
     Upload, kein Server-Load, dauerhaft kostenlos. Transparentes PNG + Farb-Swatches.
     Targets "bild freistellen kostenlos", "hintergrund entfernen".
+C3. **Hashtag-Helfer** (`/creator/hashtags/`) — kuratierte vegane Hashtag-Sets nach
+    8 Themen, DE/EN/Mix-Filter, Auswahl antippen und als Set kopieren.
+    Targets "vegane hashtags", "hashtags vegan instagram".
 
-Creator-Backlog: Hashtag-Helfer (vegane/Food-Hashtag-Sets), Caption-Ideen-Generator,
-Emoji- und Symbol-Bibliothek, Best-Time-to-Post-Übersicht, Bio-Link-Vorlagen.
+Creator-Backlog: Caption-Ideen-/Hook-Generator, Emoji- und Symbol-Bibliothek,
+Best-Time-to-Post-Übersicht, Bio-Link-Vorlagen, Karussell- und Story-Maßvorlagen.
 
 ## Nächste Ideen (priorisiert)
 
