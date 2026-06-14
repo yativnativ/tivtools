@@ -365,6 +365,8 @@ CSS += """
 .kkonter{font-size:17px;line-height:1.5;color:var(--ink)}
 .kfakt{margin-top:14px;font-size:14px;color:#34534f;background:rgba(20,125,119,.08);border-radius:11px;padding:12px 14px}
 .kfakt .kq{display:block;margin-top:5px;font-size:12px;opacity:.7}
+.kstudie{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;color:var(--green-deep);text-decoration:none;border-bottom:1px solid rgba(16,96,80,.35)}
+.kstudie:hover{border-color:var(--green-deep)}
 .klinks{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 .klinks a{font-family:'Figtree';font-weight:600;font-size:13px;color:var(--green-deep);background:rgba(41,165,121,.12);padding:7px 12px;border-radius:999px;text-decoration:none}
 .sharebar{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
@@ -1021,7 +1023,7 @@ function konterCard(a){
   const t = encodeURIComponent(shareText(a));
   return '<div class="kcard"><div class="ktitle">„'+a.title+'"</div>'+
     '<div class="kkonter">'+a.konter+'</div>'+
-    '<div class="kfakt"><b>Der Fakt dahinter:</b> '+a.fakt+(a.quelle?'<span class="kq">'+a.quelle+'</span>':'')+'</div>'+
+    '<div class="kfakt"><b>Der Fakt dahinter:</b> '+a.fakt+(a.quelle?'<span class="kq">'+a.quelle+'</span>':'')+(a.studie?'<a class="kstudie" href="'+a.studie[1]+'" target="_blank" rel="noopener">Quelle: '+a.studie[0]+' →</a>':'')+'</div>'+
     linksHtml(a)+
     '<div class="sharebar">'+
       '<a class="sharebtn" target="_blank" rel="noopener" href="https://wa.me/?text='+t+'">Per WhatsApp</a>'+
@@ -3343,12 +3345,14 @@ def _veg_links_html(a):
 def _veg_konter_card(a):
     t = urllib.parse.quote(_veg_share_text(a), safe="")
     q = f'<span class="kq">{esc(a["quelle"])}</span>' if a.get("quelle") else ""
+    st = a.get("studie")
+    stu = f'<a class="kstudie" href="{st[1]}" target="_blank" rel="noopener">Quelle: {esc(st[0])} →</a>' if st else ""
     subj = urllib.parse.quote("Kurz dazu", safe="")
     return (
         '<div class="kcard">'
         f'<div class="ktitle">„{esc(a["title"])}"</div>'
         f'<div class="kkonter">{esc(a["konter"])}</div>'
-        f'<div class="kfakt"><b>Der Fakt dahinter:</b> {esc(a["fakt"])}{q}</div>'
+        f'<div class="kfakt"><b>Der Fakt dahinter:</b> {esc(a["fakt"])}{q}{stu}</div>'
         + _veg_links_html(a)
         + '<div class="sharebar">'
         f'<a class="sharebtn" target="_blank" rel="noopener" href="https://wa.me/?text={t}">Per WhatsApp</a>'
@@ -3367,6 +3371,7 @@ def build_veganizer_hub(meta, args, quiz):
     compact = [
         {"title": a["title"], "aka": a["aka"], "konter": a["konter"], "fakt": a["fakt"],
          **({"quelle": a["quelle"]} if a.get("quelle") else {}),
+         **({"studie": a["studie"]} if a.get("studie") else {}),
          **({"links": [[l[0], (l[1] if l[1].startswith("http") else url(l[1]))] for l in a["links"]]} if a.get("links") else {})}
         for a in args
     ]

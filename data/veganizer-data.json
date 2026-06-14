@@ -29,7 +29,7 @@
       "category": "Ethik",
       "konter": "Wenn dir Pflanzen wirklich am Herzen liegen, ist vegan sogar das Beste, was du tun kannst. Für ein Kilo Fleisch werden viele Kilo Pflanzen verfüttert. Wer Tiere isst, lässt also mehr Pflanzen sterben, nicht weniger. Und Pflanzen haben kein Gehirn und kein Nervensystem, mit dem sie Schmerz empfinden könnten, ein Schwein schon.",
       "fakt": "Rund 77 Prozent der weltweiten Sojaernte gehen ins Tierfutter, nur etwa 7 Prozent direkt zum Menschen. Pflanzen besitzen kein zentrales Nervensystem und keine Schmerzrezeptoren.",
-      "quelle": "Daten zur Sojanutzung: Our World in Data.",
+      "studie": ["Sojanutzung weltweit, Our World in Data", "https://ourworldindata.org/soy"],
       "links": [["CO2-Fußabdruck der Lebensmittel", "/co2-fussabdruck/"]]
     },
     {
@@ -39,6 +39,7 @@
       "category": "Ernährung",
       "konter": "Aus den gleichen Pflanzen, aus denen das Tier sein Protein hat. Linsen, Tofu, Bohnen, Haferflocken, alles voll davon. Der stärkste Gorilla wird auch nicht mit Steak groß. Ums Protein muss sich bei uns fast niemand sorgen, eher um zu viel als zu wenig.",
       "fakt": "Pflanzliche Lebensmittel liefern alle essenziellen Aminosäuren. Ein Bedarf von rund 0,8 bis 1,6 g pro Kilo Körpergewicht ist vegan leicht zu decken.",
+      "studie": ["Positionspapier zu pflanzlicher Ernährung, J Acad Nutr Diet 2016", "https://doi.org/10.1016/j.jand.2016.09.025"],
       "links": [["Vegane Protein-Tabelle", "/protein-tabelle/"], ["Protein-Quellen-Liste", "https://this-is-vegan.com/vegane-proteinquellen-liste-2026/"]]
     },
     {
@@ -48,7 +49,7 @@
       "category": "Ernährung",
       "konter": "Gut geplant ist eine vegane Ernährung für jede Lebensphase geeignet, das sagen große Ernährungsverbände, nicht irgendein Veganer. Klar gehört B12 als Supplement dazu, das ist der eine echte Punkt. Ungesund ist nicht pflanzlich, ungesund ist schlecht geplant, und das gilt für jede Ernährung.",
       "fakt": "Fachgesellschaften stufen gut geplante, supplementierte vegane Kost als für alle Lebensphasen geeignet ein. B12 muss zugeführt werden.",
-      "quelle": "Positionen großer Ernährungsfachgesellschaften.",
+      "studie": ["Positionspapier der Academy of Nutrition and Dietetics, 2016", "https://doi.org/10.1016/j.jand.2016.09.025"],
       "links": [["Nährstoff-Rechner", "/naehrstoffrechner/"], ["Vitamin B12 vegan", "https://this-is-vegan.com/vitamin-b12-vegan-2026/"]]
     },
     {
@@ -58,6 +59,7 @@
       "category": "Ernährung",
       "konter": "B12 kommt nicht aus dem Tier, sondern aus Bakterien. Früher steckte es im Boden und im Wasser, heute ist alles so sauber, dass es fehlt. Deshalb bekommen viele Nutztiere ihr B12 selbst ins Futter gemischt. Du kannst es also direkt nehmen statt den Umweg übers Tier.",
       "fakt": "B12 wird von Mikroorganismen gebildet, nicht vom Tier selbst. Ein großer Teil der weltweit produzierten B12-Supplemente geht in die Tierfütterung.",
+      "studie": ["Vitamin B12, NIH Office of Dietary Supplements", "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/"],
       "links": [["Vitamin B12 vegan", "https://this-is-vegan.com/vitamin-b12-vegan-2026/"]]
     },
     {
@@ -67,7 +69,7 @@
       "category": "Umwelt",
       "konter": "Genau deshalb ist vegan die bessere Wahl. Der allermeiste Soja landet nämlich nicht im Tofu, sondern im Trog. Über drei Viertel der Welt-Sojaernte werden an Nutztiere verfüttert. Dein Tofu ist oft sogar aus europäischem Soja, das Schnitzel frisst den Regenwald.",
       "fakt": "Rund 77 Prozent des weltweiten Sojas gehen ins Tierfutter, nur etwa 7 Prozent direkt zum Menschen.",
-      "quelle": "Our World in Data.",
+      "studie": ["Sojanutzung weltweit, Our World in Data", "https://ourworldindata.org/soy"],
       "links": [["CO2-Fußabdruck der Lebensmittel", "/co2-fussabdruck/"]]
     },
     {
@@ -77,6 +79,7 @@
       "category": "Gesellschaft",
       "konter": "Mit der Logik müsste auch niemand wählen gehen. Über die Jahre summiert sich das enorm, und Nachfrage ist das Einzige, worauf die Industrie reagiert. Außerdem isst nicht ein Mensch allein, Millionen treffen die gleiche Entscheidung. Pflanzliche Produkte gibt es überall, weil genug Leute angefangen haben.",
       "fakt": "Über ein Jahr spart eine pflanzliche Ernährung im Schnitt grob 100 Tiere sowie große Mengen CO2, Wasser und Fläche ein.",
+      "studie": ["Umweltwirkungen von Lebensmitteln, Our World in Data", "https://ourworldindata.org/environmental-impacts-of-food"],
       "links": [["Impact-Rechner", "/impact-rechner/"]]
     },
     {
@@ -86,7 +89,7 @@
       "category": "Tiere",
       "konter": "Hunde sind keine Wölfe mehr, über Jahrtausende sind sie zu Allesfressern geworden und verdauen Stärke sehr gut. Mit einem vollwertigen, gut zusammengestellten Futter geht es vielen vegan ernährten Hunden nachweislich gut. Bei Katzen ist das anders, die sind echte Fleischfresser. Pauschal Hunde müssen stimmt aber nicht.",
       "fakt": "Studien zeigen, dass Hunde auf nährstoffvollständiger pflanzlicher Ernährung gesund bleiben können. Anders als Katzen sind Hunde keine obligaten Fleischfresser.",
-      "quelle": "Veterinärmedizinische Studien, recherchiert über PubMed."
+      "studie": ["Vegane vs. fleischbasierte Tiernahrung, PLOS ONE 2021", "https://doi.org/10.1371/journal.pone.0253292"]
     },
     {
       "slug": "wir-haben-eckzaehne",
