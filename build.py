@@ -335,6 +335,26 @@ CSS += """
 .decobtn:hover{background:var(--peach);color:var(--ink);border-color:var(--peach)}
 """
 
+# Zusatz-Styles für das Bild-Freistellen-Tool (Creator)
+CSS += """
+.drop{max-width:560px;margin:30px auto 0;border:2px dashed rgba(248,222,205,.32);border-radius:20px;padding:40px 24px;text-align:center;cursor:pointer;transition:all .15s;background:rgba(248,222,205,.04)}
+.drop:hover,.drop.over{border-color:var(--green);background:rgba(41,165,121,.09)}
+.drop .di{font-family:'Gabarito';font-weight:800;font-size:19px;color:var(--peach)}
+.drop .ds{font-size:14px;opacity:.7;margin-top:6px}
+.bgstatus{max-width:560px;margin:14px auto 0;text-align:center;font-size:14px;opacity:.85;min-height:20px}
+.bgbarwrap{max-width:560px;margin:12px auto 0;height:8px;background:rgba(248,222,205,.12);border-radius:999px;overflow:hidden;display:none}
+.bgbar{height:100%;width:5%;background:var(--green);transition:width .3s}
+.bgresult{max-width:560px;margin:20px auto 0;display:none;text-align:center}
+.checker{border-radius:16px;padding:14px;background-image:linear-gradient(45deg,#d8d8d8 25%,transparent 25%),linear-gradient(-45deg,#d8d8d8 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#d8d8d8 75%),linear-gradient(-45deg,transparent 75%,#d8d8d8 75%);background-size:22px 22px;background-position:0 0,0 11px,11px -11px,-11px 0;background-color:#fff}
+.checker img{max-width:100%;border-radius:8px;display:block;margin:0 auto}
+.bgswatches{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.sw{width:36px;height:36px;border-radius:10px;cursor:pointer;border:2px solid rgba(248,222,205,.3);padding:0;transition:border-color .14s}
+.sw.on{border-color:var(--peach)}
+.sw.t{background-image:linear-gradient(45deg,#ccc 25%,transparent 25%),linear-gradient(-45deg,#ccc 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ccc 75%),linear-gradient(-45deg,transparent 75%,#ccc 75%);background-size:12px 12px;background-position:0 0,0 6px,6px -6px,-6px 0;background-color:#fff}
+.dlbtn{display:inline-block;margin-top:18px;background:var(--peach);color:var(--ink);font-family:'Gabarito';font-weight:700;font-size:15px;padding:13px 24px;border-radius:13px;text-decoration:none;transition:transform .1s}
+.dlbtn:active{transform:scale(.98)}
+"""
+
 # ---------------------------------------------------------------- JS (Checker)
 
 CHECKER_JS = r"""
@@ -806,6 +826,58 @@ wireCopy(document.getElementById('divlist'));
 render();
 """.strip()
 
+# ---------------------------------------------------------------- JS (Bild freistellen, Modul)
+
+BGR_JS = r"""
+import * as Imgly from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.8/+esm";
+const removeBackground = Imgly.removeBackground || Imgly.default;
+const $ = id => document.getElementById(id);
+const drop=$('drop'), file=$('file'), statusEl=$('bgstatus'), barWrap=$('bgbarwrap'), bar=$('bgbar'),
+      resultWrap=$('bgresult'), checker=$('checker'), img=$('bgimg'), dl=$('bgdl');
+let cutoutUrl=null, cutoutImg=null, bg='transparent';
+function prog(p){ bar.style.width=Math.round(p*100)+'%'; }
+function setBg(b){
+  bg=b;
+  document.querySelectorAll('.sw').forEach(s=>s.classList.toggle('on', s.dataset.bg===b));
+  if(b==='transparent'){ checker.style.backgroundImage=''; checker.style.backgroundColor=''; }
+  else { checker.style.backgroundImage='none'; checker.style.backgroundColor=b; }
+  updateDownload();
+}
+function updateDownload(){
+  if(!cutoutImg) return;
+  if(bg==='transparent'){ dl.href=cutoutUrl; return; }
+  const c=document.createElement('canvas'); c.width=cutoutImg.naturalWidth; c.height=cutoutImg.naturalHeight;
+  const ctx=c.getContext('2d'); ctx.fillStyle=bg; ctx.fillRect(0,0,c.width,c.height); ctx.drawImage(cutoutImg,0,0);
+  dl.href=c.toDataURL('image/png');
+}
+async function handle(f){
+  if(!f || !f.type.startsWith('image/')){ statusEl.textContent='Bitte wähl eine Bilddatei, zum Beispiel JPG oder PNG.'; return; }
+  resultWrap.style.display='none'; barWrap.style.display='block'; prog(0.04);
+  statusEl.textContent='Hintergrund wird entfernt. Beim ersten Mal lädt einmalig das KI-Modell, das dauert einen Moment.';
+  try{
+    const blob=await removeBackground(f,{progress:(key,cur,tot)=>{ if(tot) prog(Math.min(0.99,cur/tot)); }});
+    if(cutoutUrl) URL.revokeObjectURL(cutoutUrl);
+    cutoutUrl=URL.createObjectURL(blob);
+    img.src=cutoutUrl;
+    cutoutImg=new Image();
+    cutoutImg.onload=()=>{ setBg('transparent'); };
+    cutoutImg.src=cutoutUrl;
+    prog(1); barWrap.style.display='none'; resultWrap.style.display='block';
+    statusEl.textContent='Fertig. Dein Bild ist die ganze Zeit auf deinem Gerät geblieben.';
+  }catch(e){
+    console.error(e);
+    barWrap.style.display='none';
+    statusEl.textContent='Das hat leider nicht geklappt. Versuch ein anderes Bild oder lad die Seite neu.';
+  }
+}
+file.addEventListener('change', e=>{ if(e.target.files[0]) handle(e.target.files[0]); });
+drop.addEventListener('click', ()=> file.click());
+['dragover','dragenter'].forEach(ev=>drop.addEventListener(ev, e=>{ e.preventDefault(); drop.classList.add('over'); }));
+drop.addEventListener('dragleave', e=>{ e.preventDefault(); drop.classList.remove('over'); });
+drop.addEventListener('drop', e=>{ e.preventDefault(); drop.classList.remove('over'); const f=e.dataTransfer.files[0]; if(f) handle(f); });
+document.querySelectorAll('.sw').forEach(s=>s.addEventListener('click', ()=> setBg(s.dataset.bg)));
+""".strip()
+
 # ---------------------------------------------------------------- page shell
 
 
@@ -974,6 +1046,12 @@ def build_hub(meta, adds, ings, nutrients):
       <p>Text in 18 Stilen kopieren: fett, kursiv, Schreibschrift, durchgestrichen, kopfüber und mehr, plus vegane Deko und Trenner für Bio und Caption.</p>
       <span class="meta">Schrift stylen →</span>
     </a>
+    <a class="toolcard" href="{url(FREI_BASE)}">
+      <span class="badge">Live</span>
+      <h3>Bild freistellen</h3>
+      <p>Hintergrund automatisch entfernen, komplett im Browser, ohne Upload. Transparentes PNG für Posts und Produktbilder, kostenlos und privat.</p>
+      <span class="meta">Bild freistellen →</span>
+    </a>
     <a class="toolcard" href="{url(CREATOR_BASE)}">
       <span class="badge">Neu</span>
       <h3>Creator-Bereich</h3>
@@ -1070,6 +1148,12 @@ def build_hub(meta, adds, ings, nutrients):
                         "position": 11,
                         "name": "Schriftarten-Generator für Creator",
                         "url": BASE_URL + url(FONT_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 12,
+                        "name": "Bild freistellen",
+                        "url": BASE_URL + url(FREI_BASE),
                     },
                 ],
             },
@@ -2713,6 +2797,12 @@ def build_creator_hub(meta):
       <p>Text eingeben und in 18 Stilen kopieren: fett, kursiv, Schreibschrift, durchgestrichen, kopfüber und mehr, plus vegane Deko und Trenner für Bio und Caption.</p>
       <span class="meta">Schrift stylen →</span>
     </a>
+    <a class="toolcard" href="{url(FREI_BASE)}">
+      <span class="badge">Live</span>
+      <h3>Bild freistellen</h3>
+      <p>Hintergrund automatisch entfernen, komplett im Browser und ohne Upload. Transparentes PNG für Posts, Sticker und Produktbilder, kostenlos und privat.</p>
+      <span class="meta">Bild freistellen →</span>
+    </a>
     <div class="toolcard soon">
       <span class="badge">In Arbeit</span>
       <h3>Mehr Creator-Tools</h3>
@@ -2816,6 +2906,91 @@ def build_font_tool(meta):
         "Schriftarten-Generator für Instagram: Fonts zum Kopieren | This Is Vegan",
         "Text in coole Schriftarten umwandeln und kopieren, für Instagram, TikTok und Co. Fett, kursiv, Schreibschrift, durchgestrichen, kopfüber, plus vegane Deko. Kostenlos.",
         FONT_BASE,
+        body,
+        jsonld,
+    )
+
+
+FREI_BASE = "/creator/bild-freistellen/"
+
+
+def build_bgremove(meta):
+    js = BGR_JS
+    body = site_header("Bild freistellen") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span><a href="{url(CREATOR_BASE)}">Für Creator</a><span>›</span>Bild freistellen</nav>
+<section class="hero">
+  <div class="eyebrow">Hintergrund weg, in Sekunden</div>
+  <h1>Bild <span class="q">freistellen.</span></h1>
+  <p class="sub">Bild reinziehen und der Hintergrund verschwindet automatisch. Alles läuft direkt in deinem Browser, dein Bild wird nicht hochgeladen und landet auf keinem Server.</p>
+
+  <div class="drop" id="drop">
+    <div class="di">Bild hierher ziehen oder klicken</div>
+    <div class="ds">JPG oder PNG, alles bleibt auf deinem Gerät</div>
+    <input id="file" type="file" accept="image/*" hidden>
+  </div>
+  <div class="bgstatus" id="bgstatus"></div>
+  <div class="bgbarwrap" id="bgbarwrap"><div class="bgbar" id="bgbar"></div></div>
+
+  <div class="bgresult" id="bgresult">
+    <div class="checker" id="checker"><img id="bgimg" alt="Freigestelltes Bild"></div>
+    <div class="bgswatches">
+      <button class="sw t on" data-bg="transparent" title="Transparent" aria-label="Transparenter Hintergrund"></button>
+      <button class="sw" data-bg="#ffffff" style="background:#ffffff" title="Weiß" aria-label="Weißer Hintergrund"></button>
+      <button class="sw" data-bg="#0a4a4a" style="background:#0a4a4a" title="Petrol" aria-label="Petrol Hintergrund"></button>
+      <button class="sw" data-bg="#29a579" style="background:#29a579" title="Grün" aria-label="Grüner Hintergrund"></button>
+      <button class="sw" data-bg="#f8decd" style="background:#f8decd" title="Sand" aria-label="Sandfarbener Hintergrund"></button>
+    </div>
+    <a class="dlbtn" id="bgdl" download="freigestellt.png" href="#">Als PNG herunterladen</a>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Warum hier nichts hochgeladen wird</h2>
+  <p class="prose">Das Freistellen übernimmt ein KI-Modell, das einmalig in deinen Browser geladen wird und dann direkt auf deinem Gerät rechnet. Dein Bild verlässt deinen Rechner nie. Das ist nicht nur datenschutzfreundlich, es kostet auch keine Serverkapazität, deshalb bleibt das Tool dauerhaft kostenlos. Der erste Aufruf lädt das Modell einmal herunter, danach geht es auch offline und deutlich schneller.</p>
+</section>
+
+<section class="section">
+  <h2>So holst du das beste Ergebnis raus</h2>
+  <p class="prose">Am besten klappt es bei klarem Motiv und gutem Kontrast zum Hintergrund, also Produkt, Teller, Tier oder Person vor einer ruhigen Fläche. Nach dem Freistellen kannst du den Hintergrund auf transparent lassen oder eine Farbe wählen, zum Beispiel das This-Is-Vegan-Petrol für einheitliche Posts. Das PNG mit transparentem Hintergrund lässt sich in jedem Tool weiterverwenden, von Canva bis Instagram.</p>
+</section>
+""" + site_footer(meta, full_disclaimer=False) + f'\n<script type="module">{js}</script>'
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Bild freistellen",
+            "url": BASE_URL + url(FREI_BASE),
+            "applicationCategory": "DesignApplication",
+            "operatingSystem": "Web",
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+            "description": "Entfernt den Hintergrund von Bildern komplett im Browser, ohne Upload und ohne Server, mit Download als transparentes PNG.",
+            "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": "Wird mein Bild hochgeladen?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Nein. Das Freistellen läuft komplett in deinem Browser, dein Bild verlässt dein Gerät nicht und wird auf keinen Server geladen."}},
+                {"@type": "Question", "name": "Ist das Freistellen kostenlos?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Ja, dauerhaft. Da die Berechnung auf deinem Gerät passiert und keine Serverkosten anfallen, bleibt das Tool kostenlos und ohne Anmeldung."}},
+            ],
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Für Creator", "item": BASE_URL + url(CREATOR_BASE)},
+                {"@type": "ListItem", "position": 3, "name": "Bild freistellen", "item": BASE_URL + url(FREI_BASE)},
+            ],
+        },
+    ]
+    return page(
+        "Bild freistellen: Hintergrund entfernen, ohne Upload | This Is Vegan",
+        "Hintergrund von Bildern kostenlos entfernen, direkt im Browser und ohne Upload. Transparentes PNG herunterladen. Privat, schnell, ohne Anmeldung.",
+        FREI_BASE,
         body,
         jsonld,
     )
@@ -2926,6 +3101,7 @@ def main():
     # Creator-Bereich
     pages[CREATOR_BASE] = build_creator_hub(CREATOR_META)
     pages[FONT_BASE] = build_font_tool(CREATOR_META)
+    pages[FREI_BASE] = build_bgremove(CREATOR_META)
 
     for path, content in pages.items():
         out = DIST / path.lstrip("/") / "index.html"
