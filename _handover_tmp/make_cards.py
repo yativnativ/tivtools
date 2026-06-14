@@ -12,6 +12,14 @@ SRC = ROOT / "grafik-src"        # committed source illustrations
 OUT = ROOT / "grafik-cards"      # committed final cards
 OUT.mkdir(exist_ok=True)
 FONT = Path("/tmp/Gabarito.ttf")
+LOGO = ROOT / "og-assets" / "logo-tiv-cream.png"
+
+
+def paste_logo(img, x, y, h):
+    lg = Image.open(LOGO).convert("RGBA")
+    w = round(lg.width * h / lg.height)
+    lg = lg.resize((w, h), Image.LANCZOS)
+    img.paste(lg, (x, y), lg)
 
 # Brand colors
 TEAL = (10, 74, 74)
@@ -98,10 +106,8 @@ def make_card(motif, slug, headline, fakt):
     d.ellipse([-160, -200, 240, 200], fill=(255, 255, 255, 12))
     d.ellipse([S - 230, S - 360, S + 220, S + 120], fill=(229, 152, 117, 22))
 
-    # brand row
-    bx, by = 70, 74
-    d.ellipse([bx, by + 4, bx + 26, by + 30], fill=GREEN)
-    d.text((bx + 38, by), "This Is Vegan", font=f(34, 700), fill=PEACH)
+    # brand row: echtes TIV-Logo (cream)
+    paste_logo(img, 70, 70, 58)
 
     # eyebrow
     eb = f(23, 700)

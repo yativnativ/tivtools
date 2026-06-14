@@ -12,6 +12,14 @@ SRC = Path("/tmp/ogill")
 OUT = ROOT / "og-cards"
 OUT.mkdir(exist_ok=True)
 FONT = Path("/tmp/Gabarito.ttf")
+LOGO = ROOT / "og-assets" / "logo-tiv-cream.png"
+
+
+def paste_logo(img, x, y, h):
+    lg = Image.open(LOGO).convert("RGBA")
+    w = round(lg.width * h / lg.height)
+    lg = lg.resize((w, h), Image.LANCZOS)
+    img.paste(lg, (x, y), lg)
 
 TEAL = (10, 74, 74)
 PEACH = (248, 222, 205)
@@ -115,11 +123,10 @@ def make(slug, eyebrow, headline, subline):
     # text left
     x0 = 72
     textw = px - x0 - 48
-    # brand
-    d.ellipse([x0, 74, x0 + 22, 96], fill=GREEN)
-    d.text((x0 + 32, 72), "This Is Vegan", font=f(30, 700), fill=PEACH)
+    # brand: echtes TIV-Logo (cream)
+    paste_logo(img, x0, 62, 50)
     # eyebrow (letterspaced)
-    d.text((x0, 138), " ".join(eyebrow), font=f(19, 700), fill=TERRA)
+    d.text((x0, 140), " ".join(eyebrow), font=f(19, 700), fill=TERRA)
     # headline
     hl = len(headline)
     hsize = 72 if hl <= 17 else (60 if hl <= 26 else 48)

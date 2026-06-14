@@ -388,7 +388,7 @@ CSS += """
 #qnext{margin-top:16px;text-align:center}
 .qdone{font-family:'Gabarito';font-weight:700;color:var(--peach);font-size:17px}
 .qdone .btn{margin-left:10px}
-.vcardimg{display:block;max-width:380px;width:100%;margin:18px auto 0;border-radius:18px;box-shadow:0 20px 50px -24px rgba(0,0,0,.6)}
+.vcardimg{display:block;max-width:380px;width:100%;height:auto;margin:18px auto 0;border-radius:18px;box-shadow:0 20px 50px -24px rgba(0,0,0,.6)}
 """
 
 # Zusatz-Styles für den Hashtag-Helfer (Creator)

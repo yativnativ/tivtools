@@ -14,6 +14,7 @@ OUT = ROOT / "reise-cards"
 OUT.mkdir(exist_ok=True)
 GAB = "/tmp/Gabarito.ttf"
 UNI = "/System/Library/Fonts/Supplemental/Arial Unicode.ttf"
+LOGO = ROOT / "og-assets" / "logo-tiv-cream.png"
 
 TEAL = (10, 74, 74)
 PEACH = (248, 222, 205)
@@ -127,16 +128,18 @@ def make(lang, phrases):
             d2.text((pad + 24, iy + 2), rom, font=rom_f, fill=(248, 222, 205, 150))
         y += bh + 16
 
-    # footer
-    fy2 = H - 150
-    d.ellipse([cx - 112, fy2, cx - 112 + 22, fy2 + 22], fill=GREEN)
-    bf = gab(34, 800)
-    d.text((cx - 70, fy2 - 6), "This Is Vegan", font=bf, fill=PEACH)
+    # footer: echtes TIV-Logo (cream) + Quelle
+    logo = Image.open(LOGO).convert("RGBA")
+    lw = 290
+    logo = logo.resize((lw, round(logo.height * lw / logo.width)), Image.LANCZOS)
+    ly = H - 240
+    img.paste(logo, (cx - lw // 2, ly), logo)
     sf = uni(24)
     s1 = "von www.this-is-vegan.com"
     s2 = "IG: thisisvegan.magazin"
-    d.text((cx - d.textlength(s1, font=sf) / 2, fy2 + 42), s1, font=sf, fill=(248, 222, 205, 200))
-    d.text((cx - d.textlength(s2, font=sf) / 2, fy2 + 76), s2, font=sf, fill=(248, 222, 205, 200))
+    sy = ly + logo.height + 16
+    d.text((cx - d.textlength(s1, font=sf) / 2, sy), s1, font=sf, fill=(248, 222, 205, 210))
+    d.text((cx - d.textlength(s2, font=sf) / 2, sy + 34), s2, font=sf, fill=(248, 222, 205, 210))
 
     sl = lang["slug"]
     out_path = OUT / f"{sl}.png"
