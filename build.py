@@ -309,6 +309,14 @@ CSS += """
 .prow.top .pval{color:var(--terra-light)}
 .prow.tier .pval{color:#e8845f}
 .prow.pflanz .pval{color:var(--green)}
+.field select{font-family:'Gabarito';font-weight:700;font-size:17px;border:2px solid rgba(10,48,48,.15);border-radius:12px;padding:12px 14px;background:#fff;color:var(--ink);width:100%}
+.field select:focus{outline:none;border-color:var(--green)}
+.addbtn{margin-top:4px;border:0;cursor:pointer;background:var(--green-deep);color:var(--peach);font-family:'Gabarito';font-weight:700;font-size:15px;padding:13px 22px;border-radius:13px;width:100%;transition:transform .1s}
+.addbtn:active{transform:scale(.98)}
+.rm{flex:none;width:30px;height:30px;border-radius:50%;border:0;background:rgba(192,57,43,.12);color:#a02d20;font-size:18px;cursor:pointer;line-height:1}
+.mealsum{background:var(--peach);color:var(--ink);border-radius:16px;padding:22px;text-align:center;margin:16px auto 0;max-width:720px}
+.mealsum .big{font-family:'Gabarito';font-weight:900;font-size:38px;color:var(--green-deep);letter-spacing:-.02em;line-height:1}
+.mealsum .pct{font-size:14px;color:#3a5856;margin-top:5px}
 """
 
 # ---------------------------------------------------------------- JS (Checker)
@@ -668,6 +676,39 @@ document.querySelectorAll('[data-sort]').forEach(b => b.addEventListener('click'
 render();
 """.strip()
 
+# ---------------------------------------------------------------- JS (Protein-pro-Mahlzeit)
+
+MEAL_JS = r"""
+const FOODS = __DATA__;
+let items = [], target = 60;
+function round1(x){ return Math.round(x*10)/10; }
+function render(){
+  const list = document.getElementById('mealitems');
+  if(!items.length){
+    list.innerHTML = '<div class="empty" style="display:block">Noch nichts drin. Wähl oben ein Lebensmittel und gib die Menge an.</div>';
+  } else {
+    list.innerHTML = items.map((it,i) =>
+      '<div class="prow"><div><div class="pname">'+it.n+'</div><div class="pcat">'+it.g+' g</div></div>'+
+      '<div style="display:flex;align-items:center;gap:14px"><div class="pval">'+round1(it.p*it.g/100)+'<small> g</small></div>'+
+      '<button class="rm" data-i="'+i+'" aria-label="Entfernen">×</button></div></div>').join('');
+  }
+  const tot = items.reduce((s,it) => s + it.p*it.g/100, 0);
+  document.getElementById('mealbig').textContent = round1(tot) + ' g Protein';
+  document.getElementById('mealpct').textContent = items.length ? ('deckt rund '+Math.round(tot/target*100)+' % von '+target+' g Tagesziel') : 'Tagesziel '+target+' g';
+  document.querySelectorAll('.rm').forEach(b => b.addEventListener('click', () => { items.splice(+b.dataset.i,1); render(); }));
+}
+document.getElementById('addbtn').addEventListener('click', () => {
+  const sel = document.getElementById('foodsel');
+  const g = parseFloat(document.getElementById('grams').value);
+  if(!g || g <= 0) return;
+  const f = FOODS.find(x => x.n === sel.value);
+  if(f){ items.push({n: f.n, p: f.p, g: g}); render(); }
+});
+const ti = document.getElementById('target');
+ti.addEventListener('input', () => { const v = parseFloat(ti.value); if(v > 0){ target = v; render(); } });
+render();
+""".strip()
+
 # ---------------------------------------------------------------- page shell
 
 
@@ -811,6 +852,12 @@ def build_hub(meta, adds, ings, nutrients):
       <p>Der Klima-Fußabdruck von Lebensmitteln im Vergleich, tierisch gegen pflanzlich, in kg CO2 pro Kilo. Auf Basis großer Ökobilanz-Daten.</p>
       <span class="meta">Klimabilanz sehen →</span>
     </a>
+    <a class="toolcard" href="{url(MEAL_BASE)}">
+      <span class="badge">Live</span>
+      <h3>Protein pro Mahlzeit</h3>
+      <p>Stell deine Mahlzeit aus pflanzlichen Lebensmitteln zusammen und sieh sofort, wie viel Protein zusammenkommt und wie viel vom Tagesziel.</p>
+      <span class="meta">Mahlzeit rechnen →</span>
+    </a>
     <div class="toolcard soon">
       <span class="badge">In Arbeit</span>
       <h3>Mehr Tools kommen</h3>
@@ -895,6 +942,12 @@ def build_hub(meta, adds, ings, nutrients):
                         "position": 9,
                         "name": "CO2-Fußabdruck von Lebensmitteln",
                         "url": BASE_URL + url(CO2_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 10,
+                        "name": "Protein-pro-Mahlzeit-Rechner",
+                        "url": BASE_URL + url(MEAL_BASE),
                     },
                 ],
             },
@@ -2434,6 +2487,88 @@ def build_co2(meta, foods):
     )
 
 
+MEAL_BASE = "/protein-pro-mahlzeit/"
+
+
+def build_meal(meta, foods):
+    sorted_foods = sorted(foods, key=lambda f: f["name"].lower())
+    compact = [{"n": f["name"], "p": f["protein"]} for f in sorted_foods]
+    js = MEAL_JS.replace("__DATA__", json.dumps(compact, ensure_ascii=False, separators=(",", ":")))
+    options = "\n".join(
+        f'          <option value="{esc(f["name"])}">{esc(f["name"])} ({_prot_num(f["protein"])} g/100g)</option>'
+        for f in sorted_foods
+    )
+
+    body = site_header("Protein pro Mahlzeit") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>Protein pro Mahlzeit</nav>
+<section class="hero">
+  <div class="eyebrow">Eiweiß zusammenrechnen</div>
+  <h1>Wie viel Protein hat deine <span class="q">Mahlzeit?</span></h1>
+  <p class="sub">Stell deine Mahlzeit aus pflanzlichen Lebensmitteln zusammen und sieh sofort, wie viel Protein zusammenkommt.</p>
+
+  <div class="calc">
+    <div class="calc-grid">
+      <div class="field">
+        <label for="foodsel">Lebensmittel</label>
+        <select id="foodsel" aria-label="Lebensmittel wählen">
+{options}
+        </select>
+      </div>
+      <div class="field">
+        <label for="grams">Menge in Gramm</label>
+        <input id="grams" type="number" value="100" min="1" max="2000" inputmode="numeric" aria-label="Menge in Gramm">
+      </div>
+    </div>
+    <button type="button" class="addbtn" id="addbtn">Zur Mahlzeit hinzufügen</button>
+    <div class="field" style="margin-top:4px">
+      <label for="target">Dein Tagesziel in Gramm</label>
+      <input id="target" type="number" value="60" min="20" max="300" inputmode="numeric" aria-label="Tagesziel in Gramm Protein">
+    </div>
+  </div>
+
+  <div class="mealsum">
+    <div class="big" id="mealbig">0 g Protein</div>
+    <div class="pct" id="mealpct"></div>
+  </div>
+  <div class="ptable" id="mealitems" style="margin-top:14px"></div>
+</section>
+
+<section class="section">
+  <h2>So holst du genug Protein raus</h2>
+  <p class="prose">Kombiniere zu jeder Mahlzeit eine kräftige Eiweißquelle wie Tofu, Tempeh, Hülsenfrüchte oder Seitan mit Getreide. Wie viel du am Tag brauchst, rechnet dir der <a href="{url(NAEHR_BASE + "protein/")}" style="color:var(--green);font-weight:700;text-decoration:none">Nährstoff-Rechner</a> aus, welche Lebensmittel am meisten liefern, zeigt die <a href="{url(PROT_BASE)}" style="color:var(--green);font-weight:700;text-decoration:none">Protein-Tabelle</a>.</p>
+</section>
+""" + site_footer(meta, full_disclaimer=False) + f"\n<script>{js}</script>"
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Protein-pro-Mahlzeit-Rechner",
+            "url": BASE_URL + url(MEAL_BASE),
+            "applicationCategory": "HealthApplication",
+            "operatingSystem": "Web",
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+            "description": "Stellt eine Mahlzeit aus pflanzlichen Lebensmitteln zusammen und berechnet den Proteingehalt pro Portion.",
+            "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Protein pro Mahlzeit", "item": BASE_URL + url(MEAL_BASE)},
+            ],
+        },
+    ]
+    return page(
+        "Protein-Rechner: wie viel Eiweiß hat deine Mahlzeit? | This Is Vegan",
+        "Stell deine vegane Mahlzeit zusammen und berechne den Proteingehalt pro Portion, mit Gramm-genauen Werten. Kostenlos, ohne Anmeldung.",
+        MEAL_BASE,
+        body,
+        jsonld,
+    )
+
+
 def build_404(meta):
     body = site_header("Tools") + f"""
 <section class="hero">
@@ -2532,6 +2667,9 @@ def main():
 
     # CO2-Fußabdruck
     pages[CO2_BASE] = build_co2(co2_meta, co2_foods)
+
+    # Protein-pro-Mahlzeit-Rechner
+    pages[MEAL_BASE] = build_meal(protein_meta, protein_foods)
 
     for path, content in pages.items():
         out = DIST / path.lstrip("/") / "index.html"
