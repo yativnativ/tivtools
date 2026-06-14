@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "version": 1,
+    "lastUpdated": "2026-06-13",
+    "methodik": "Angaben in kg CO2-Äquivalent pro kg Lebensmittel, globale Mittelwerte über die gesamte Lieferkette inklusive Landnutzung. Grundlage ist die bislang größte Lebenszyklus-Metaanalyse der Ernährung (Science, 2018, Daten von rund 38.000 Farmen), aufbereitet von Our World in Data. Regionale Werte schwanken, die Rangfolge ist aber stabil: tierische Lebensmittel liegen fast durchweg um ein Vielfaches höher als pflanzliche. Hinweis: Einzelne Pflanzenprodukte wie Kaffee oder Kakao sind pro Kilo hoch, werden aber in winzigen Mengen verzehrt, deshalb sind sie hier nicht gelistet.",
+    "sources": "Lebenszyklus-Metaanalyse in Science (2018), Datenaufbereitung Our World in Data."
+  },
+  "foods": [
+    {"name": "Rindfleisch", "category": "Tierisch", "co2": 99},
+    {"name": "Lammfleisch", "category": "Tierisch", "co2": 40},
+    {"name": "Garnelen (Zucht)", "category": "Tierisch", "co2": 27},
+    {"name": "Käse", "category": "Tierisch", "co2": 24},
+    {"name": "Fisch (Zucht)", "category": "Tierisch", "co2": 14},
+    {"name": "Schweinefleisch", "category": "Tierisch", "co2": 12},
+    {"name": "Hähnchen", "category": "Tierisch", "co2": 10},
+    {"name": "Eier", "category": "Tierisch", "co2": 4.5},
+    {"name": "Kuhmilch", "category": "Tierisch", "co2": 3.2},
+    {"name": "Reis", "category": "Pflanzlich", "co2": 4.0},
+    {"name": "Tofu", "category": "Pflanzlich", "co2": 3.2},
+    {"name": "Haferflocken", "category": "Pflanzlich", "co2": 1.6},
+    {"name": "Beeren", "category": "Pflanzlich", "co2": 1.5},
+    {"name": "Brot (Weizen)", "category": "Pflanzlich", "co2": 1.4},
+    {"name": "Tomaten", "category": "Pflanzlich", "co2": 1.4},
+    {"name": "Sojadrink", "category": "Pflanzlich", "co2": 1.0},
+    {"name": "Erbsen", "category": "Pflanzlich", "co2": 1.0},
+    {"name": "Linsen", "category": "Pflanzlich", "co2": 0.9},
+    {"name": "Bananen", "category": "Pflanzlich", "co2": 0.9},
+    {"name": "Kartoffeln", "category": "Pflanzlich", "co2": 0.5},
+    {"name": "Gemüse", "category": "Pflanzlich", "co2": 0.5},
+    {"name": "Äpfel", "category": "Pflanzlich", "co2": 0.4},
+    {"name": "Nüsse", "category": "Pflanzlich", "co2": 0.4}
+  ]
+}

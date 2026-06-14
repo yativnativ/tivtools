@@ -307,6 +307,8 @@ CSS += """
 .prow .pval{font-family:'Gabarito';font-weight:900;font-size:22px;letter-spacing:-.02em;color:var(--green);white-space:nowrap}
 .prow .pval small{font-size:11px;font-weight:600;opacity:.6;color:var(--peach)}
 .prow.top .pval{color:var(--terra-light)}
+.prow.tier .pval{color:#e8845f}
+.prow.pflanz .pval{color:var(--green)}
 """
 
 # ---------------------------------------------------------------- JS (Checker)
@@ -641,6 +643,31 @@ document.querySelectorAll('[data-sort]').forEach(b => b.addEventListener('click'
 render();
 """.strip()
 
+# ---------------------------------------------------------------- JS (CO2-Vergleich)
+
+CO2_JS = r"""
+const F = __DATA__;
+let q = "", cat = "all", sort = "desc";
+function rowsHtml(){
+  let list = F.filter(f => (cat==="all" || f.t===cat) && (!q || f.n.toLowerCase().includes(q)));
+  list.sort((a,b) => sort==="desc" ? b.co2-a.co2 : a.co2-b.co2);
+  if(!list.length) return '<div class="empty" style="display:block">Dazu finde ich nichts.</div>';
+  return list.map(f => '<div class="prow '+(f.t==="Tierisch"?"tier":"pflanz")+'">'+
+    '<div><div class="pname">'+f.n+'</div><div class="pcat">'+f.t+'</div></div>'+
+    '<div class="pval">'+f.co2+'<small> kg CO2</small></div></div>').join('');
+}
+function render(){ document.getElementById('ptable').innerHTML = rowsHtml(); }
+const qi = document.getElementById('pq');
+qi.addEventListener('input', () => { q = qi.value.trim().toLowerCase(); render(); });
+document.querySelectorAll('[data-cat]').forEach(b => b.addEventListener('click', () => {
+  cat = b.dataset.cat; document.querySelectorAll('[data-cat]').forEach(x => x.classList.toggle('active', x===b)); render();
+}));
+document.querySelectorAll('[data-sort]').forEach(b => b.addEventListener('click', () => {
+  sort = b.dataset.sort; document.querySelectorAll('[data-sort]').forEach(x => x.classList.toggle('on', x===b)); render();
+}));
+render();
+""".strip()
+
 # ---------------------------------------------------------------- page shell
 
 
@@ -778,6 +805,12 @@ def build_hub(meta, adds, ings, nutrients):
       <p>Die proteinreichsten pflanzlichen Lebensmittel, durchsuchbar und sortierbar, mit Eiweiß pro 100 Gramm. Von Tofu über Linsen bis Hanfsamen.</p>
       <span class="meta">Protein finden →</span>
     </a>
+    <a class="toolcard" href="{url(CO2_BASE)}">
+      <span class="badge">Live</span>
+      <h3>CO2-Fußabdruck</h3>
+      <p>Der Klima-Fußabdruck von Lebensmitteln im Vergleich, tierisch gegen pflanzlich, in kg CO2 pro Kilo. Auf Basis großer Ökobilanz-Daten.</p>
+      <span class="meta">Klimabilanz sehen →</span>
+    </a>
     <div class="toolcard soon">
       <span class="badge">In Arbeit</span>
       <h3>Mehr Tools kommen</h3>
@@ -856,6 +889,12 @@ def build_hub(meta, adds, ings, nutrients):
                         "position": 8,
                         "name": "Vegane Protein-Tabelle",
                         "url": BASE_URL + url(PROT_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 9,
+                        "name": "CO2-Fußabdruck von Lebensmitteln",
+                        "url": BASE_URL + url(CO2_BASE),
                     },
                 ],
             },
@@ -2297,6 +2336,104 @@ def build_protein(meta, foods, categories):
     )
 
 
+CO2_BASE = "/co2-fussabdruck/"
+
+
+def build_co2(meta, foods):
+    compact = [{"n": f["name"], "t": f["category"], "co2": f["co2"]} for f in foods]
+    js = CO2_JS.replace("__DATA__", json.dumps(compact, ensure_ascii=False, separators=(",", ":")))
+    ranked = sorted(foods, key=lambda f: -f["co2"])
+    rows = "\n".join(
+        f'    <div class="prow {"tier" if f["category"] == "Tierisch" else "pflanz"}">'
+        f'<div><div class="pname">{esc(f["name"])}</div><div class="pcat">{esc(f["category"])}</div></div>'
+        f'<div class="pval">{_prot_num(f["co2"])}<small> kg CO2</small></div></div>'
+        for f in ranked
+    )
+    cat_chips = (
+        '    <button class="filt active" data-cat="all">Alle</button>\n'
+        '    <button class="filt" data-cat="Tierisch">Tierisch</button>\n'
+        '    <button class="filt" data-cat="Pflanzlich">Pflanzlich</button>'
+    )
+
+    body = site_header("CO2-Fußabdruck") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>CO2-Fußabdruck</nav>
+<section class="hero">
+  <div class="eyebrow">Klimabilanz auf dem Teller</div>
+  <h1>Wie viel CO2 steckt im <span class="q">Essen?</span></h1>
+  <p class="sub">Der CO2-Fußabdruck von Lebensmitteln im direkten Vergleich. 1 kg Rindfleisch verursacht rund 99 kg CO2, so viel wie etwa 800 km mit dem Auto. 1 kg Linsen: unter 1 kg.</p>
+
+  <div class="search-shell">
+    <div class="search-box">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+      <input id="pq" type="text" autocomplete="off" placeholder="z. B. Rindfleisch, Käse oder Tofu" aria-label="Lebensmittel suchen">
+    </div>
+  </div>
+
+  <div class="psort">
+    <div class="seg">
+      <button type="button" data-sort="desc" class="on">Größter Fußabdruck</button>
+      <button type="button" data-sort="asc">Kleinster Fußabdruck</button>
+    </div>
+  </div>
+</section>
+
+<section class="listsec">
+  <div class="filters" id="filters" style="justify-content:center;margin-bottom:8px">
+{cat_chips}
+  </div>
+  <div class="ptable" id="ptable">
+{rows}
+  </div>
+  <div class="infobox" style="margin-left:auto;margin-right:auto"><b>So rechnen wir:</b> {esc(meta["methodik"])}</div>
+</section>
+
+<section class="section">
+  <h2>Warum die Unterschiede so groß sind</h2>
+  <p class="prose">Tierische Lebensmittel verursachen pro Kilo fast immer ein Vielfaches der Emissionen pflanzlicher. Der Grund: Tiere müssen erst mit Pflanzen gefüttert werden, dabei geht ein Großteil der Energie verloren, dazu kommen Methan aus der Verdauung und Flächen, die für Weide und Futteranbau gerodet werden. Pflanzen direkt zu essen spart diesen Umweg.</p>
+  <p class="prose">Sieh dir auch den <a href="{url(IMPACT_BASE)}" style="color:var(--green);font-weight:700;text-decoration:none">Impact-Rechner</a> an, der hochrechnet, was deine Ernährung übers Jahr spart.</p>
+</section>
+""" + site_footer(meta, full_disclaimer=False) + f"\n<script>{js}</script>"
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "CO2-Fußabdruck von Lebensmitteln",
+            "url": BASE_URL + url(CO2_BASE),
+            "applicationCategory": "LifestyleApplication",
+            "operatingSystem": "Web",
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+            "description": f"Vergleicht den CO2-Fußabdruck von {len(foods)} Lebensmitteln, tierisch und pflanzlich, in kg CO2 pro kg.",
+            "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": "Welches Lebensmittel hat den größten CO2-Fußabdruck?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Rindfleisch liegt mit rund 99 kg CO2 pro kg klar an der Spitze, gefolgt von Lammfleisch und Käse. Pflanzliche Lebensmittel liegen fast alle unter 5 kg pro kg."}},
+                {"@type": "Question", "name": "Wie viel CO2 spart eine pflanzliche Ernährung?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Pflanzliche Lebensmittel verursachen pro Kilo meist ein Vielfaches weniger als tierische. Studien zeigen für pflanzliche Alternativen zu Rindfleisch rund 77 Prozent weniger Klimalast."}},
+            ],
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "CO2-Fußabdruck", "item": BASE_URL + url(CO2_BASE)},
+            ],
+        },
+    ]
+    return page(
+        "CO2-Fußabdruck von Lebensmitteln: die Klima-Tabelle | This Is Vegan",
+        "Der CO2-Fußabdruck von Lebensmitteln im Vergleich, tierisch gegen pflanzlich, in kg CO2 pro kg. Durchsuchbar und sortierbar, auf Basis großer Ökobilanz-Daten.",
+        CO2_BASE,
+        body,
+        jsonld,
+    )
+
+
 def build_404(meta):
     body = site_header("Tools") + f"""
 <section class="hero">
@@ -2344,6 +2481,9 @@ def main():
     protein_data = json.loads((ROOT / "data" / "protein-data.json").read_text(encoding="utf-8"))
     protein_meta, protein_foods, protein_cats = protein_data["meta"], protein_data["foods"], protein_data["categories"]
 
+    co2_data = json.loads((ROOT / "data" / "co2-data.json").read_text(encoding="utf-8"))
+    co2_meta, co2_foods = co2_data["meta"], co2_data["foods"]
+
     if DIST.exists():
         shutil.rmtree(DIST)
     DIST.mkdir(parents=True)
@@ -2389,6 +2529,9 @@ def main():
 
     # Protein-Tabelle
     pages[PROT_BASE] = build_protein(protein_meta, protein_foods, protein_cats)
+
+    # CO2-Fußabdruck
+    pages[CO2_BASE] = build_co2(co2_meta, co2_foods)
 
     for path, content in pages.items():
         out = DIST / path.lstrip("/") / "index.html"
