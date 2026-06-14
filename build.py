@@ -11,6 +11,7 @@ Liest data/enummern-data.json und baut nach dist/:
 
 Aufruf:  python3 build.py
 """
+import base64
 import html
 import json
 import shutil
@@ -388,6 +389,7 @@ CSS += """
 #qnext{margin-top:16px;text-align:center}
 .qdone{font-family:'Gabarito';font-weight:700;color:var(--peach);font-size:17px}
 .qdone .btn{margin-left:10px}
+.vcardimg{display:block;max-width:380px;width:100%;margin:18px auto 0;border-radius:18px;box-shadow:0 20px 50px -24px rgba(0,0,0,.6)}
 """
 
 # Zusatz-Styles für den Hashtag-Helfer (Creator)
@@ -3367,6 +3369,72 @@ def _veg_konter_card(a):
 VEG_COPY_JS = "document.querySelectorAll('.cp[data-t]').forEach(function(b){b.onclick=function(){var t=decodeURIComponent(b.dataset.t);if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t);}else{var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}ta.remove();}var o=b.textContent;b.textContent='Kopiert!';b.classList.add('done');setTimeout(function(){b.textContent=o;b.classList.remove('done');},1300);};});"
 
 
+GABARITO_B64 = base64.b64encode((ROOT / "assets" / "fonts" / "gabarito-latin.woff2").read_bytes()).decode()
+
+VEG_MOTIFS = {
+    "milch": '<path d="M478,500 L500,725 L580,725 L602,500 Z"/><path d="M486,540 q16,-14 32,0 t32,0 t30,0"/><path d="M524,455 q9,13 0,26 q-9,-13 0,-26 Z" fill="#f7b79a" stroke="none"/><path d="M566,470 q7,10 0,20 q-7,-10 0,-20 Z" fill="#f7b79a" stroke="none"/>',
+    "ei": '<path d="M540,470 C598,470 612,560 612,612 C612,668 580,696 540,696 C500,696 468,668 468,612 C468,560 482,470 540,470 Z"/><path d="M482,592 l21,-16 l18,18 l21,-16 l20,16 l18,-15 l19,16" stroke="#e59875"/>',
+    "honig": '<ellipse cx="540" cy="618" rx="74" ry="49"/><path d="M520,574 q-9,44 6,88" stroke="#e59875"/><path d="M556,572 q9,45 -4,89" stroke="#e59875"/><ellipse cx="510" cy="558" rx="27" ry="16" stroke="#29a579"/><ellipse cx="570" cy="558" rx="27" ry="16" stroke="#29a579"/><path d="M602,588 q22,-18 30,-36"/><circle cx="634" cy="548" r="6" fill="#f8decd" stroke="none"/>',
+    "huhn": '<circle cx="532" cy="632" r="73"/><circle cx="602" cy="546" r="41"/><path d="M586,508 q6,-19 16,-6 q6,-17 16,-4 q6,-15 14,-2" stroke="#e59875"/><path d="M640,546 l30,-7 l-28,20 z" fill="#e59875" stroke="#e59875"/><circle cx="612" cy="540" r="4" fill="#f8decd" stroke="none"/><path d="M462,612 q-36,-6 -54,18 q32,-2 42,14"/><path d="M512,702 l-6,36 m-15,0 h30"/><path d="M560,704 l-2,36 m-15,0 h30"/>',
+    "jacke": '<path d="M500,498 L468,520 L488,562 L500,550 L500,706 L580,706 L580,550 L592,562 L612,520 L580,498 L548,534 L532,534 Z"/><path d="M540,534 L540,706"/><path d="M512,612 h24 v34 h-24 z"/>',
+    "kaese": '<path d="M466,668 L628,562 L628,668 Z"/><circle cx="560" cy="632" r="12"/><circle cx="597" cy="618" r="8"/><circle cx="538" cy="650" r="7"/>',
+    "leder": '<path d="M482,512 C562,476 650,506 660,568 C670,630 602,692 540,690 C468,688 436,612 460,560 C467,536 472,520 482,512 Z"/><path d="M502,538 C568,512 634,536 644,578" stroke="#e59875" stroke-dasharray="2 16"/>',
+    "schaf": '<path d="M474,608 a32,32 0 0,1 28,-44 a32,32 0 0,1 54,-10 a32,32 0 0,1 52,16 a30,30 0 0,1 6,56 a32,32 0 0,1 -50,22 a32,32 0 0,1 -60,-8 a30,30 0 0,1 -30,-32 z"/><ellipse cx="452" cy="616" rx="30" ry="36"/><ellipse cx="432" cy="592" rx="12" ry="20"/><circle cx="446" cy="610" r="4" fill="#f8decd" stroke="none"/><path d="M506,676 l-4,36 m42,-30 l0,36 m46,-40 l6,34"/>',
+}
+
+
+def _wrap(text, maxchars):
+    lines, cur = [], ""
+    for w in text.split():
+        if not cur or len(cur) + len(w) + 1 <= maxchars:
+            cur = (cur + " " + w).strip()
+        else:
+            lines.append(cur)
+            cur = w
+    if cur:
+        lines.append(cur)
+    return lines
+
+
+def _tspans(lines, x, y, lh):
+    return "".join(f'<tspan x="{x}" y="{y + i * lh}">{esc(l)}</tspan>' for i, l in enumerate(lines))
+
+
+def _veg_card_svg(a):
+    title_lines = _wrap(a["title"], 19)[:4]
+    essence = a["fakt"].split(". ")[0].rstrip(".") + "."
+    fakt_lines = _wrap(essence, 44)[:3]
+    motif = VEG_MOTIFS.get(a.get("motif"), "")
+    src = ""
+    if a.get("studie"):
+        src = f'<text x="96" y="958" font-size="20" font-weight="600" fill="#e59875">Quelle: {esc(_wrap(a["studie"][0], 52)[0])}</text>'
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">'
+        "<defs>"
+        "<style>"
+        f"@font-face{{font-family:'Gab';src:url(data:font/woff2;base64,{GABARITO_B64}) format('woff2');font-weight:400 900;}}"
+        "text{font-family:'Gab','Trebuchet MS',sans-serif;fill:#f8decd}"
+        "</style>"
+        '<filter id="sk" x="-8%" y="-8%" width="116%" height="116%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/></filter>'
+        "</defs>"
+        '<rect width="1080" height="1080" fill="#0a4a4a"/>'
+        '<circle cx="940" cy="150" r="230" fill="none" stroke="#0d5a58" stroke-width="6"/>'
+        '<circle cx="940" cy="150" r="180" fill="none" stroke="#0d5a58" stroke-width="6"/>'
+        '<circle cx="96" cy="90" r="15" fill="#29a579"/>'
+        '<text x="124" y="102" font-size="36" font-weight="800" letter-spacing="-1">This Is Vegan</text>'
+        '<text x="96" y="172" font-size="22" font-weight="700" letter-spacing="3" fill="#e59875">GUT ZU WISSEN</text>'
+        f'<text font-size="54" font-weight="900" letter-spacing="-1.5">{_tspans(title_lines, 96, 252, 62)}</text>'
+        f'<g filter="url(#sk)" fill="none" stroke="#f8decd" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">{motif}</g>'
+        f'<text font-size="28" font-weight="600" fill="#f3d9c4">{_tspans(fakt_lines, 96, 850, 40)}</text>'
+        f"{src}"
+        '<text x="540" y="1036" font-size="26" font-weight="700" text-anchor="middle" fill="#f8decd">IG: thisisvegan.magazin 🌱</text>'
+        "</svg>"
+    )
+
+
+CARD_JS = "function dlCard(imgId,name){var img=document.getElementById(imgId);var c=document.createElement('canvas');c.width=1080;c.height=1080;var x=c.getContext('2d');x.drawImage(img,0,0,1080,1080);c.toBlob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name+'.png';document.body.appendChild(a);a.click();a.remove();});}"
+
+
 def build_veganizer_hub(meta, args, quiz):
     compact = [
         {"title": a["title"], "aka": a["aka"], "konter": a["konter"], "fakt": a["fakt"],
@@ -3479,6 +3547,19 @@ def build_veganizer_detail(a, meta, args):
         for r in related
     )
 
+    card_block = ""
+    if a.get("motif"):
+        cid = "vcard-" + s
+        gurl = url("/grafik/" + s + ".svg")
+        card_block = (
+            '<section class="section"><h2>Zum Teilen</h2>'
+            '<p class="lead">Speicher die Grafik und schick sie weiter, zum Beispiel in die Familiengruppe.</p>'
+            f'<img id="{cid}" class="vcardimg" src="{gurl}" alt="{esc(title)}, Infografik von This Is Vegan" loading="lazy" width="1080" height="1080">'
+            f'<div style="text-align:center;margin-top:14px"><button class="dlbtn" onclick="dlCard(\'{cid}\',\'{s}\')">Als Bild speichern</button>'
+            f'<a class="sharebtn" href="{gurl}" download style="margin-left:8px">SVG laden</a></div>'
+            "</section>"
+        )
+
     body = site_header("Veganizer") + f"""
 <nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span><a href="{url(VEG_BASE)}">Veganizer</a><span>›</span>{esc(a["category"])}</nav>
 <section class="hero left">
@@ -3489,6 +3570,8 @@ def build_veganizer_detail(a, meta, args):
 <div style="margin-top:6px">
 {_veg_konter_card(a)}
 </div>
+
+{card_block}
 
 <section class="section">
   <h2>Ähnliche Sprüche kontern</h2>
@@ -3504,7 +3587,7 @@ def build_veganizer_detail(a, meta, args):
   </div>
   <a class="btn" href="{url(VEG_BASE)}">Zum Veganizer →</a>
 </div>
-""" + site_footer(meta, full_disclaimer=False) + f'\n<script>{VEG_COPY_JS}</script>'
+""" + site_footer(meta, full_disclaimer=False) + f'\n<script>{VEG_COPY_JS}\n{CARD_JS}</script>'
 
     answer_first = a["konter"].split(". ")[0] + "."
     jsonld = [
@@ -3661,6 +3744,13 @@ def main():
         out = DIST / path.lstrip("/") / "index.html"
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(content, encoding="utf-8")
+
+    # Veganizer-Teilgrafiken (SVG-Karten im Kritzel-Stil)
+    graf_dir = DIST / "grafik"
+    graf_dir.mkdir(parents=True, exist_ok=True)
+    for a in veg_args:
+        if a.get("motif"):
+            (graf_dir / (a["slug"] + ".svg")).write_text(_veg_card_svg(a), encoding="utf-8")
 
     (DIST / "404.html").write_text(build_404(meta), encoding="utf-8")
 

@@ -459,6 +459,82 @@
       "category": "Ethik",
       "konter": "Beim Tier geht es nicht um ein bisschen, für das Schnitzel war es ganz tot, nicht ein bisschen. Maßhalten ist trotzdem super, weniger ist immer besser als viel. Aber wenn weniger gut ist, warum dann nicht gleich der nächste Schritt? Niemand muss perfekt sein, anfangen reicht.",
       "fakt": "Reduktion ist sinnvoll, ändert für das einzelne getötete Tier aber nichts. Der Schritt von weniger zu pflanzlich ist oft kleiner als gedacht."
+    },
+    {
+      "slug": "warum-trinken-veganer-keine-milch",
+      "title": "Warum trinken Veganer keine Milch?",
+      "aka": ["warum keine milch", "milch warum", "kuhmilch warum nicht"],
+      "category": "Warum",
+      "motif": "milch",
+      "konter": "Damit eine Kuh Milch gibt, muss sie ein Kalb bekommen, jedes Jahr aufs Neue. Das Kalb wird ihr kurz nach der Geburt weggenommen, damit wir die Milch trinken. Gibt sie weniger Milch, geht sie zum Schlachter, oft mit fünf statt zwanzig Jahren. Da wollen Veganer nicht mitmachen, und Pflanzendrinks gibt es ja in jeder Sorte.",
+      "fakt": "Milchkühe werden jährlich besamt, das Kalb wird getrennt, und ausgediente Tiere werden lange vor ihrer natürlichen Lebenserwartung geschlachtet.",
+      "links": [["Pflanzendrink-Vergleich", "/pflanzendrink-vergleich/"], ["Milch vegan ersetzen", "/vegan-ersetzen/milch/"]]
+    },
+    {
+      "slug": "warum-essen-veganer-keine-eier",
+      "title": "Warum essen Veganer keine Eier?",
+      "aka": ["warum keine eier", "eier warum nicht", "ei warum"],
+      "category": "Warum",
+      "motif": "ei",
+      "konter": "Hühner legen heute weit über 300 Eier im Jahr, ein Wildhuhn etwa 20, das zehrt am Körper. Vor allem aber werden die männlichen Küken getötet, weil sie keine Eier legen, allein in Deutschland Millionen pro Jahr. Deshalb lassen Veganer Eier weg, und auch zum Backen geht das problemlos.",
+      "fakt": "In der Lege-Industrie werden männliche Küken getötet, und Legehennen werden nach kurzer Nutzungsdauer geschlachtet.",
+      "links": [["Ei vegan ersetzen", "/vegan-ersetzen/ei/"]]
+    },
+    {
+      "slug": "warum-essen-veganer-keinen-honig",
+      "title": "Warum essen Veganer keinen Honig?",
+      "aka": ["warum kein honig", "honig warum nicht", "bienen honig"],
+      "category": "Warum",
+      "motif": "honig",
+      "konter": "Honig ist der Wintervorrat der Bienen, den der Imker entnimmt und oft durch Zuckerwasser ersetzt. In der Zucht werden Königinnen beschnitten und ganze Völker gehen verloren. Kein großes Drama, aber tierfrei ist Honig eben nicht. Agavendicksaft oder Ahornsirup süßen genauso.",
+      "fakt": "Imkerei nutzt den Honig der Bienen, ersetzt ihn durch Zuckerwasser und greift in die Völker ein.",
+      "links": [["Honig vegan ersetzen", "/vegan-ersetzen/honig/"]]
+    },
+    {
+      "slug": "warum-essen-veganer-keine-freilandeier",
+      "title": "Warum essen Veganer keine Freilandeier?",
+      "aka": ["warum keine freilandeier", "freilandeier warum", "bio eier warum"],
+      "category": "Warum",
+      "motif": "huhn",
+      "konter": "Freiland ist klar besser als Käfig. Aber auch dort kommen die Hennen aus Brütereien, in denen die männlichen Küken getötet wurden, und auch sie werden geschlachtet, sobald sie weniger legen, oft nach ein bis zwei Jahren. Das Label löst das Grundproblem nicht, deshalb lassen Veganer auch Freilandeier weg.",
+      "fakt": "Auch bei Freiland und Bio werden männliche Küken getötet und Legehennen früh geschlachtet."
+    },
+    {
+      "slug": "warum-keine-second-hand-leder-pelz",
+      "title": "Warum tragen manche Veganer kein Second-Hand-Leder oder -Pelz?",
+      "aka": ["warum kein second hand leder", "gebraucht pelz", "vintage leder vegan"],
+      "category": "Warum",
+      "motif": "jacke",
+      "konter": "Da sind sich Veganer selbst nicht ganz einig, und das ist okay. Manche tragen Second-Hand, weil es keine neue Nachfrage schafft, das Tier ist ja längst tot. Andere lassen es weg, weil sie Leder und Pelz nicht normalisieren wollen, gerade in der Öffentlichkeit. Beide Haltungen sind vertretbar, neue Tierprodukte zu kaufen lehnen aber alle ab.",
+      "fakt": "Second-Hand-Tierprodukte schaffen keine neue Nachfrage. Ob man sie trägt, ist eine persönliche Abwägung, neu kaufen lehnen alle Veganer ab."
+    },
+    {
+      "slug": "warum-essen-veganer-keinen-kaese",
+      "title": "Warum essen Veganer keinen Käse?",
+      "aka": ["warum kein käse", "käse warum nicht", "kaese vegan warum"],
+      "category": "Warum",
+      "motif": "kaese",
+      "konter": "Käse ist konzentrierte Milch, dahinter steckt also dasselbe wie bei Milch, das jährliche Kalb, die Trennung, der Schlachthof. Dazu kommt bei vielen Sorten tierisches Lab aus dem Kälbermagen. Veganer lassen ihn deshalb weg. Der Verzicht fällt vielen am schwersten, aber veganer Käse wird richtig gut.",
+      "fakt": "Käse basiert auf Milch und enthält bei vielen Sorten tierisches Lab aus dem Kälbermagen.",
+      "links": [["Käse vegan ersetzen", "/vegan-ersetzen/kaese/"]]
+    },
+    {
+      "slug": "warum-tragen-veganer-kein-leder",
+      "title": "Warum tragen Veganer kein Leder?",
+      "aka": ["warum kein leder", "leder warum nicht", "leder vegan"],
+      "category": "Warum",
+      "motif": "leder",
+      "konter": "Leder ist gegerbte Tierhaut, dafür stirbt ein Tier. Es ist auch kein bloßer Abfall, sondern ein lohnendes Nebenprodukt, das die Schlachtung mitfinanziert. Heute gibt es starkes veganes Leder aus Apfel, Kaktus, Kork oder Pilz. Muss also nicht die Kuh sein.",
+      "fakt": "Leder ist ein wirtschaftlich wertvolles Koppelprodukt der Schlachtindustrie, nicht nur Abfall."
+    },
+    {
+      "slug": "warum-tragen-veganer-keine-wolle",
+      "title": "Warum tragen Veganer keine Wolle?",
+      "aka": ["warum keine wolle", "wolle warum nicht", "schafwolle vegan"],
+      "category": "Warum",
+      "motif": "schaf",
+      "konter": "Dass Schafe geschoren werden müssen, kommt erst durch die Zucht auf möglichst viel Wolle. Beim Scheren im Akkord kommt es oft zu Verletzungen, und am Ende landen die Tiere im Schlachthof. Baumwolle, Hanf oder Tencel halten genauso warm, ganz ohne Schaf.",
+      "fakt": "Wollschafe wurden auf maximale Wollmenge gezüchtet, Akkordscheren verletzt häufig, ausgediente Tiere werden geschlachtet."
     }
   ],
   "quiz": [
