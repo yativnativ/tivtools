@@ -353,6 +353,8 @@ CSS += """
 .sw.t{background-image:linear-gradient(45deg,#ccc 25%,transparent 25%),linear-gradient(-45deg,#ccc 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ccc 75%),linear-gradient(-45deg,transparent 75%,#ccc 75%);background-size:12px 12px;background-position:0 0,0 6px,6px -6px,-6px 0;background-color:#fff}
 .dlbtn{display:inline-block;margin-top:18px;background:var(--peach);color:var(--ink);font-family:'Gabarito';font-weight:700;font-size:15px;padding:13px 24px;border-radius:13px;text-decoration:none;transition:transform .1s}
 .dlbtn:active{transform:scale(.98)}
+.hdtoggle{display:flex;align-items:center;gap:9px;justify-content:center;max-width:560px;margin:14px auto 0;font-size:14px;opacity:.85;cursor:pointer}
+.hdtoggle input{width:17px;height:17px;accent-color:var(--green)}
 """
 
 # Zusatz-Styles für den Hashtag-Helfer (Creator)
@@ -843,11 +845,14 @@ render();
 BGR_JS = r"""
 import * as Imgly from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.8/+esm";
 const removeBackground = Imgly.removeBackground || Imgly.default;
+const BiRefNet = "onnx-community/BiRefNet_lite";
 const $ = id => document.getElementById(id);
 const drop=$('drop'), file=$('file'), statusEl=$('bgstatus'), barWrap=$('bgbarwrap'), bar=$('bgbar'),
       resultWrap=$('bgresult'), checker=$('checker'), img=$('bgimg'), dl=$('bgdl');
 let cutoutUrl=null, cutoutImg=null, bg='transparent';
+let tf=null, model=null, processor=null, hdReady=false, hdBroken=false;
 function prog(p){ bar.style.width=Math.round(p*100)+'%'; }
+function hdWanted(){ const el=document.getElementById('hd'); return el && el.checked && 'gpu' in navigator; }
 function setBg(b){
   bg=b;
   document.querySelectorAll('.sw').forEach(s=>s.classList.toggle('on', s.dataset.bg===b));
@@ -862,28 +867,59 @@ function updateDownload(){
   const ctx=c.getContext('2d'); ctx.fillStyle=bg; ctx.fillRect(0,0,c.width,c.height); ctx.drawImage(cutoutImg,0,0);
   dl.href=c.toDataURL('image/png');
 }
+function show(url){
+  if(cutoutUrl) URL.revokeObjectURL(cutoutUrl);
+  cutoutUrl=url; img.src=url;
+  cutoutImg=new Image(); cutoutImg.onload=()=>setBg('transparent'); cutoutImg.src=url;
+  prog(1); barWrap.style.display='none'; resultWrap.style.display='block';
+  statusEl.textContent='Fertig. Dein Bild ist die ganze Zeit auf deinem Gerät geblieben.';
+}
+async function ensureHd(){
+  if(hdReady) return true;
+  if(hdBroken || !('gpu' in navigator)) return false;
+  try{
+    tf = tf || await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.1/+esm");
+    tf.env.allowLocalModels=false;
+    model = await tf.AutoModel.from_pretrained(BiRefNet, { dtype:'fp16', device:'webgpu' });
+    processor = await tf.AutoProcessor.from_pretrained(BiRefNet);
+    hdReady=true; return true;
+  }catch(e){ console.warn('HD-Modell nicht verfügbar', e); hdBroken=true; return false; }
+}
+async function runHd(f){
+  const u=URL.createObjectURL(f); const image=await tf.RawImage.fromURL(u); URL.revokeObjectURL(u);
+  const inputs=await processor(image);
+  const outputs=await model({ input_image: inputs.pixel_values });
+  let m=outputs[Object.keys(outputs)[0]];
+  const d=m.data; let mx=-Infinity,mn=Infinity; for(let i=0;i<d.length;i++){const v=d[i]; if(v>mx)mx=v; if(v<mn)mn=v;}
+  if(mx>1.01||mn<-0.01) m=m.sigmoid();
+  const mask=await tf.RawImage.fromTensor(m[0].mul(255).to('uint8')).resize(image.width,image.height);
+  const c=document.createElement('canvas'); c.width=image.width; c.height=image.height;
+  const ctx=c.getContext('2d'); ctx.drawImage(image.toCanvas(),0,0);
+  const id=ctx.getImageData(0,0,c.width,c.height); const md=mask.data;
+  for(let i=0;i<md.length;i++){ id.data[i*4+3]=md[i]; }
+  ctx.putImageData(id,0,0);
+  return await new Promise(res=>c.toBlob(b=>res(URL.createObjectURL(b)),'image/png'));
+}
 async function handle(f){
   if(!f || !f.type.startsWith('image/')){ statusEl.textContent='Bitte wähl eine Bilddatei, zum Beispiel JPG oder PNG.'; return; }
-  resultWrap.style.display='none'; barWrap.style.display='block'; prog(0.04);
-  statusEl.textContent='Hintergrund wird entfernt. Beim ersten Mal lädt einmalig das KI-Modell, das dauert einen Moment.';
+  resultWrap.style.display='none'; barWrap.style.display='block'; prog(0.05);
   try{
-    const blob=await removeBackground(f,{progress:(key,cur,tot)=>{ if(tot) prog(Math.min(0.99,cur/tot)); }});
-    if(cutoutUrl) URL.revokeObjectURL(cutoutUrl);
-    cutoutUrl=URL.createObjectURL(blob);
-    img.src=cutoutUrl;
-    cutoutImg=new Image();
-    cutoutImg.onload=()=>{ setBg('transparent'); };
-    cutoutImg.src=cutoutUrl;
-    prog(1); barWrap.style.display='none'; resultWrap.style.display='block';
-    statusEl.textContent='Fertig. Dein Bild ist die ganze Zeit auf deinem Gerät geblieben.';
+    if(hdWanted() && await ensureHd()){
+      statusEl.textContent='HD-Modell stellt frei, das trennt Motiv und Hintergrund besonders sauber.';
+      prog(0.55);
+      try{ show(await runHd(f)); return; }
+      catch(e){ console.warn('HD fehlgeschlagen, nutze Standard', e); hdBroken=true; }
+    }
+    statusEl.textContent='Hintergrund wird entfernt. Beim ersten Mal lädt einmalig das Modell, das dauert einen Moment.';
+    const blob=await removeBackground(f,{ model:'isnet', output:{format:'image/png'}, progress:(k,c,t)=>{ if(t) prog(Math.min(0.99,c/t)); } });
+    show(URL.createObjectURL(blob));
   }catch(e){
-    console.error(e);
-    barWrap.style.display='none';
+    console.error(e); barWrap.style.display='none';
     statusEl.textContent='Das hat leider nicht geklappt. Versuch ein anderes Bild oder lad die Seite neu.';
   }
 }
 file.addEventListener('change', e=>{ if(e.target.files[0]) handle(e.target.files[0]); });
-drop.addEventListener('click', ()=> file.click());
+drop.addEventListener('click', e=>{ if(e.target.id!=='hd') file.click(); });
 ['dragover','dragenter'].forEach(ev=>drop.addEventListener(ev, e=>{ e.preventDefault(); drop.classList.add('over'); }));
 drop.addEventListener('dragleave', e=>{ e.preventDefault(); drop.classList.remove('over'); });
 drop.addEventListener('drop', e=>{ e.preventDefault(); drop.classList.remove('over'); const f=e.dataTransfer.files[0]; if(f) handle(f); });
@@ -3000,6 +3036,7 @@ def build_bgremove(meta):
     <div class="ds">JPG oder PNG, alles bleibt auf deinem Gerät</div>
     <input id="file" type="file" accept="image/*" hidden>
   </div>
+  <label class="hdtoggle"><input type="checkbox" id="hd" checked> HD-Modus: stärkeres Modell für saubere Kanten, auf neueren Geräten</label>
   <div class="bgstatus" id="bgstatus"></div>
   <div class="bgbarwrap" id="bgbarwrap"><div class="bgbar" id="bgbar"></div></div>
 
@@ -3023,7 +3060,7 @@ def build_bgremove(meta):
 
 <section class="section">
   <h2>So holst du das beste Ergebnis raus</h2>
-  <p class="prose">Am besten klappt es bei klarem Motiv und gutem Kontrast zum Hintergrund, also Produkt, Teller, Tier oder Person vor einer ruhigen Fläche. Nach dem Freistellen kannst du den Hintergrund auf transparent lassen oder eine Farbe wählen, zum Beispiel das This-Is-Vegan-Petrol für einheitliche Posts. Das PNG mit transparentem Hintergrund lässt sich in jedem Tool weiterverwenden, von Canva bis Instagram.</p>
+  <p class="prose">Am besten klappt es bei klarem Motiv und gutem Kontrast zum Hintergrund, also Produkt, Teller, Tier oder Person vor einer ruhigen Fläche. Der HD-Modus nutzt auf neueren Geräten ein stärkeres Modell, das Motiv und Hintergrund sauberer trennt, gerade bei kniffligen Bildern mit unruhigem Hintergrund. Klappt das auf deinem Gerät nicht, schaltet das Tool automatisch auf das Standardmodell um. Nach dem Freistellen kannst du den Hintergrund transparent lassen oder eine Farbe wählen, zum Beispiel das This-Is-Vegan-Petrol für einheitliche Posts. Das PNG lässt sich in jedem Tool weiterverwenden, von Canva bis Instagram.</p>
 </section>
 """ + site_footer(meta, full_disclaimer=False) + f'\n<script type="module">{js}</script>'
 
