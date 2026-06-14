@@ -28,7 +28,18 @@ indexierbaren Seiten, deploybar per `git push`.
 10. **Protein pro Mahlzeit** (`/protein-pro-mahlzeit/`) — Meal-Builder, Protein
     summieren, Prozent vom Tagesziel. Nutzt die gecheckten Protein-Werte.
 
-Gesamt: rund 207 Seiten, alle mit FAQ- + Breadcrumb-Schema, Canonical, OG.
+Gesamt: rund 209 Seiten, alle mit FAQ- + Breadcrumb-Schema, Canonical, OG.
+
+## Bereich: Für Content Creator (`/creator/`)
+
+Eigener Bereich für vegane, Tierschutz- und Food-Accounts auf Social Media.
+
+C1. **Schriftarten-Generator** (`/creator/schriftarten/`) — 18 Unicode-Stile (fett,
+    kursiv, Schreibschrift, gotisch, durchgestrichen, kopfüber u.a.), vegane Deko
+    und Trenner, Copy-Buttons. Targets "instagram schriftarten", "schrift kopieren".
+
+Creator-Backlog: Hashtag-Helfer (vegane/Food-Hashtag-Sets), Caption-Ideen-Generator,
+Emoji- und Symbol-Bibliothek, Best-Time-to-Post-Übersicht, Bio-Link-Vorlagen.
 
 ## Nächste Ideen (priorisiert)
 
