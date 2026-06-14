@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "version": 1,
+    "lastUpdated": "2026-06-13",
+    "disclaimer": "Die Konter sind als Gesprächshilfe gedacht, nicht als Streitwaffe. Am meisten überzeugt am Ende ein ruhiger Ton und ein gutes Beispiel, nicht das lauteste Argument."
+  },
+  "arguments": [
+    {
+      "slug": "loewen-essen-auch-fleisch",
+      "title": "Aber Löwen essen doch auch Fleisch",
+      "aka": ["löwen", "raubtiere", "tierreich", "natur", "fressen", "nahrungskette"],
+      "category": "Natur",
+      "konter": "Stimmt, Löwen essen Fleisch. Sie töten aber auch ihre Rivalen und fressen im Notfall den eigenen Nachwuchs. Wir nehmen uns sonst selten ein Raubtier zum Vorbild für richtig und falsch. Und anders als der Löwe stehst du nicht hungrig in der Savanne, sondern vor einem vollen Regal und hast die Wahl.",
+      "fakt": "Löwen sind obligate Fleischfresser, sie müssen Fleisch essen. Der Mensch ist Allesfresser und kommt nachweislich gut ohne aus. Aus natürlich folgt nicht richtig, sonst wären auch Krankheiten gut.",
+      "links": [["Vegan starten in 30 Tagen", "https://this-is-vegan.com/vegan-starten-30-tage-plan/"]]
+    },
+    {
+      "slug": "vorfahren-haben-auch-fleisch-gegessen",
+      "title": "Unsere Vorfahren haben doch auch Fleisch gegessen",
+      "aka": ["vorfahren", "steinzeit", "evolution", "urmenschen", "früher", "schon immer"],
+      "category": "Natur",
+      "konter": "Unsere Vorfahren haben vieles gemacht, was wir heute nicht mehr machen, mit Dreißig sterben zum Beispiel. Haben wir schon immer so gemacht ist kein Argument, sonst hätte sich nie etwas geändert. Sie haben gegessen, was da war, nicht aus Überzeugung. Du hast jeden Tag eine Wahl, die sie nie hatten.",
+      "fakt": "Die frühe menschliche Ernährung war stark pflanzenbetont und je nach Region sehr unterschiedlich. Tradition allein sagt nichts darüber, ob etwas heute richtig ist."
+    },
+    {
+      "slug": "pflanzen-haben-auch-gefuehle",
+      "title": "Aber Pflanzen haben auch Gefühle",
+      "aka": ["pflanzen", "gefühle", "schmerz", "leben", "schreien", "salat"],
+      "category": "Ethik",
+      "konter": "Wenn dir Pflanzen wirklich am Herzen liegen, ist vegan sogar das Beste, was du tun kannst. Für ein Kilo Fleisch werden viele Kilo Pflanzen verfüttert. Wer Tiere isst, lässt also mehr Pflanzen sterben, nicht weniger. Und Pflanzen haben kein Gehirn und kein Nervensystem, mit dem sie Schmerz empfinden könnten, ein Schwein schon.",
+      "fakt": "Rund 77 Prozent der weltweiten Sojaernte gehen ins Tierfutter, nur etwa 7 Prozent direkt zum Menschen. Pflanzen besitzen kein zentrales Nervensystem und keine Schmerzrezeptoren.",
+      "quelle": "Daten zur Sojanutzung: Our World in Data.",
+      "links": [["CO2-Fußabdruck der Lebensmittel", "/co2-fussabdruck/"]]
+    },
+    {
+      "slug": "wo-nimmst-du-dein-protein-her",
+      "title": "Wo nimmst du denn dein Protein her?",
+      "aka": ["protein", "eiweiß", "muskeln", "kraft"],
+      "category": "Ernährung",
+      "konter": "Aus den gleichen Pflanzen, aus denen das Tier sein Protein hat. Linsen, Tofu, Bohnen, Haferflocken, alles voll davon. Der stärkste Gorilla wird auch nicht mit Steak groß. Ums Protein muss sich bei uns fast niemand sorgen, eher um zu viel als zu wenig.",
+      "fakt": "Pflanzliche Lebensmittel liefern alle essenziellen Aminosäuren. Ein Bedarf von rund 0,8 bis 1,6 g pro Kilo Körpergewicht ist vegan leicht zu decken.",
+      "links": [["Vegane Protein-Tabelle", "/protein-tabelle/"], ["Protein-Quellen-Liste", "https://this-is-vegan.com/vegane-proteinquellen-liste-2026/"]]
+    },
+    {
+      "slug": "vegan-ist-ungesund",
+      "title": "Vegane Ernährung ist doch ungesund",
+      "aka": ["ungesund", "mangel", "mangelernährung", "nährstoffe", "schädlich"],
+      "category": "Ernährung",
+      "konter": "Gut geplant ist eine vegane Ernährung für jede Lebensphase geeignet, das sagen große Ernährungsverbände, nicht irgendein Veganer. Klar gehört B12 als Supplement dazu, das ist der eine echte Punkt. Ungesund ist nicht pflanzlich, ungesund ist schlecht geplant, und das gilt für jede Ernährung.",
+      "fakt": "Fachgesellschaften stufen gut geplante, supplementierte vegane Kost als für alle Lebensphasen geeignet ein. B12 muss zugeführt werden.",
+      "quelle": "Positionen großer Ernährungsfachgesellschaften.",
+      "links": [["Nährstoff-Rechner", "/naehrstoffrechner/"], ["Vitamin B12 vegan", "https://this-is-vegan.com/vitamin-b12-vegan-2026/"]]
+    },
+    {
+      "slug": "ihr-muesst-b12-nehmen",
+      "title": "Ihr müsst doch B12 nehmen, also ist es unnatürlich",
+      "aka": ["b12", "supplement", "tabletten", "unnatürlich", "vitamin"],
+      "category": "Ernährung",
+      "konter": "B12 kommt nicht aus dem Tier, sondern aus Bakterien. Früher steckte es im Boden und im Wasser, heute ist alles so sauber, dass es fehlt. Deshalb bekommen viele Nutztiere ihr B12 selbst ins Futter gemischt. Du kannst es also direkt nehmen statt den Umweg übers Tier.",
+      "fakt": "B12 wird von Mikroorganismen gebildet, nicht vom Tier selbst. Ein großer Teil der weltweit produzierten B12-Supplemente geht in die Tierfütterung.",
+      "links": [["Vitamin B12 vegan", "https://this-is-vegan.com/vitamin-b12-vegan-2026/"]]
+    },
+    {
+      "slug": "soja-zerstoert-den-regenwald",
+      "title": "Aber für Soja wird der Regenwald abgeholzt",
+      "aka": ["soja", "regenwald", "abholzung", "umwelt", "amazonas"],
+      "category": "Umwelt",
+      "konter": "Genau deshalb ist vegan die bessere Wahl. Der allermeiste Soja landet nämlich nicht im Tofu, sondern im Trog. Über drei Viertel der Welt-Sojaernte werden an Nutztiere verfüttert. Dein Tofu ist oft sogar aus europäischem Soja, das Schnitzel frisst den Regenwald.",
+      "fakt": "Rund 77 Prozent des weltweiten Sojas gehen ins Tierfutter, nur etwa 7 Prozent direkt zum Menschen.",
+      "quelle": "Our World in Data.",
+      "links": [["CO2-Fußabdruck der Lebensmittel", "/co2-fussabdruck/"]]
+    },
+    {
+      "slug": "ein-einzelner-aendert-nichts",
+      "title": "Ein Einzelner ändert doch eh nichts",
+      "aka": ["bringt nichts", "einzelner", "ändert nichts", "sinnlos", "egal"],
+      "category": "Gesellschaft",
+      "konter": "Mit der Logik müsste auch niemand wählen gehen. Über die Jahre summiert sich das enorm, und Nachfrage ist das Einzige, worauf die Industrie reagiert. Außerdem isst nicht ein Mensch allein, Millionen treffen die gleiche Entscheidung. Pflanzliche Produkte gibt es überall, weil genug Leute angefangen haben.",
+      "fakt": "Über ein Jahr spart eine pflanzliche Ernährung im Schnitt grob 100 Tiere sowie große Mengen CO2, Wasser und Fläche ein.",
+      "links": [["Impact-Rechner", "/impact-rechner/"]]
+    },
+    {
+      "slug": "hunde-muessen-fleisch-essen",
+      "title": "Aber Hunde müssen doch Fleisch essen",
+      "aka": ["hund", "hunde", "haustier", "hundefutter", "katze"],
+      "category": "Tiere",
+      "konter": "Hunde sind keine Wölfe mehr, über Jahrtausende sind sie zu Allesfressern geworden und verdauen Stärke sehr gut. Mit einem vollwertigen, gut zusammengestellten Futter geht es vielen vegan ernährten Hunden nachweislich gut. Bei Katzen ist das anders, die sind echte Fleischfresser. Pauschal Hunde müssen stimmt aber nicht.",
+      "fakt": "Studien zeigen, dass Hunde auf nährstoffvollständiger pflanzlicher Ernährung gesund bleiben können. Anders als Katzen sind Hunde keine obligaten Fleischfresser.",
+      "quelle": "Veterinärmedizinische Studien, recherchiert über PubMed."
+    },
+    {
+      "slug": "wir-haben-eckzaehne",
+      "title": "Wir haben doch Eckzähne, also sind wir für Fleisch gemacht",
+      "aka": ["eckzähne", "zähne", "anatomie", "gebiss", "raubtier"],
+      "category": "Natur",
+      "konter": "Unsere Eckzähne sind winzig gegen die echter Raubtiere, und auch Gorillas oder Flusspferde haben mächtige Eckzähne, ganz ohne Fleisch. Wir haben flache Mahlzähne, einen langen Darm und Hände zum Pflücken, nicht zum Reißen. Probier mal, ein Reh mit bloßen Zähnen zu erlegen.",
+      "fakt": "Gebiss und Verdauungstrakt des Menschen ähneln denen von Allesfressern mit hohem Pflanzenanteil, nicht denen von Fleischfressern."
+    },
+    {
+      "slug": "tiere-wuerden-aussterben",
+      "title": "Wenn keiner mehr Fleisch isst, sterben die Tiere aus",
+      "aka": ["aussterben", "nutztiere", "kühe", "schweine", "zu viele tiere"],
+      "category": "Tiere",
+      "konter": "Nutztiere sind keine bedrohte Wildart, sie werden gezielt in riesigen Mengen gezüchtet, weil es Nachfrage gibt. Sinkt die Nachfrage, werden weniger nachgezüchtet, niemand wird ausgerottet. Es geht ja nicht um einen Schalter über Nacht, sondern um weniger Leid, Schritt für Schritt.",
+      "fakt": "Die Zahl der Nutztiere richtet sich nach der Nachfrage. Weniger Konsum bedeutet weniger Zucht, kein Aussterben."
+    },
+    {
+      "slug": "mein-fleisch-kommt-vom-biobauern",
+      "title": "Mein Fleisch kommt vom Biobauern, dem geht es gut",
+      "aka": ["bio", "biobauer", "tierwohl", "glücklich", "regional", "weide"],
+      "category": "Ethik",
+      "konter": "Schön, dass dir Tierwohl wichtig ist, das meine ich ernst. Aber auch das Bio-Tier landet am Ende im Schlachthof, oft im selben wie das konventionelle. Ein bisschen mehr Platz ändert nichts daran, dass ein fühlendes Tier für ein Essen stirbt, das du nicht brauchst. Gutes Leben und dann töten bleibt töten.",
+      "fakt": "Auch in der Bio-Haltung werden Tiere jung geschlachtet und durchlaufen denselben Schlachtprozess. Label senken Leid, beenden es aber nicht."
+    },
+    {
+      "slug": "fleischersatz-ist-chemie",
+      "title": "Dieser Fleischersatz ist doch voll Chemie",
+      "aka": ["ersatz", "verarbeitet", "chemie", "zusatzstoffe", "ungesund", "labor"],
+      "category": "Ernährung",
+      "konter": "Schau dir mal die Zutatenliste einer normalen Wurst an, Nitritpökelsalz, Phosphate, Aromen. Verarbeitet heißt nicht automatisch schlecht, und niemand muss Ersatzprodukte essen, um vegan zu sein. Tofu, Linsen und Bohnen sind so unverarbeitet wie es geht. Ersatz ist die Brücke, nicht die Pflicht.",
+      "fakt": "Auch konventionelle Wurst enthält zahlreiche Zusatzstoffe. Der Verarbeitungsgrad allein sagt wenig über die Gesundheit aus.",
+      "links": [["E-Nummern-Checker", "/e-nummern/"], ["Ist das vegan?", "/ist-das-vegan/"]]
+    },
+    {
+      "slug": "honig-ist-doch-ok",
+      "title": "Honig ist doch okay, da leidet keine Biene",
+      "aka": ["honig", "bienen", "imker", "süßungsmittel"],
+      "category": "Tiere",
+      "konter": "Honig ist der Wintervorrat der Bienen, der oft durch Zuckerwasser ersetzt wird. In der Zucht werden Königinnen beschnitten und ganze Völker gehen verloren. Man muss es nicht dramatisieren, aber kein Tier betroffen stimmt eben nicht. Agavendicksaft oder Ahornsirup tun es genauso.",
+      "fakt": "Imkerei nutzt und ersetzt den Honig der Bienen und greift in die Völker ein. Pflanzliche Süßungsmittel sind unproblematische Alternativen.",
+      "links": [["Honig vegan ersetzen", "/vegan-ersetzen/honig/"]]
+    },
+    {
+      "slug": "ich-koennte-nie-verzichten",
+      "title": "Ich könnte ja nie auf Käse verzichten",
+      "aka": ["verzichten", "käse", "könnte nie", "schwach", "lecker"],
+      "category": "Gesellschaft",
+      "konter": "Das dachte ich auch mal. Nie heißt meistens noch nicht richtig ausprobiert. Es gibt inzwischen richtig guten veganen Käse, und du musst ja nicht morgen alles auf einmal. Fang mit einer Sache an. Verzicht fühlt es sich nur am Anfang an, danach ist es einfach normal.",
+      "fakt": "Geschmacksvorlieben sind erlernt und ändern sich. Der Markt für pflanzliche Alternativen wächst stark, die Auswahl ist groß.",
+      "links": [["Käse vegan ersetzen", "/vegan-ersetzen/kaese/"], ["Vegan starten in 30 Tagen", "https://this-is-vegan.com/vegan-starten-30-tage-plan/"]]
+    },
+    {
+      "slug": "der-mensch-steht-ueber-dem-tier",
+      "title": "Der Mensch steht nun mal über dem Tier",
+      "aka": ["überlegen", "intelligenz", "krone der schöpfung", "stärker", "mächtiger"],
+      "category": "Ethik",
+      "konter": "Stärker oder klüger zu sein gibt einem nicht das Recht, anderen wehzutun, das gilt unter Menschen genauso. Ein Kleinkind ist auch nicht klüger als ein Schwein, und trotzdem würden wir ihm nichts antun. Macht ist kein moralisches Argument.",
+      "fakt": "Entscheidend ist die Fähigkeit zu leiden, nicht die Intelligenz. Schweine gelten als ähnlich klug wie Hunde."
+    }
+  ],
+  "quiz": [
+    {
+      "frage": "Onkel Bernd: \"Aber Löwen essen doch auch Fleisch!\" Was kontert am besten?",
+      "options": [
+        {"t": "\"Ja, und Löwen fressen auch ihren Nachwuchs. Wir nehmen sie sonst auch nicht zum Vorbild, und du stehst vor dem Regal, nicht in der Savanne.\"", "ok": true, "fb": "Ruhig, schlagfertig und entlarvt den Naturtrugschluss, ohne anzugreifen."},
+        {"t": "\"Du hast doch eh keine Ahnung von Biologie.\"", "ok": false, "fb": "Persönlich und herablassend, das macht Bernd nur trotzig."},
+        {"t": "\"Stimmt eigentlich, da hast du recht.\"", "ok": false, "fb": "Einknicken bringt nichts, der Vergleich hinkt ja gerade."}
+      ]
+    },
+    {
+      "frage": "\"Wo nimmst du denn dein Protein her?\"",
+      "options": [
+        {"t": "\"Aus denselben Pflanzen wie das Tier. Linsen, Tofu, Bohnen, der Gorilla wird ja auch ohne Steak stark.\"", "ok": true, "fb": "Konkret, anschaulich und nimmt die Angst vorm Eiweißmangel."},
+        {"t": "\"Protein wird total überbewertet, das ist mir egal.\"", "ok": false, "fb": "Klingt uninformiert und bestätigt das Klischee vom Mangel."},
+        {"t": "\"Auf jeden Fall mehr als du.\"", "ok": false, "fb": "Wettbewerb statt Antwort, das überzeugt niemanden."}
+      ]
+    },
+    {
+      "frage": "\"Für Soja wird doch der Regenwald abgeholzt!\"",
+      "options": [
+        {"t": "\"Genau deshalb esse ich vegan. Über drei Viertel vom Soja geht ins Tierfutter, mein Tofu ist oft aus Europa.\"", "ok": true, "fb": "Dreht das Argument um und nennt die belegbare Zahl."},
+        {"t": "\"Soja ist doch gar nicht so schlimm.\"", "ok": false, "fb": "Verharmlost und verschenkt das starke Gegenargument."},
+        {"t": "\"Dann iss halt gar nichts mehr.\"", "ok": false, "fb": "Sarkasmus beendet das Gespräch, statt zu überzeugen."}
+      ]
+    },
+    {
+      "frage": "\"Vegan ist doch total ungesund.\"",
+      "options": [
+        {"t": "\"Gut geplant ist es für jede Lebensphase geeignet, sagen die Ernährungsverbände. B12 nehme ich als einziges dazu.\"", "ok": true, "fb": "Sachlich, ehrlich beim B12 und beruft sich auf Fachstellen."},
+        {"t": "\"Ich bin gesünder als alle Fleischesser zusammen.\"", "ok": false, "fb": "Übertrieben und nicht haltbar, das schwächt dich."},
+        {"t": "\"Fleisch macht eh Krebs.\"", "ok": false, "fb": "Pauschal und angstmachend, kippt schnell ins Unsachliche."}
+      ]
+    },
+    {
+      "frage": "\"Ein Einzelner ändert doch eh nichts.\"",
+      "options": [
+        {"t": "\"Mit der Logik müsste auch keiner wählen gehen. Über Jahre summiert sich das, und Nachfrage ist alles, worauf die Industrie hört.\"", "ok": true, "fb": "Starker Vergleich, der die Ohnmacht-Ausrede aushebelt."},
+        {"t": "\"Stimmt schon, aber ich mach's trotzdem.\"", "ok": false, "fb": "Gibt den Kernpunkt auf, dabei stimmt er gar nicht."},
+        {"t": "\"Dann ist dir die Umwelt also egal?\"", "ok": false, "fb": "Vorwurf statt Argument, das macht zu."}
+      ]
+    },
+    {
+      "frage": "\"Hunde müssen doch Fleisch essen.\"",
+      "options": [
+        {"t": "\"Hunde sind Allesfresser geworden, mit gutem Futter geht es vielen vegan prima. Bei Katzen ist das wirklich anders.\"", "ok": true, "fb": "Differenziert korrekt zwischen Hund und Katze, das wirkt fundiert."},
+        {"t": "\"Tiere sollten alle vegan sein.\"", "ok": false, "fb": "Faktisch falsch bei obligaten Fleischfressern wie Katzen."},
+        {"t": "\"Hauptsache mein Hund frisst, was ich will.\"", "ok": false, "fb": "Wirkt ideologisch und überzeugt niemanden."}
+      ]
+    },
+    {
+      "frage": "\"Aber Pflanzen haben auch Gefühle.\"",
+      "options": [
+        {"t": "\"Wenn dir Pflanzen wichtig sind, ist vegan top, fürs Fleisch werden viel mehr Pflanzen verfüttert. Und Pflanzen haben kein Nervensystem.\"", "ok": true, "fb": "Dreht das Argument um und nennt den biologischen Fakt."},
+        {"t": "\"Das ist doch lächerlich.\"", "ok": false, "fb": "Abwertend, dabei lässt sich der Punkt leicht sachlich klären."},
+        {"t": "\"Pflanzen sind mir ehrlich gesagt egal.\"", "ok": false, "fb": "Verschenkt die Chance und wirkt gleichgültig."}
+      ]
+    },
+    {
+      "frage": "\"Mein Fleisch kommt vom Biobauern, dem geht es gut.\"",
+      "options": [
+        {"t": "\"Schön, dass dir Tierwohl wichtig ist. Aber auch das Bio-Tier landet im Schlachthof, oft im selben. Gutes Leben und dann töten bleibt töten.\"", "ok": true, "fb": "Wertschätzend im Einstieg, klar in der Sache."},
+        {"t": "\"Bio ist auch nur Marketing-Lüge.\"", "ok": false, "fb": "Pauschal und kämpferisch, das blockt ab."},
+        {"t": "\"Dann ist es ja okay.\"", "ok": false, "fb": "Gibt den eigentlichen Punkt komplett auf."}
+      ]
+    },
+    {
+      "frage": "\"Ich könnte ja nie auf Käse verzichten.\"",
+      "options": [
+        {"t": "\"Dachte ich auch mal. Es gibt echt guten veganen Käse, und du musst nicht alles auf einmal. Fang mit einer Sache an.\"", "ok": true, "fb": "Empathisch, ohne Druck, senkt die Hürde."},
+        {"t": "\"Dann bist du eben charakterschwach.\"", "ok": false, "fb": "Beleidigung, das Gegenteil von überzeugend."},
+        {"t": "\"Käse ist sowieso eklig.\"", "ok": false, "fb": "Geschmacksurteile überzeugen niemanden, der Käse mag."}
+      ]
+    },
+    {
+      "frage": "\"Der Mensch steht nun mal über dem Tier.\"",
+      "options": [
+        {"t": "\"Stärker zu sein gibt einem nicht das Recht, anderen wehzutun. Ein Kleinkind ist auch nicht klüger als ein Schwein, und wir würden ihm nichts tun.\"", "ok": true, "fb": "Konsequenter Vergleich, der das Machtargument entkräftet."},
+        {"t": "\"Genau, und Veganer stehen über euch.\"", "ok": false, "fb": "Überheblich, spiegelt nur das Problem."},
+        {"t": "\"Da kann man wohl nichts machen.\"", "ok": false, "fb": "Resignation, dabei gibt es eine gute Antwort."}
+      ]
+    }
+  ]
+}

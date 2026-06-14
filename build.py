@@ -14,6 +14,7 @@ Aufruf:  python3 build.py
 import html
 import json
 import shutil
+import urllib.parse
 from datetime import date
 from pathlib import Path
 
@@ -355,6 +356,36 @@ CSS += """
 .dlbtn:active{transform:scale(.98)}
 .hdtoggle{display:flex;align-items:center;gap:9px;justify-content:center;max-width:560px;margin:14px auto 0;font-size:14px;opacity:.85;cursor:pointer}
 .hdtoggle input{width:17px;height:17px;accent-color:var(--green)}
+"""
+
+# Zusatz-Styles für den Veganizer (Konter + Quiz)
+CSS += """
+.kcard{background:var(--peach);color:var(--ink);border-radius:20px;padding:24px;max-width:640px;margin:24px auto 0;text-align:left;box-shadow:0 22px 60px -28px rgba(0,0,0,.55);animation:pop .28s cubic-bezier(.2,.9,.3,1.2)}
+.ktitle{font-family:'Gabarito';font-weight:800;font-size:19px;color:var(--teal);margin-bottom:12px}
+.kkonter{font-size:17px;line-height:1.5;color:var(--ink)}
+.kfakt{margin-top:14px;font-size:14px;color:#34534f;background:rgba(20,125,119,.08);border-radius:11px;padding:12px 14px}
+.kfakt .kq{display:block;margin-top:5px;font-size:12px;opacity:.7}
+.klinks{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.klinks a{font-family:'Figtree';font-weight:600;font-size:13px;color:var(--green-deep);background:rgba(41,165,121,.12);padding:7px 12px;border-radius:999px;text-decoration:none}
+.sharebar{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.sharebtn{cursor:pointer;border:0;font-family:'Gabarito';font-weight:700;font-size:13px;padding:10px 16px;border-radius:11px;text-decoration:none;background:var(--ink);color:var(--peach);transition:background .15s}
+.sharebtn:hover{background:var(--green-deep)}
+.sharebtn.done{background:var(--green)}
+.ctaline{margin-top:16px;font-size:14px;color:#34534f}
+.ctaline a{color:var(--green-deep);font-weight:700;text-decoration:none}
+.qprog{font-size:13px;opacity:.7;margin-bottom:10px;text-align:center}
+.qfrage{font-family:'Gabarito';font-weight:800;font-size:20px;color:var(--peach);margin-bottom:16px;text-align:center;line-height:1.25}
+.qopts{display:flex;flex-direction:column;gap:10px;max-width:640px;margin:0 auto}
+.qopt{cursor:pointer;text-align:left;border:1px solid var(--line);background:rgba(248,222,205,.05);color:var(--peach);font-family:'Figtree';font-weight:500;font-size:15px;padding:14px 16px;border-radius:13px;transition:all .14s;line-height:1.45}
+.qopt:hover:not(:disabled){background:rgba(248,222,205,.1)}
+.qopt.good{background:rgba(42,157,111,.2);border-color:var(--yes)}
+.qopt.bad{background:rgba(192,57,43,.16);border-color:var(--no)}
+.qopt.dim{opacity:.5}
+.qfb{margin:14px auto 0;max-width:640px;font-size:15px;color:var(--peach);background:rgba(248,222,205,.06);border-left:3px solid var(--terra);border-radius:11px;padding:12px 14px}
+.qfb:empty{display:none}
+#qnext{margin-top:16px;text-align:center}
+.qdone{font-family:'Gabarito';font-weight:700;color:var(--peach);font-size:17px}
+.qdone .btn{margin-left:10px}
 """
 
 # Zusatz-Styles für den Hashtag-Helfer (Creator)
@@ -968,6 +999,97 @@ document.getElementById('hcopy').addEventListener('click', () => {
 selectAllVisible(); render();
 """.strip()
 
+# ---------------------------------------------------------------- JS (Veganizer)
+
+VEG_JS = r"""
+const ARGS = __ARGS__, QUIZ = __QUIZ__;
+const MAIN = "https://this-is-vegan.com";
+const norm = s => s.toLowerCase().replace(/\s+/g,"").replace(/[^a-z0-9äöüß]/g,"");
+function findArg(q){
+  q = norm(q); if(!q) return null;
+  return ARGS.find(a => norm(a.title) === q)
+    || ARGS.find(a => a.aka.some(k => norm(k) === q))
+    || ARGS.find(a => norm(a.title).includes(q) || a.aka.some(k => norm(k).includes(q))) || null;
+}
+function shareText(a){ return '„' + a.title + '"\n\n' + a.konter + '\n\nWenn du mehr wissen willst, schau auf this-is-vegan.com vorbei 🌱'; }
+function linksHtml(a){
+  if(!a.links || !a.links.length) return '';
+  return '<div class="klinks">' + a.links.map(l =>
+    '<a href="'+l[1]+'"'+(l[1].indexOf('http')===0?' target="_blank" rel="noopener"':'')+'>'+l[0]+' →</a>').join('') + '</div>';
+}
+function konterCard(a){
+  const t = encodeURIComponent(shareText(a));
+  return '<div class="kcard"><div class="ktitle">„'+a.title+'"</div>'+
+    '<div class="kkonter">'+a.konter+'</div>'+
+    '<div class="kfakt"><b>Der Fakt dahinter:</b> '+a.fakt+(a.quelle?'<span class="kq">'+a.quelle+'</span>':'')+'</div>'+
+    linksHtml(a)+
+    '<div class="sharebar">'+
+      '<a class="sharebtn" target="_blank" rel="noopener" href="https://wa.me/?text='+t+'">Per WhatsApp</a>'+
+      '<a class="sharebtn" href="mailto:?subject='+encodeURIComponent('Kurz dazu')+'&body='+t+'">Per Mail</a>'+
+      '<button class="sharebtn cp" data-t="'+t+'">Kopieren</button>'+
+    '</div>'+
+    '<div class="ctaline">Wenn du mehr wissen willst, schau auf <a href="'+MAIN+'/" target="_blank" rel="noopener">this-is-vegan.com</a> vorbei 🌱</div>'+
+  '</div>';
+}
+function wireCopy(scope){
+  scope.querySelectorAll('.cp[data-t]').forEach(b => b.onclick = () => {
+    const text = decodeURIComponent(b.dataset.t);
+    if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text);
+    else { const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} ta.remove(); }
+    const o=b.textContent; b.textContent='Kopiert!'; b.classList.add('done');
+    setTimeout(()=>{ b.textContent=o; b.classList.remove('done'); }, 1300);
+  });
+}
+function searchKonter(){
+  const v = document.getElementById('vq').value;
+  const r = document.getElementById('kresult');
+  if(!v.trim()){ r.innerHTML=''; return; }
+  const a = findArg(v);
+  r.innerHTML = a ? konterCard(a) : '<div class="miss"><h3>Dazu habe ich noch keinen fertigen Konter</h3><p>Versuch ein Stichwort wie Protein, Löwen, Soja, B12 oder Bio-Fleisch.</p></div>';
+  wireCopy(r);
+}
+const vq = document.getElementById('vq');
+if(vq){
+  vq.addEventListener('keydown', e => { if(e.key==='Enter') searchKonter(); });
+  vq.addEventListener('input', e => { if(e.target.value.trim().length>=2) searchKonter(); else document.getElementById('kresult').innerHTML=''; });
+  const go=document.getElementById('vgo'); if(go) go.addEventListener('click', searchKonter);
+  document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+    vq.value=c.dataset.c; searchKonter();
+    document.getElementById('kresult').scrollIntoView({behavior:'smooth', block:'center'});
+  }));
+}
+// Quiz
+let qi=0, score=0, answered=false;
+function renderQuiz(){
+  const q=QUIZ[qi]; answered=false;
+  document.getElementById('quizbox').innerHTML =
+    '<div class="qprog">Frage '+(qi+1)+' von '+QUIZ.length+' · '+score+' richtig</div>'+
+    '<div class="qfrage">'+q.frage+'</div>'+
+    '<div class="qopts">'+q.options.map((o,i)=>'<button class="qopt" data-i="'+i+'">'+o.t+'</button>').join('')+'</div>'+
+    '<div class="qfb" id="qfb"></div><div id="qnext"></div>';
+  document.querySelectorAll('.qopt').forEach(b=>b.onclick=()=>answerQ(+b.dataset.i));
+}
+function answerQ(i){
+  if(answered) return; answered=true;
+  const q=QUIZ[qi], o=q.options[i];
+  document.querySelectorAll('.qopt').forEach((b,j)=>{ b.disabled=true; b.classList.add(q.options[j].ok?'good':(j===i?'bad':'dim')); });
+  if(o.ok) score++;
+  document.getElementById('qfb').innerHTML='<b>'+(o.ok?'Stark. ':'Geht besser. ')+'</b>'+o.fb;
+  const last = qi>=QUIZ.length-1;
+  document.getElementById('qnext').innerHTML = last
+    ? '<div class="qdone">Durch! '+score+' von '+QUIZ.length+' richtig.<button class="btn" id="qn">Nochmal üben</button></div>'
+    : '<button class="btn" id="qn">Nächste Frage →</button>';
+  document.getElementById('qn').onclick=()=>{ if(last){qi=0;score=0;} else qi++; renderQuiz(); };
+}
+function showTab(t){
+  document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on', b.dataset.tab===t));
+  document.getElementById('tab-konter').style.display = t==='konter' ? 'block':'none';
+  document.getElementById('tab-quiz').style.display = t==='quiz' ? 'block':'none';
+  if(t==='quiz' && !document.querySelector('#quizbox .qopt')) renderQuiz();
+}
+document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click', ()=>showTab(b.dataset.tab)));
+""".strip()
+
 # ---------------------------------------------------------------- page shell
 
 
@@ -1117,6 +1239,12 @@ def build_hub(meta, adds, ings, nutrients):
       <p>Stell deine Mahlzeit aus pflanzlichen Lebensmitteln zusammen und sieh sofort, wie viel Protein zusammenkommt und wie viel vom Tagesziel.</p>
       <span class="meta">Mahlzeit rechnen →</span>
     </a>
+    <a class="toolcard" href="{url(VEG_BASE)}">
+      <span class="badge">Live</span>
+      <h3>Veganizer</h3>
+      <p>Schlagfertige, fundierte Antworten auf die häufigsten Sprüche gegen Veganer, mit Studien und Links, zum Teilen per WhatsApp. Plus Quiz zum Üben.</p>
+      <span class="meta">Onkel Bernd kontern →</span>
+    </a>
     <div class="toolcard soon">
       <span class="badge">In Arbeit</span>
       <h3>Mehr Tools kommen</h3>
@@ -1242,18 +1370,24 @@ def build_hub(meta, adds, ings, nutrients):
                     {
                         "@type": "ListItem",
                         "position": 11,
+                        "name": "Veganizer: Antworten auf Anti-Vegan-Sprüche",
+                        "url": BASE_URL + url(VEG_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 12,
                         "name": "Schriftarten-Generator für Creator",
                         "url": BASE_URL + url(FONT_BASE),
                     },
                     {
                         "@type": "ListItem",
-                        "position": 12,
+                        "position": 13,
                         "name": "Bild freistellen",
                         "url": BASE_URL + url(FREI_BASE),
                     },
                     {
                         "@type": "ListItem",
-                        "position": 13,
+                        "position": 14,
                         "name": "Vegane Hashtags",
                         "url": BASE_URL + url(HASH_BASE),
                     },
@@ -3186,6 +3320,222 @@ def build_hashtags(meta, topics):
     )
 
 
+VEG_BASE = "/veganizer/"
+VEG_POPULAR = [("Löwen", "löwen"), ("Protein", "protein"), ("Soja", "soja"), ("B12", "b12"), ("Bio-Fleisch", "bio"), ("Pflanzen-Gefühle", "pflanzen")]
+
+
+def _veg_share_text(a):
+    return '„' + a["title"] + '"\n\n' + a["konter"] + '\n\nWenn du mehr wissen willst, schau auf this-is-vegan.com vorbei 🌱'
+
+
+def _veg_links_html(a):
+    ls = a.get("links")
+    if not ls:
+        return ""
+    out = []
+    for label, href in ls:
+        full = href if href.startswith("http") else url(href)
+        ext = ' target="_blank" rel="noopener"' if href.startswith("http") else ''
+        out.append(f'<a href="{full}"{ext}>{esc(label)} →</a>')
+    return '<div class="klinks">' + "".join(out) + "</div>"
+
+
+def _veg_konter_card(a):
+    t = urllib.parse.quote(_veg_share_text(a), safe="")
+    q = f'<span class="kq">{esc(a["quelle"])}</span>' if a.get("quelle") else ""
+    subj = urllib.parse.quote("Kurz dazu", safe="")
+    return (
+        '<div class="kcard">'
+        f'<div class="ktitle">„{esc(a["title"])}"</div>'
+        f'<div class="kkonter">{esc(a["konter"])}</div>'
+        f'<div class="kfakt"><b>Der Fakt dahinter:</b> {esc(a["fakt"])}{q}</div>'
+        + _veg_links_html(a)
+        + '<div class="sharebar">'
+        f'<a class="sharebtn" target="_blank" rel="noopener" href="https://wa.me/?text={t}">Per WhatsApp</a>'
+        f'<a class="sharebtn" href="mailto:?subject={subj}&body={t}">Per Mail</a>'
+        f'<button class="sharebtn cp" data-t="{t}">Kopieren</button>'
+        "</div>"
+        f'<div class="ctaline">Wenn du mehr wissen willst, schau auf <a href="{MAIN_SITE}/" target="_blank" rel="noopener">this-is-vegan.com</a> vorbei 🌱</div>'
+        "</div>"
+    )
+
+
+VEG_COPY_JS = "document.querySelectorAll('.cp[data-t]').forEach(function(b){b.onclick=function(){var t=decodeURIComponent(b.dataset.t);if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t);}else{var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}ta.remove();}var o=b.textContent;b.textContent='Kopiert!';b.classList.add('done');setTimeout(function(){b.textContent=o;b.classList.remove('done');},1300);};});"
+
+
+def build_veganizer_hub(meta, args, quiz):
+    compact = [
+        {"title": a["title"], "aka": a["aka"], "konter": a["konter"], "fakt": a["fakt"],
+         **({"quelle": a["quelle"]} if a.get("quelle") else {}),
+         **({"links": [[l[0], (l[1] if l[1].startswith("http") else url(l[1]))] for l in a["links"]]} if a.get("links") else {})}
+        for a in args
+    ]
+    js = VEG_JS.replace("__ARGS__", json.dumps(compact, ensure_ascii=False, separators=(",", ":")))
+    js = js.replace("__QUIZ__", json.dumps(quiz, ensure_ascii=False, separators=(",", ":")))
+    chips = "\n".join(f'    <button class="chip" data-c="{esc(c)}">{esc(label)}</button>' for label, c in VEG_POPULAR)
+    grid = "\n".join(
+        f'    <a class="item yes" href="{url(VEG_BASE + a["slug"] + "/")}">'
+        f'<span class="bar"></span><div><div class="en">{esc(a["title"])}</div>'
+        f'<div class="nm">{esc(a["category"])}</div></div></a>'
+        for a in args
+    )
+
+    body = site_header("Veganizer") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>Veganizer</nav>
+<section class="hero">
+  <div class="eyebrow">Schlagfertig beim Familienfest</div>
+  <h1>Kontere Onkel <span class="q">Bernd.</span></h1>
+  <p class="sub">Die Sprüche, die du als Veganer am häufigsten hörst, mit ruhigen, fundierten Antworten. Such dir den passenden Konter oder trainier deine Schlagfertigkeit im Quiz.</p>
+  <div class="psort">
+    <div class="seg">
+      <button type="button" data-tab="konter" class="on">Konter finden</button>
+      <button type="button" data-tab="quiz">Quiz üben</button>
+    </div>
+  </div>
+</section>
+
+<div id="tab-konter">
+  <section class="hero" style="padding-top:8px">
+    <div class="search-shell">
+      <div class="search-box">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+        <input id="vq" type="text" autocomplete="off" placeholder="Spruch oder Stichwort, z. B. Löwen oder Protein" aria-label="Spruch oder Stichwort suchen">
+        <button class="go" id="vgo">Kontern</button>
+      </div>
+    </div>
+    <div class="chips">
+      <span>Häufig gehört:</span>
+{chips}
+    </div>
+    <div id="kresult" aria-live="polite"></div>
+  </section>
+
+  <section class="listsec">
+    <div class="listhead"><div><h2>Alle Sprüche</h2><p>{len(args)} typische Aussagen mit passender Antwort. Tipp einen an für Details und zum Teilen.</p></div></div>
+    <div class="grid">
+{grid}
+    </div>
+  </section>
+</div>
+
+<div id="tab-quiz" style="display:none">
+  <section class="hero" style="padding-top:8px">
+    <div class="qbox" id="quizbox"></div>
+  </section>
+</div>
+
+<section class="section">
+  <h2>So nutzt du den Veganizer</h2>
+  <p class="prose">Im Konter-Bereich tippst du den Spruch oder ein Stichwort ein und bekommst eine ruhige, sachliche Antwort, die du direkt per WhatsApp, Mail oder kopiert weitergeben kannst. Im Quiz übst du wie in der Fahrschule, welche Antwort wirklich überzeugt und welche das Gespräch eher abwürgt. Der beste Konter ist übrigens fast nie der lauteste, sondern der ruhige.</p>
+</section>
+""" + site_footer(meta, full_disclaimer=False) + f"\n<script>{js}\n{VEG_COPY_JS}</script>"
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Veganizer",
+            "url": BASE_URL + url(VEG_BASE),
+            "applicationCategory": "EducationalApplication",
+            "operatingSystem": "Web",
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+            "description": f"Schlagfertige, fundierte Antworten auf die {len(args)} häufigsten Sprüche gegen Veganer, plus Quiz zum Üben.",
+            "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Veganizer", "item": BASE_URL + url(VEG_BASE)},
+            ],
+        },
+    ]
+    return page(
+        "Veganizer: schlagfertige Antworten auf Anti-Vegan-Sprüche | This Is Vegan",
+        f"Die {len(args)} häufigsten Sprüche gegen Veganer, mit ruhigen, fundierten Antworten zum Kontern und Teilen. Plus Quiz für mehr Schlagfertigkeit. Kostenlos.",
+        VEG_BASE,
+        body,
+        jsonld,
+    )
+
+
+def build_veganizer_detail(a, meta, args):
+    title = a["title"]
+    s = a["slug"]
+    path = VEG_BASE + s + "/"
+    related = [x for x in args if x["category"] == a["category"] and x["slug"] != s][:4]
+    if len(related) < 4:
+        related += [x for x in args if x["slug"] != s and x not in related][: 4 - len(related)]
+    rel_html = "\n".join(
+        f'    <a class="item yes" href="{url(VEG_BASE + r["slug"] + "/")}">'
+        f'<span class="bar"></span><div><div class="en">{esc(r["title"])}</div>'
+        f'<div class="nm">{esc(r["category"])}</div></div></a>'
+        for r in related
+    )
+
+    body = site_header("Veganizer") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span><a href="{url(VEG_BASE)}">Veganizer</a><span>›</span>{esc(a["category"])}</nav>
+<section class="hero left">
+  <div class="eyebrow">{esc(a["category"])} · die beste Antwort</div>
+  <h1 class="detail">{esc(title)}</h1>
+</section>
+
+<div style="margin-top:6px">
+{_veg_konter_card(a)}
+</div>
+
+<section class="section">
+  <h2>Ähnliche Sprüche kontern</h2>
+  <div class="related">
+{rel_html}
+  </div>
+</section>
+
+<div class="cta">
+  <div>
+    <h2>Noch einen Spruch kontern?</h2>
+    <p>Der Veganizer kennt {len(args)} typische Aussagen und hat das Quiz zum Üben.</p>
+  </div>
+  <a class="btn" href="{url(VEG_BASE)}">Zum Veganizer →</a>
+</div>
+""" + site_footer(meta, full_disclaimer=False) + f'\n<script>{VEG_COPY_JS}</script>'
+
+    answer_first = a["konter"].split(". ")[0] + "."
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": title,
+                 "acceptedAnswer": {"@type": "Answer", "text": a["konter"] + " " + a["fakt"]}},
+            ],
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Veganizer", "item": BASE_URL + url(VEG_BASE)},
+                {"@type": "ListItem", "position": 3, "name": title, "item": BASE_URL + url(path)},
+            ],
+        },
+    ]
+    desc = f"{answer_first} Die ruhige, fundierte Antwort auf den Spruch und passende Studien, zum Kontern und Teilen."
+    if len(desc) > 155:
+        desc = answer_first
+        if len(desc) > 155:
+            desc = desc[:152].rstrip() + "..."
+    return page(
+        f'„{title}" - die schlagfertige Antwort | This Is Vegan',
+        desc,
+        path,
+        body,
+        jsonld,
+        og_type="article",
+    )
+
+
 def build_404(meta):
     body = site_header("Tools") + f"""
 <section class="hero">
@@ -3235,6 +3585,9 @@ def main():
 
     co2_data = json.loads((ROOT / "data" / "co2-data.json").read_text(encoding="utf-8"))
     co2_meta, co2_foods = co2_data["meta"], co2_data["foods"]
+
+    veg_data = json.loads((ROOT / "data" / "veganizer-data.json").read_text(encoding="utf-8"))
+    veg_meta, veg_args, veg_quiz = veg_data["meta"], veg_data["arguments"], veg_data["quiz"]
 
     if DIST.exists():
         shutil.rmtree(DIST)
@@ -3287,6 +3640,11 @@ def main():
 
     # Protein-pro-Mahlzeit-Rechner
     pages[MEAL_BASE] = build_meal(protein_meta, protein_foods)
+
+    # Veganizer
+    pages[VEG_BASE] = build_veganizer_hub(veg_meta, veg_args, veg_quiz)
+    for a in veg_args:
+        pages[VEG_BASE + a["slug"] + "/"] = build_veganizer_detail(a, veg_meta, veg_args)
 
     # Creator-Bereich
     pages[CREATOR_BASE] = build_creator_hub(CREATOR_META)
