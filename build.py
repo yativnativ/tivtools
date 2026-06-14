@@ -119,7 +119,7 @@ CSS = """
 @font-face{font-family:'Gabarito';font-style:normal;font-weight:500 900;font-display:swap;src:url(/fonts/gabarito-latin.woff2) format('woff2')}
 @font-face{font-family:'Figtree';font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/figtree-latin.woff2) format('woff2')}
 html{scroll-behavior:smooth}
-body{background:var(--teal-bg);color:var(--peach);font-family:'Figtree',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh}
+body{background:radial-gradient(58vw 58vw at 86% -8%,rgba(20,125,119,.34),transparent 60%),radial-gradient(52vw 52vw at -12% 16%,rgba(16,96,80,.30),transparent 56%),radial-gradient(46vw 46vw at 112% 92%,rgba(229,152,117,.10),transparent 60%),var(--teal-bg);background-attachment:fixed;color:var(--peach);font-family:'Figtree',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh}
 .wrap{max-width:920px;margin:0 auto;padding:0 20px}
 a{color:inherit}
 header.site{padding:22px 0 4px;display:flex;align-items:center;justify-content:space-between;gap:16px}
