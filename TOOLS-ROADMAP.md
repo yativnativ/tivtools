@@ -23,17 +23,19 @@ indexierbaren Seiten, deploybar per `git push`.
    (Kaffee, Backen, Protein, Klima), Nährwerte, 8 Detailseiten. Kauf-Intention.
 8. **Protein-Tabelle** (`/protein-tabelle/`) — 42 Lebensmittel, durchsuchbar/sortierbar,
    Eiweiß pro 100 g. Targets "veganes protein tabelle", verlinkt zum Nährstoff-Rechner.
+9. **CO2-Fußabdruck** (`/co2-fussabdruck/`) — 23 Lebensmittel, kg CO2 pro kg, tierisch
+   vs pflanzlich farbcodiert. Werte gegen Science-2018-Metaanalyse/OWID gecheckt.
+10. **Protein pro Mahlzeit** (`/protein-pro-mahlzeit/`) — Meal-Builder, Protein
+    summieren, Prozent vom Tagesziel. Nutzt die gecheckten Protein-Werte.
 
-Gesamt: rund 205 Seiten, alle mit FAQ- + Breadcrumb-Schema, Canonical, OG.
+Gesamt: rund 207 Seiten, alle mit FAQ- + Breadcrumb-Schema, Canonical, OG.
 
 ## Nächste Ideen (priorisiert)
 
-9. **"Ist das vegan?" ausbauen** auf 100+ Lebensmittel und echte Marken
-   (Markenname + Produkt). Marken-Suchen sind riesig und kaum bedient. Achtung:
-   Markenrezepturen ändern sich, defensiv formulieren und datieren.
-10. **Protein-pro-Gericht-Rechner** — mehrere Lebensmittel + Menge kombinieren,
-    Protein pro Portion summieren. Ergänzt Protein-Tabelle und Nährstoff-Rechner.
-11. **Vegane-Reise-Spickzettel** — "Ich bin vegan"-Sätze + versteckt-tierisch-Begriffe
+11. **"Ist das vegan?" ausbauen** auf 100+ Lebensmittel und echte Marken
+    (Markenname + Produkt). Marken-Suchen sind riesig und kaum bedient. Achtung:
+    Markenrezepturen ändern sich, defensiv formulieren und datieren.
+12. **Vegane-Reise-Spickzettel** — "Ich bin vegan"-Sätze + versteckt-tierisch-Begriffe
     pro Sprache. Nische, teilbar, ohne Konkurrenz.
 12. **Saisonkalender erweitern**: pro Sorte eine Seite ("Erdbeeren Saison") mit
     Rezept-Links, plus Kräuter und Salate.
