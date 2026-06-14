@@ -1,0 +1,125 @@
+{
+  "meta": {
+    "version": 1,
+    "lastUpdated": "2026-06-14",
+    "hinweis": "Standardphrasen als Reisehilfe. Aussprache und regionale Varianten koennen abweichen. Im Zweifel die Karte zeigen statt sprechen."
+  },
+  "phrases": [
+    {"key": "bin_vegan", "de": "Ich bin vegan.", "icon": "🌱"},
+    {"key": "no_animal", "de": "Ich esse kein Fleisch, keinen Fisch, keine Eier und keine Milch.", "icon": "🚫"},
+    {"key": "contains", "de": "Ist da Fleisch, Fisch, Ei oder Milch drin?", "icon": "❓"},
+    {"key": "no_cheese", "de": "Ohne Käse, bitte.", "icon": "🧀"},
+    {"key": "whats_vegan", "de": "Was ist hier vegan?", "icon": "📋"},
+    {"key": "thanks", "de": "Vielen Dank!", "icon": "🙏"}
+  ],
+  "languages": [
+    {"slug": "englisch", "name": "Englisch", "native": "English", "flag": "🇬🇧",
+     "t": {
+       "bin_vegan": {"x": "I am vegan."},
+       "no_animal": {"x": "I don't eat meat, fish, eggs or milk."},
+       "contains": {"x": "Does this contain meat, fish, egg or milk?"},
+       "no_cheese": {"x": "Without cheese, please."},
+       "whats_vegan": {"x": "What here is vegan?"},
+       "thanks": {"x": "Thank you very much!"}
+     }},
+    {"slug": "spanisch", "name": "Spanisch", "native": "Español", "flag": "🇪🇸",
+     "t": {
+       "bin_vegan": {"x": "Soy vegano. (vegana)"},
+       "no_animal": {"x": "No como carne, pescado, huevos ni leche."},
+       "contains": {"x": "¿Esto lleva carne, pescado, huevo o leche?"},
+       "no_cheese": {"x": "Sin queso, por favor."},
+       "whats_vegan": {"x": "¿Qué hay aquí que sea vegano?"},
+       "thanks": {"x": "¡Muchas gracias!"}
+     }},
+    {"slug": "franzoesisch", "name": "Französisch", "native": "Français", "flag": "🇫🇷",
+     "t": {
+       "bin_vegan": {"x": "Je suis végane."},
+       "no_animal": {"x": "Je ne mange ni viande, ni poisson, ni œufs, ni lait."},
+       "contains": {"x": "Est-ce qu'il y a de la viande, du poisson, des œufs ou du lait ?"},
+       "no_cheese": {"x": "Sans fromage, s'il vous plaît."},
+       "whats_vegan": {"x": "Qu'est-ce qui est végane ici ?"},
+       "thanks": {"x": "Merci beaucoup !"}
+     }},
+    {"slug": "italienisch", "name": "Italienisch", "native": "Italiano", "flag": "🇮🇹",
+     "t": {
+       "bin_vegan": {"x": "Sono vegano. (vegana)"},
+       "no_animal": {"x": "Non mangio carne, pesce, uova né latte."},
+       "contains": {"x": "Contiene carne, pesce, uova o latte?"},
+       "no_cheese": {"x": "Senza formaggio, per favore."},
+       "whats_vegan": {"x": "Cosa c'è di vegano qui?"},
+       "thanks": {"x": "Grazie mille!"}
+     }},
+    {"slug": "portugiesisch", "name": "Portugiesisch", "native": "Português", "flag": "🇵🇹",
+     "t": {
+       "bin_vegan": {"x": "Sou vegano. (vegana)"},
+       "no_animal": {"x": "Não como carne, peixe, ovos nem leite."},
+       "contains": {"x": "Isto leva carne, peixe, ovo ou leite?"},
+       "no_cheese": {"x": "Sem queijo, por favor."},
+       "whats_vegan": {"x": "O que aqui é vegano?"},
+       "thanks": {"x": "Muito obrigado! (obrigada)"}
+     }},
+    {"slug": "niederlaendisch", "name": "Niederländisch", "native": "Nederlands", "flag": "🇳🇱",
+     "t": {
+       "bin_vegan": {"x": "Ik ben veganist."},
+       "no_animal": {"x": "Ik eet geen vlees, vis, eieren of melk."},
+       "contains": {"x": "Zit hier vlees, vis, ei of melk in?"},
+       "no_cheese": {"x": "Zonder kaas, alsjeblieft."},
+       "whats_vegan": {"x": "Wat is hier veganistisch?"},
+       "thanks": {"x": "Hartelijk dank!"}
+     }},
+    {"slug": "polnisch", "name": "Polnisch", "native": "Polski", "flag": "🇵🇱",
+     "t": {
+       "bin_vegan": {"x": "Jestem weganinem. (weganką)"},
+       "no_animal": {"x": "Nie jem mięsa, ryb, jajek ani mleka."},
+       "contains": {"x": "Czy to zawiera mięso, ryby, jajka lub mleko?"},
+       "no_cheese": {"x": "Bez sera, proszę."},
+       "whats_vegan": {"x": "Co tu jest wegańskie?"},
+       "thanks": {"x": "Dziękuję bardzo!"}
+     }},
+    {"slug": "kroatisch", "name": "Kroatisch", "native": "Hrvatski", "flag": "🇭🇷",
+     "t": {
+       "bin_vegan": {"x": "Ja sam vegan. (veganka)"},
+       "no_animal": {"x": "Ne jedem meso, ribu, jaja ni mlijeko."},
+       "contains": {"x": "Sadrži li ovo meso, ribu, jaje ili mlijeko?"},
+       "no_cheese": {"x": "Bez sira, molim."},
+       "whats_vegan": {"x": "Što je ovdje vegansko?"},
+       "thanks": {"x": "Hvala lijepa!"}
+     }},
+    {"slug": "griechisch", "name": "Griechisch", "native": "Ελληνικά", "flag": "🇬🇷",
+     "t": {
+       "bin_vegan": {"x": "Είμαι βίγκαν.", "r": "Íme vígkan."},
+       "no_animal": {"x": "Δεν τρώω κρέας, ψάρι, αυγά ή γάλα.", "r": "Den tróo kréas, psári, avgá í gála."},
+       "contains": {"x": "Έχει μέσα κρέας, ψάρι, αυγό ή γάλα;", "r": "Échi mésa kréas, psári, avgó í gála?"},
+       "no_cheese": {"x": "Χωρίς τυρί, παρακαλώ.", "r": "Chorís tirí, parakaló."},
+       "whats_vegan": {"x": "Τι είναι βίγκαν εδώ;", "r": "Ti íne vígkan edó?"},
+       "thanks": {"x": "Ευχαριστώ πολύ!", "r": "Efcharistó polí!"}
+     }},
+    {"slug": "tuerkisch", "name": "Türkisch", "native": "Türkçe", "flag": "🇹🇷",
+     "t": {
+       "bin_vegan": {"x": "Veganım."},
+       "no_animal": {"x": "Et, balık, yumurta ve süt yemiyorum."},
+       "contains": {"x": "Bunun içinde et, balık, yumurta veya süt var mı?"},
+       "no_cheese": {"x": "Peynirsiz, lütfen."},
+       "whats_vegan": {"x": "Burada vegan olan ne var?"},
+       "thanks": {"x": "Çok teşekkür ederim!"}
+     }},
+    {"slug": "japanisch", "name": "Japanisch", "native": "日本語", "flag": "🇯🇵",
+     "t": {
+       "bin_vegan": {"x": "私はヴィーガンです。", "r": "Watashi wa vīgan desu."},
+       "no_animal": {"x": "肉、魚、卵、牛乳は食べません。", "r": "Niku, sakana, tamago, gyūnyū wa tabemasen."},
+       "contains": {"x": "これに肉、魚、卵、牛乳は入っていますか？", "r": "Kore ni niku, sakana, tamago, gyūnyū wa haitte imasu ka?"},
+       "no_cheese": {"x": "チーズ抜きでお願いします。", "r": "Chīzu nuki de onegai shimasu."},
+       "whats_vegan": {"x": "ここで何がヴィーガンですか？", "r": "Koko de nani ga vīgan desu ka?"},
+       "thanks": {"x": "どうもありがとうございます。", "r": "Dōmo arigatō gozaimasu."}
+     }},
+    {"slug": "indonesisch", "name": "Indonesisch", "native": "Bahasa Indonesia", "flag": "🇮🇩",
+     "t": {
+       "bin_vegan": {"x": "Saya vegan. (Saya makan makanan nabati.)"},
+       "no_animal": {"x": "Saya tidak makan daging, ikan, telur, dan susu."},
+       "contains": {"x": "Apakah ini mengandung daging, ikan, telur, atau susu?"},
+       "no_cheese": {"x": "Tanpa keju, tolong."},
+       "whats_vegan": {"x": "Apa yang vegan di sini?"},
+       "thanks": {"x": "Terima kasih banyak!"}
+     }}
+  ]
+}

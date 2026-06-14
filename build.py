@@ -1096,8 +1096,48 @@ document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click', (
 # ---------------------------------------------------------------- page shell
 
 
-def page(title, desc, path, body, jsonld=None, og_type="website"):
+OG_MAP = {
+    "/": "hub",
+    "/e-nummern/": "e-nummern",
+    "/vegan-ersetzen/": "vegan-ersetzen",
+    "/naehrstoffrechner/": "naehrstoffrechner",
+    "/ist-das-vegan/": "ist-das-vegan",
+    "/impact-rechner/": "impact-rechner",
+    "/saisonkalender/": "saisonkalender",
+    "/pflanzendrink-vergleich/": "pflanzendrink-vergleich",
+    "/protein-tabelle/": "protein-tabelle",
+    "/co2-fussabdruck/": "co2-fussabdruck",
+    "/protein-pro-mahlzeit/": "protein-pro-mahlzeit",
+    "/veganizer/": "veganizer",
+    "/creator/": "creator",
+    "/creator/schriftarten/": "schriftarten",
+    "/creator/bild-freistellen/": "bild-freistellen",
+    "/creator/hashtags/": "hashtags",
+    "/vegan-auf-reisen/": "vegan-auf-reisen",
+    "/versteckte-zutaten/": "versteckte-zutaten",
+}
+
+
+def page(title, desc, path, body, jsonld=None, og_type="website", og_image=None):
     canonical = BASE_URL + url(path)
+    if og_image is None:
+        og_image = OG_MAP.get(path)
+    if og_image:
+        og_url = BASE_URL + url(f"/og/{og_image}.png")
+        og_alt = esc(title)
+        og_tags = (
+            f'<meta property="og:image" content="{og_url}">\n'
+            f'<meta property="og:image:width" content="1200">\n'
+            f'<meta property="og:image:height" content="630">\n'
+            f'<meta property="og:image:alt" content="{og_alt}">\n'
+            f'<meta name="twitter:image" content="{og_url}">'
+        )
+    else:
+        d = f"{BASE_URL}{url('/og-image.png')}"
+        og_tags = (
+            f'<meta property="og:image" content="{d}">\n'
+            f'<meta name="twitter:image" content="{d}">'
+        )
     ld = ""
     if jsonld:
         for block in jsonld:
@@ -1121,12 +1161,11 @@ def page(title, desc, path, body, jsonld=None, og_type="website"):
 <meta property="og:description" content="{esc(desc)}">
 <meta property="og:type" content="{og_type}">
 <meta property="og:url" content="{canonical}">
-<meta property="og:image" content="{BASE_URL}{url('/og-image.png')}">
 <meta property="og:locale" content="de_DE">
+{og_tags}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{esc(title)}">
 <meta name="twitter:description" content="{esc(desc)}">
-<meta name="twitter:image" content="{BASE_URL}{url('/og-image.png')}">
 {fonts}
 <style>{CSS}</style>
 {ld}</head>
@@ -1247,6 +1286,18 @@ def build_hub(meta, adds, ings, nutrients):
       <h3>Veganizer</h3>
       <p>Schlagfertige, fundierte Antworten auf die häufigsten Sprüche gegen Veganer, mit Studien und Links, zum Teilen per WhatsApp. Plus Quiz zum Üben.</p>
       <span class="meta">Onkel Bernd kontern →</span>
+    </a>
+    <a class="toolcard" href="{url(VZUT_BASE)}">
+      <span class="badge">Neu</span>
+      <h3>Versteckte tierische Zutaten</h3>
+      <p>Gelatine, Karmin, Molke, Lab: welche Zutaten heimlich tierisch sind, was dahintersteckt und wo du sie findest. Mit pflanzlicher Alternative.</p>
+      <span class="meta">Zutat enttarnen →</span>
+    </a>
+    <a class="toolcard" href="{url(REISE_BASE)}">
+      <span class="badge">Neu</span>
+      <h3>Vegan auf Reisen</h3>
+      <p>„Ich bin vegan“ und die wichtigsten Sätze in 12 Sprachen, zum Vorlesen oder Zeigen. Damit im Urlaub klar ist, was auf den Teller darf.</p>
+      <span class="meta">Spickzettel öffnen →</span>
     </a>
     <div class="toolcard soon">
       <span class="badge">In Arbeit</span>
@@ -1393,6 +1444,18 @@ def build_hub(meta, adds, ings, nutrients):
                         "position": 14,
                         "name": "Vegane Hashtags",
                         "url": BASE_URL + url(HASH_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 15,
+                        "name": "Versteckte tierische Zutaten erkennen",
+                        "url": BASE_URL + url(VZUT_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 16,
+                        "name": "Vegan auf Reisen: Sprach-Spickzettel",
+                        "url": BASE_URL + url(REISE_BASE),
                     },
                 ],
             },
@@ -3560,6 +3623,492 @@ def build_veganizer_detail(a, meta, args):
     )
 
 
+# ================================================================ Reise-Spickzettel
+REISE_BASE = "/vegan-auf-reisen/"
+
+REISE_CSS = (
+    ".langbar{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 14px}"
+    ".langbtn{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:rgba(248,222,205,.04);color:var(--peach);font-family:'Figtree';font-weight:600;font-size:14px;padding:8px 14px;border-radius:999px;cursor:pointer;transition:all .14s}"
+    ".langbtn:hover{border-color:var(--peach)}"
+    ".langbtn.active{background:var(--peach);color:var(--ink);border-color:var(--peach)}"
+    ".langbtn .fl{font-size:17px;line-height:1}"
+    ".pb{display:grid;gap:12px;margin-top:6px}"
+    ".prow{display:grid;grid-template-columns:1fr 1.25fr;gap:16px;align-items:start;padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:rgba(248,222,205,.03)}"
+    ".pde{font-family:'Figtree';font-weight:600;color:var(--peach);opacity:.72;font-size:15px;line-height:1.35}"
+    ".pxwrap{display:flex;flex-direction:column;gap:9px;align-items:flex-start}"
+    ".px{font-family:'Gabarito';font-weight:700;font-size:19px;color:#f6ece1;line-height:1.3}"
+    ".pr{font-size:13px;opacity:.6;font-style:italic;margin-top:-5px}"
+    "@media(max-width:560px){.prow{grid-template-columns:1fr;gap:9px}}"
+)
+
+REISE_JS = r"""
+const D = __DATA__;
+const box = document.getElementById('pb');
+function rowHtml(lang){
+  return D.phrases.map(function(p){
+    var t = lang.t[p.key] || {x:''};
+    var rom = t.r ? '<div class="pr">'+t.r+'</div>' : '';
+    var enc = encodeURIComponent(t.x);
+    return '<div class="prow"><div class="pde">'+p.icon+'  '+p.de+'</div>'+
+      '<div class="pxwrap"><div class="px">'+t.x+'</div>'+rom+
+      '<button class="sharebtn cp" data-t="'+enc+'">Kopieren</button></div></div>';
+  }).join('');
+}
+function wire(){
+  box.querySelectorAll('.cp[data-t]').forEach(function(b){
+    b.onclick = function(){
+      var text = decodeURIComponent(b.dataset.t);
+      if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text);
+      else { var ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} ta.remove(); }
+      var o=b.textContent; b.textContent='Kopiert!'; b.classList.add('done');
+      setTimeout(function(){ b.textContent=o; b.classList.remove('done'); }, 1300);
+    };
+  });
+}
+function render(slug){
+  var lang = D.langs.find(function(l){return l.slug===slug;}) || D.langs[0];
+  document.querySelectorAll('.langbtn').forEach(function(b){ b.classList.toggle('active', b.dataset.s===lang.slug); });
+  box.innerHTML = rowHtml(lang);
+  wire();
+}
+document.querySelectorAll('.langbtn').forEach(function(b){ b.addEventListener('click', function(){ render(b.dataset.s); }); });
+render(D.langs[0].slug);
+""".strip()
+
+
+def _reise_rows_static(lang, phrases):
+    out = []
+    for p in phrases:
+        t = lang["t"].get(p["key"], {"x": ""})
+        rom = f'<div class="pr">{esc(t["r"])}</div>' if t.get("r") else ""
+        enc = urllib.parse.quote(t["x"])
+        out.append(
+            f'<div class="prow"><div class="pde">{p["icon"]}  {esc(p["de"])}</div>'
+            f'<div class="pxwrap"><div class="px">{esc(t["x"])}</div>{rom}'
+            f'<button class="sharebtn cp" data-t="{enc}">Kopieren</button></div></div>'
+        )
+    return "\n".join(out)
+
+
+def build_reise_hub(meta, data):
+    phrases, langs = data["phrases"], data["languages"]
+    compact = {"phrases": phrases, "langs": langs}
+    js = REISE_JS.replace("__DATA__", json.dumps(compact, ensure_ascii=False, separators=(",", ":")))
+    langbtns = "\n".join(
+        f'    <button class="langbtn" data-s="{l["slug"]}"><span class="fl">{l["flag"]}</span>{esc(l["name"])}</button>'
+        for l in langs
+    )
+    langlist = "\n".join(
+        f'    <a href="{url(REISE_BASE + l["slug"] + "/")}">{l["flag"]} Ich bin vegan auf {esc(l["name"])}<span class="arrow">→</span></a>'
+        for l in langs
+    )
+    body = site_header("Vegan auf Reisen") + f"""
+<style>{REISE_CSS}</style>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>Vegan auf Reisen</nav>
+<section class="hero left">
+  <div class="eyebrow">Der Sprach-Spickzettel für unterwegs</div>
+  <h1>Vegan auf <span class="q">Reisen.</span></h1>
+  <p class="sub">Die wichtigsten Sätze in {len(langs)} Sprachen, um im Restaurant oder Laden klar zu sagen, dass du vegan isst. Sprache wählen, vorlesen oder einfach das Handy zeigen.</p>
+  <div class="langbar">
+{langbtns}
+  </div>
+  <div class="pb" id="pb"></div>
+</section>
+
+<section class="section">
+  <h2>So nutzt du den Spickzettel</h2>
+  <p class="prose">Am sichersten zeigst du die Sätze direkt vom Display, gerade dort, wo die Aussprache schwierig ist. Halte die Liste kurz und konkret: „kein Fleisch, kein Fisch, kein Ei, keine Milch“ versteht man fast überall. In Ländern mit anderer Schrift hilft die Lautschrift in Klammern beim Vorlesen.</p>
+  <p class="prose">Denk dran, dass Brühe, Fischsauce, Butter und Ei oft versteckt mitkochen. Die Frage „Ist da Fleisch, Fisch, Ei oder Milch drin?“ klärt das meiste.</p>
+</section>
+
+<section class="section">
+  <h2>Alle Sprachen einzeln</h2>
+  <p class="lead">Für jede Sprache gibt es eine eigene Seite zum Speichern und Teilen.</p>
+  <div class="linklist">
+{langlist}
+  </div>
+</section>
+
+<div class="cta">
+  <div>
+    <h2>Vor der Reise schon planen?</h2>
+    <p>Im This-Is-Vegan-Magazin findest du Reise-Guides und Restaurant-Tipps für vegane Trips.</p>
+  </div>
+  <a class="btn" href="{MAIN_SITE}/">Zum Magazin →</a>
+</div>
+""" + site_footer(meta, full_disclaimer=False) + f"\n<script>{js}</script>"
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Vegan auf Reisen: Sprach-Spickzettel",
+            "url": BASE_URL + url(REISE_BASE),
+            "applicationCategory": "TravelApplication",
+            "operatingSystem": "Web",
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+            "description": f"Die wichtigsten veganen Sätze in {len(langs)} Sprachen zum Vorlesen oder Zeigen.",
+            "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Vegan auf Reisen", "item": BASE_URL + url(REISE_BASE)},
+            ],
+        },
+    ]
+    return page(
+        f"Vegan auf Reisen: „Ich bin vegan“ in {len(langs)} Sprachen | This Is Vegan",
+        f"Sag im Urlaub klar, dass du vegan isst. Die wichtigsten Sätze in {len(langs)} Sprachen zum Vorlesen oder Zeigen, von Englisch bis Indonesisch. Kostenlos.",
+        REISE_BASE,
+        body,
+        jsonld,
+        og_image="vegan-auf-reisen",
+    )
+
+
+def build_reise_detail(lang, meta, data):
+    phrases, langs = data["phrases"], data["languages"]
+    name, native = lang["name"], lang["native"]
+    path = REISE_BASE + lang["slug"] + "/"
+    rows = _reise_rows_static(lang, phrases)
+    vegan_line = lang["t"]["bin_vegan"]["x"]
+    others = [l for l in langs if l["slug"] != lang["slug"]]
+    rel_html = "\n".join(
+        f'    <a href="{url(REISE_BASE + l["slug"] + "/")}">{l["flag"]} {esc(l["name"])}<span class="arrow">→</span></a>'
+        for l in others
+    )
+    body = site_header("Vegan auf Reisen") + f"""
+<style>{REISE_CSS}</style>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span><a href="{url(REISE_BASE)}">Vegan auf Reisen</a><span>›</span>{esc(name)}</nav>
+<section class="hero left">
+  <div class="eyebrow">{lang["flag"]} {esc(native)} · Vegan-Sätze</div>
+  <h1 class="detail">Ich bin vegan auf <span class="q">{esc(name)}.</span></h1>
+  <p class="sub">Die wichtigsten Sätze, um auf {esc(native)} klarzumachen, dass du vegan isst. Tipp aufs Kopieren oder zeig die Sätze direkt vom Display.</p>
+</section>
+
+<div class="pb" style="margin-top:24px">
+{rows}
+</div>
+
+<section class="section">
+  <h2>Worauf du achten solltest</h2>
+  <p class="prose">Brühe, Butter, Fischsauce und Ei verstecken sich oft in Gerichten, die vegan aussehen. Die Frage „Ist da Fleisch, Fisch, Ei oder Milch drin?“ klärt das Meiste. Im Zweifel lieber einmal mehr nachfragen oder die Sätze zeigen.</p>
+</section>
+
+<section class="section">
+  <h2>In anderen Sprachen</h2>
+  <div class="linklist">
+{rel_html}
+  </div>
+</section>
+
+<div class="cta">
+  <div>
+    <h2>Mehr Sprachen?</h2>
+    <p>Der Spickzettel hat die wichtigsten Sätze in {len(langs)} Sprachen, mit Sprachwähler.</p>
+  </div>
+  <a class="btn" href="{url(REISE_BASE)}">Zum Spickzettel →</a>
+</div>
+""" + site_footer(meta, full_disclaimer=False) + f"\n<script>{VEG_COPY_JS}</script>"
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": f"Wie sagt man „Ich bin vegan“ auf {name}?",
+                 "acceptedAnswer": {"@type": "Answer", "text": f"Auf {native} sagt man: {vegan_line}"}},
+            ],
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Vegan auf Reisen", "item": BASE_URL + url(REISE_BASE)},
+                {"@type": "ListItem", "position": 3, "name": name, "item": BASE_URL + url(path)},
+            ],
+        },
+    ]
+    return page(
+        f"Ich bin vegan auf {name}: die wichtigsten Sätze | This Is Vegan",
+        f"Wie sagt man „Ich bin vegan“ auf {name}? Die wichtigsten Sätze für Restaurant und Einkauf auf {native}, zum Vorlesen oder Zeigen. Kostenlos.",
+        path,
+        body,
+        jsonld,
+        og_type="article",
+        og_image="vegan-auf-reisen",
+    )
+
+
+# ================================================================ Versteckte tierische Zutaten
+VZUT_BASE = "/versteckte-zutaten/"
+VZUT_POPULAR = ["Gelatine", "Karmin", "Molke", "E471", "Honig", "Vitamin D3"]
+VZUT_LABEL = {
+    "yes": {"t": "Pflanzlich", "s": "kein tierischer Ursprung", "icon": "✓"},
+    "maybe": {"t": "Kann tierisch sein", "s": "Herkunft hängt vom Hersteller ab", "icon": "?"},
+    "no": {"t": "Tierisch", "s": "wird vom Tier gewonnen", "icon": "✕"},
+}
+
+VZUT_JS = r"""
+const DATA = __DATA__;
+const L = {
+  yes:{t:"Pflanzlich", s:"kein tierischer Ursprung", i:"✓"},
+  maybe:{t:"Kann tierisch sein", s:"Herkunft hängt vom Hersteller ab", i:"?"},
+  no:{t:"Tierisch", s:"wird vom Tier gewonnen", i:"✕"}
+};
+const norm = s => s.toLowerCase().replace(/\s+/g,"").replace(/[^a-z0-9äöüß]/g,"");
+function find(query){
+  const q = norm(query);
+  if(!q) return null;
+  return DATA.find(d => norm(d.name) === q)
+    || DATA.find(d => d.aka.some(a => norm(a) === q))
+    || DATA.find(d => norm(d.name).startsWith(q))
+    || DATA.find(d => norm(d.name).includes(q) || d.aka.some(a => norm(a).includes(q)))
+    || null;
+}
+function render(item){
+  const r = document.getElementById("result");
+  if(!item){
+    r.innerHTML = '<div class="miss"><h3>Dazu habe ich noch keinen Eintrag</h3>'+
+      '<p>Versuch eine andere Zutat oder einen Teil des Namens. Die Liste wächst laufend.</p></div>';
+    return;
+  }
+  const x = L[item.s];
+  r.innerHTML =
+    '<div class="card"><div class="verdict '+item.s+'"><div class="mark">'+x.i+'</div>'+
+    '<div class="vtext">'+x.t+'<small>'+x.s+'</small></div></div>'+
+    '<div class="card-body"><div class="enum">'+item.name+'</div>'+
+    '<span class="klasse">'+item.cat+'</span><p class="info">'+item.info+'</p>'+
+    (item.note ? '<div class="note"><span>!</span><span><b>Achte drauf:</b> '+item.note+'</span></div>' : '')+
+    '<a class="detail-link" href="'+item.u+'">Alle Details zu '+item.name+' →</a></div></div>';
+}
+function search(){
+  const v = document.getElementById("q").value;
+  if(!v.trim()){ document.getElementById("result").innerHTML=""; return; }
+  render(find(v));
+}
+document.getElementById("go").addEventListener("click", search);
+document.getElementById("q").addEventListener("keydown", e => { if(e.key==="Enter") search(); });
+document.getElementById("q").addEventListener("input", e => {
+  if(e.target.value.trim().length >= 2) search();
+  else document.getElementById("result").innerHTML="";
+});
+document.querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => {
+  document.getElementById("q").value = c.dataset.c;
+  search();
+  document.getElementById("result").scrollIntoView({behavior:"smooth", block:"center"});
+}));
+document.querySelectorAll(".filt").forEach(f => f.addEventListener("click", () => {
+  document.querySelectorAll(".filt").forEach(x=>x.classList.remove("active"));
+  f.classList.add("active");
+  const flt = f.dataset.f;
+  let shown = 0;
+  document.querySelectorAll("#grid .item").forEach(el => {
+    const show = flt==="all" || el.classList.contains(flt);
+    el.classList.toggle("hidden", !show);
+    if(show) shown++;
+  });
+  document.querySelector("#grid .empty").style.display = shown ? "none" : "block";
+}));
+""".strip()
+
+
+def build_versteckte_hub(meta, ings):
+    order = {"no": 0, "maybe": 1, "yes": 2}
+    sorted_ings = sorted(ings, key=lambda x: (order[x["status"]], x["name"].lower()))
+    items = "\n".join(
+        f'    <a class="item {i["status"]}" href="{url(VZUT_BASE + i["slug"] + "/")}">'
+        f'<span class="bar"></span><div><div class="en">{esc(i["name"])}</div>'
+        f'<div class="nm">{esc(i["category"])}</div></div></a>'
+        for i in sorted_ings
+    )
+    compact = [
+        {"name": i["name"], "aka": i.get("aka", []), "cat": i["category"], "s": i["status"],
+         "info": i["info"], **({"note": i["note"]} if i.get("note") else {}),
+         "u": url(VZUT_BASE + i["slug"] + "/")}
+        for i in ings
+    ]
+    js = VZUT_JS.replace("__DATA__", json.dumps(compact, ensure_ascii=False, separators=(",", ":")))
+    chips = "\n".join(f'    <button class="chip" data-c="{esc(c)}">{esc(c)}</button>' for c in VZUT_POPULAR)
+    counts = {s: sum(1 for i in ings if i["status"] == s) for s in ("yes", "no", "maybe")}
+
+    body = site_header("Versteckte tierische Zutaten") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>Versteckte tierische Zutaten</nav>
+<section class="hero">
+  <div class="eyebrow">Was sich hinter Zutatennamen versteckt</div>
+  <h1>Versteckte <span class="q">tierische Zutaten.</span></h1>
+  <p class="sub">Zutat oder E-Nummer eingeben und sofort sehen, ob dahinter etwas Tierisches steckt, von Gelatine über Karmin bis zu Vitamin D3.</p>
+
+  <div class="search-shell">
+    <div class="search-box">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+      <input id="q" type="text" autocomplete="off" placeholder="z. B. Gelatine, E120 oder Molke" aria-label="Zutat suchen">
+      <button class="go" id="go">Prüfen</button>
+    </div>
+  </div>
+
+  <div class="chips">
+    <span>Häufig gesucht:</span>
+{chips}
+  </div>
+
+  <div id="result" aria-live="polite"></div>
+</section>
+
+<section class="listsec">
+  <div class="listhead">
+    <div>
+      <h2>Alle Zutaten</h2>
+      <p>{len(ings)} Einträge: {counts['no']} tierisch, {counts['maybe']} kann tierisch sein, {counts['yes']} klingt tierisch, ist aber pflanzlich.</p>
+    </div>
+    <div class="filters" id="filters">
+      <button class="filt active" data-f="all">Alle</button>
+      <button class="filt s-no" data-f="no"><span class="swatch"></span>Tierisch</button>
+      <button class="filt s-maybe" data-f="maybe"><span class="swatch"></span>Kann tierisch sein</button>
+      <button class="filt s-yes" data-f="yes"><span class="swatch"></span>Pflanzlich</button>
+    </div>
+  </div>
+  <div class="grid" id="grid">
+{items}
+    <div class="empty">Keine Einträge in diesem Filter.</div>
+  </div>
+</section>
+""" + site_footer(meta) + f"\n<script>{js}</script>"
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Versteckte tierische Zutaten: der Checker",
+            "url": BASE_URL + url(VZUT_BASE),
+            "applicationCategory": "UtilityApplication",
+            "operatingSystem": "Web",
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+            "description": f"Checker für {len(ings)} Zutaten, die tierischen Ursprungs sein können, von Gelatine über Karmin bis Vitamin D3.",
+            "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Versteckte tierische Zutaten", "item": BASE_URL + url(VZUT_BASE)},
+            ],
+        },
+    ]
+    return page(
+        "Versteckte tierische Zutaten erkennen | This Is Vegan",
+        f"Welche Zutaten sind heimlich tierisch? {len(ings)} Begriffe von Gelatine über Karmin (E120) bis Vitamin D3, mit Erklärung und pflanzlicher Alternative. Kostenlos.",
+        VZUT_BASE,
+        body,
+        jsonld,
+        og_image="versteckte-zutaten",
+    )
+
+
+def build_versteckte_detail(i, meta, ings):
+    name = i["name"]
+    s = i["slug"]
+    status = i["status"]
+    path = VZUT_BASE + s + "/"
+    L = VZUT_LABEL[status]
+    note_html = ""
+    if i.get("note"):
+        note_html = f'<div class="note"><span>!</span><span><b>Achte drauf:</b> {esc(i["note"])}</span></div>'
+
+    related = [x for x in ings if x["category"] == i["category"] and x["slug"] != s][:6]
+    if len(related) < 4:
+        related += [x for x in ings if x["slug"] != s and x not in related][: 4 - len(related)]
+    rel_html = "\n".join(
+        f'    <a class="item {r["status"]}" href="{url(VZUT_BASE + r["slug"] + "/")}">'
+        f'<span class="bar"></span><div><div class="en">{esc(r["name"])}</div>'
+        f'<div class="nm">{esc(r["category"])}</div></div></a>'
+        for r in related
+    )
+
+    verdict_long = {
+        "yes": f"{name} ist pflanzlich. Der Name führt in die Irre, ein tierischer Ursprung steckt hier nicht dahinter. Du kannst also beruhigt sein, wenn du das auf der Zutatenliste liest.",
+        "maybe": f"Ob {name} tierisch ist, hängt vom Hersteller ab. Es gibt pflanzliche und tierische Varianten, und die Herkunft steht selten auf der Packung. Im Zweifel hilft ein Vegan-Siegel oder eine kurze Nachfrage beim Hersteller.",
+        "no": f"{name} wird vom Tier gewonnen und ist nicht vegan. Achte auf der Zutatenliste darauf und greif zu Produkten mit Vegan-Siegel oder einer klar pflanzlichen Alternative.",
+    }[status]
+
+    body = site_header("Versteckte tierische Zutaten") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span><a href="{url(VZUT_BASE)}">Versteckte tierische Zutaten</a><span>›</span>{esc(name)}</nav>
+<section class="hero left">
+  <div class="eyebrow">{esc(i["category"])} · Herkunfts-Check</div>
+  <h1 class="detail">Ist {esc(name)} <span class="q">vegan?</span></h1>
+</section>
+
+<div id="result" style="margin:24px 0 0;max-width:620px">
+  <div class="card" style="animation:none">
+    <div class="verdict {status}">
+      <div class="mark">{L["icon"]}</div>
+      <div class="vtext">{L["t"]}<small>{L["s"]}</small></div>
+    </div>
+    <div class="card-body">
+      <div class="enum">{esc(name)}</div>
+      <span class="klasse">{esc(i["category"])}</span>
+      <p class="info">{esc(i["info"])}</p>
+      {note_html}
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <h2>Was heißt das für dich?</h2>
+  <p class="prose">{esc(verdict_long)}</p>
+</section>
+
+<section class="section">
+  <h2>Ähnliche Zutaten</h2>
+  <div class="related">
+{rel_html}
+  </div>
+</section>
+
+<div class="cta">
+  <div>
+    <h2>Noch eine Zutat prüfen?</h2>
+    <p>Der Checker kennt {len(ings)} Zutaten, die tierisch sein können, und zeigt dir sofort die Herkunft.</p>
+  </div>
+  <a class="btn" href="{url(VZUT_BASE)}">Zum Checker →</a>
+</div>
+""" + site_footer(meta)
+
+    aka_txt = ""
+    if i.get("aka"):
+        aka_txt = " Auch bekannt als: " + ", ".join(i["aka"][:3]) + "."
+    answer = f"{L['t']}: {i['info']}"
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": f"Ist {name} vegan?",
+                 "acceptedAnswer": {"@type": "Answer", "text": answer}},
+            ],
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Versteckte tierische Zutaten", "item": BASE_URL + url(VZUT_BASE)},
+                {"@type": "ListItem", "position": 3, "name": name, "item": BASE_URL + url(path)},
+            ],
+        },
+    ]
+    lead = {"yes": f"{name} ist trotz des Namens pflanzlich.", "maybe": f"{name} kann tierisch sein.", "no": f"{name} ist tierisch und nicht vegan."}[status]
+    desc = f"{lead} {i['info']}"
+    if len(desc) > 155:
+        desc = desc[:152].rstrip() + "..."
+    return page(f"Ist {name} vegan? Herkunft erklärt | This Is Vegan", desc, path, body, jsonld, og_type="article", og_image="versteckte-zutaten")
+
+
 def build_404(meta):
     body = site_header("Tools") + f"""
 <section class="hero">
@@ -3612,6 +4161,12 @@ def main():
 
     veg_data = json.loads((ROOT / "data" / "veganizer-data.json").read_text(encoding="utf-8"))
     veg_meta, veg_args, veg_quiz = veg_data["meta"], veg_data["arguments"], veg_data["quiz"]
+
+    reise_data = json.loads((ROOT / "data" / "reise-data.json").read_text(encoding="utf-8"))
+    reise_meta = reise_data["meta"]
+
+    vzut_data = json.loads((ROOT / "data" / "versteckte-zutaten-data.json").read_text(encoding="utf-8"))
+    vzut_meta, vzut_ings = vzut_data["meta"], vzut_data["ingredients"]
 
     if DIST.exists():
         shutil.rmtree(DIST)
@@ -3670,6 +4225,16 @@ def main():
     for a in veg_args:
         pages[VEG_BASE + a["slug"] + "/"] = build_veganizer_detail(a, veg_meta, veg_args)
 
+    # Vegan auf Reisen
+    pages[REISE_BASE] = build_reise_hub(reise_meta, reise_data)
+    for lang in reise_data["languages"]:
+        pages[REISE_BASE + lang["slug"] + "/"] = build_reise_detail(lang, reise_meta, reise_data)
+
+    # Versteckte tierische Zutaten
+    pages[VZUT_BASE] = build_versteckte_hub(vzut_meta, vzut_ings)
+    for ing in vzut_ings:
+        pages[VZUT_BASE + ing["slug"] + "/"] = build_versteckte_detail(ing, vzut_meta, vzut_ings)
+
     # Creator-Bereich
     pages[CREATOR_BASE] = build_creator_hub(CREATOR_META)
     pages[FONT_BASE] = build_font_tool(CREATOR_META)
@@ -3691,6 +4256,15 @@ def main():
             src = cards_src / (a["slug"] + ".png")
             if src.exists():
                 shutil.copy2(src, graf_dir / (a["slug"] + ".png"))
+
+    # OG-/Share-Karten pro Tool (1200x630, Higgsfield-Kritzel-Illu auf TIV-Karte,
+    # lokal mit Pillow gerendert, committet in og-cards/).
+    og_dir = DIST / "og"
+    og_dir.mkdir(parents=True, exist_ok=True)
+    og_src = ROOT / "og-cards"
+    if og_src.exists():
+        for f in sorted(og_src.glob("*.png")):
+            shutil.copy2(f, og_dir / f.name)
 
     (DIST / "404.html").write_text(build_404(meta), encoding="utf-8")
 
