@@ -319,6 +319,22 @@ CSS += """
 .mealsum .pct{font-size:14px;color:#3a5856;margin-top:5px}
 """
 
+# Zusatz-Styles für den Schriftarten-Generator (Creator)
+CSS += """
+.fontinput{width:100%;max-width:640px;margin:30px auto 0;display:block;font-family:'Figtree';font-size:18px;border:2px solid rgba(248,222,205,.22);border-radius:16px;padding:16px;background:rgba(248,222,205,.07);color:var(--peach);resize:vertical;min-height:84px}
+.fontinput:focus{outline:none;border-color:var(--green)}
+.fontlist{margin:20px auto 0;display:flex;flex-direction:column;gap:10px;max-width:720px}
+.fontrow{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--peach);color:var(--ink);border-radius:14px;padding:12px 16px}
+.fontrow .flabel{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-bottom:3px}
+.fontrow .fout{font-size:18px;word-break:break-word;line-height:1.45;color:var(--ink)}
+.copybtn{flex:none;border:0;cursor:pointer;background:var(--ink);color:var(--peach);font-family:'Gabarito';font-weight:700;font-size:13px;padding:9px 14px;border-radius:10px;transition:background .15s}
+.copybtn:hover{background:var(--green-deep)}
+.copybtn.done{background:var(--green)}
+.decogrid{display:flex;flex-wrap:wrap;gap:8px;max-width:720px;margin:14px auto 0;justify-content:center}
+.decobtn{cursor:pointer;border:1px solid var(--line);background:rgba(248,222,205,.05);color:var(--peach);font-size:18px;padding:8px 13px;border-radius:11px;transition:all .14s}
+.decobtn:hover{background:var(--peach);color:var(--ink);border-color:var(--peach)}
+"""
+
 # ---------------------------------------------------------------- JS (Checker)
 
 CHECKER_JS = r"""
@@ -709,6 +725,87 @@ ti.addEventListener('input', () => { const v = parseFloat(ti.value); if(v > 0){ 
 render();
 """.strip()
 
+# ---------------------------------------------------------------- JS (Schriftarten-Generator)
+
+FONT_JS = r"""
+const SCRIPT_EX={B:'ℬ',E:'ℰ',F:'ℱ',H:'ℋ',I:'ℐ',L:'ℒ',M:'ℳ',R:'ℛ',e:'ℯ',g:'ℊ',o:'ℴ'};
+const FRAK_EX={C:'ℭ',H:'ℌ',I:'ℑ',R:'ℜ',Z:'ℨ'};
+const DS_EX={C:'ℂ',H:'ℍ',N:'ℕ',P:'ℙ',Q:'ℚ',R:'ℝ',Z:'ℤ'};
+const SMALLCAPS={a:'ᴀ',b:'ʙ',c:'ᴄ',d:'ᴅ',e:'ᴇ',f:'ꜰ',g:'ɢ',h:'ʜ',i:'ɪ',j:'ᴊ',k:'ᴋ',l:'ʟ',m:'ᴍ',n:'ɴ',o:'ᴏ',p:'ᴘ',q:'ǫ',r:'ʀ',s:'s',t:'ᴛ',u:'ᴜ',v:'ᴠ',w:'ᴡ',x:'x',y:'ʏ',z:'ᴢ'};
+const FLIP={a:'ɐ',b:'q',c:'ɔ',d:'p',e:'ǝ',f:'ɟ',g:'ƃ',h:'ɥ',i:'ᴉ',j:'ɾ',k:'ʞ',l:'l',m:'ɯ',n:'u',o:'o',p:'d',q:'b',r:'ɹ',s:'s',t:'ʇ',u:'n',v:'ʌ',w:'ʍ',x:'x',y:'ʎ',z:'z',A:'∀',B:'B',C:'Ɔ',D:'D',E:'Ǝ',F:'Ⅎ',G:'פ',H:'H',I:'I',J:'ſ',K:'K',L:'˥',M:'W',N:'N',O:'O',P:'Ԁ',Q:'Q',R:'R',S:'S',T:'⊥',U:'∩',V:'Λ',W:'M',X:'X',Y:'⅄',Z:'Z','1':'Ɩ','2':'ᄅ','3':'Ɛ','4':'ㄣ','5':'ϛ','6':'9','7':'ㄥ','8':'8','9':'6','0':'0','.':'˙','?':'¿','!':'¡'};
+function mapc(str,up,low,dig,ex){
+  ex=ex||{}; let o='';
+  for(const ch of str){
+    if(ex[ch]){o+=ex[ch];continue;}
+    const c=ch.codePointAt(0);
+    if(c>=65&&c<=90)o+=String.fromCodePoint(up+(c-65));
+    else if(c>=97&&c<=122)o+=String.fromCodePoint(low+(c-97));
+    else if(dig&&c>=48&&c<=57)o+=String.fromCodePoint(dig+(c-48));
+    else o+=ch;
+  }
+  return o;
+}
+function circled(str){let o='';for(const ch of str){const c=ch.codePointAt(0);
+  if(c>=65&&c<=90)o+=String.fromCodePoint(0x24B6+(c-65));
+  else if(c>=97&&c<=122)o+=String.fromCodePoint(0x24D0+(c-97));
+  else if(c===48)o+='⓪';
+  else if(c>=49&&c<=57)o+=String.fromCodePoint(0x2460+(c-49));
+  else o+=ch;}return o;}
+function fullwidth(str){let o='';for(const ch of str){const c=ch.codePointAt(0);
+  if(c>=33&&c<=126)o+=String.fromCodePoint(0xFF01+(c-33));
+  else if(c===32)o+='　';else o+=ch;}return o;}
+function combine(str,mark){return [...str].map(c=>c+mark).join('');}
+function smallcaps(str){return [...str].map(c=>SMALLCAPS[c.toLowerCase()]||c).join('');}
+function flip(str){return [...str].map(c=>FLIP[c]||FLIP[c.toLowerCase()]||c).reverse().join('');}
+const STYLES=[
+  ['Fett', s=>mapc(s,0x1D5D4,0x1D5EE,0x1D7EC)],
+  ['Kursiv', s=>mapc(s,0x1D608,0x1D622,null)],
+  ['Fett kursiv', s=>mapc(s,0x1D63C,0x1D656,null)],
+  ['Schreibschrift', s=>mapc(s,0x1D49C,0x1D4B6,null,SCRIPT_EX)],
+  ['Schreibschrift fett', s=>mapc(s,0x1D4D0,0x1D4EA,null)],
+  ['Serif fett', s=>mapc(s,0x1D400,0x1D41A,0x1D7CE)],
+  ['Gotisch', s=>mapc(s,0x1D504,0x1D51E,null,FRAK_EX)],
+  ['Gotisch fett', s=>mapc(s,0x1D56C,0x1D586,null)],
+  ['Outline', s=>mapc(s,0x1D538,0x1D552,0x1D7D8,DS_EX)],
+  ['Monospace', s=>mapc(s,0x1D670,0x1D68A,0x1D7F6)],
+  ['Eingekreist', circled],
+  ['Fullwidth', fullwidth],
+  ['Kapitälchen', smallcaps],
+  ['Durchgestrichen', s=>combine(s,'̶')],
+  ['Unterstrichen', s=>combine(s,'̲')],
+  ['Kopfüber', flip],
+  ['Rückwärts', s=>[...s].reverse().join('')],
+  ['Gesperrt', s=>[...s].join(' ')]
+];
+const DECO=['🌱','🌿','🥑','🍃','☘️','🍀','💚','♻️','🐮','🐷','🐔','🐝','✿','❀','✦','✧','⋆','♡','·','˖'];
+const DIVIDERS=['˚₊‧ꓰ᠁ 🌱 ᠂ꓱ ‧₊˚','⋆｡˚ 🌿 ˚｡⋆','·｡°✦ 🌱 ✦°｡·','╰┈➤ 🌱','⊚ ˚˖ 🌿 ˖˚ ⊚','･:＊¨ 🌱 ¨＊:･'];
+function escH(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function copy(text){
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text);}
+  else{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}ta.remove();}
+}
+function flash(b){const o=b.textContent;b.textContent='Kopiert!';b.classList.add('done');setTimeout(()=>{b.textContent=o;b.classList.remove('done');},1200);}
+function wireCopy(scope){
+  scope.querySelectorAll('.copybtn[data-text]').forEach(b=>{b.onclick=()=>{copy(decodeURIComponent(b.dataset.text));flash(b);};});
+}
+function render(){
+  const t=document.getElementById('ftext').value || 'vegan';
+  document.getElementById('fontlist').innerHTML=STYLES.map(([name,fn])=>{
+    const out=fn(t);
+    return '<div class="fontrow"><div style="flex:1;min-width:0"><span class="flabel">'+name+'</span>'+
+      '<div class="fout">'+escH(out)+'</div></div>'+
+      '<button class="copybtn" data-text="'+encodeURIComponent(out)+'">Kopieren</button></div>';
+  }).join('');
+  wireCopy(document.getElementById('fontlist'));
+}
+document.getElementById('ftext').addEventListener('input',render);
+document.getElementById('decogrid').innerHTML=DECO.map(d=>'<button class="decobtn" data-d="'+encodeURIComponent(d)+'">'+d+'</button>').join('');
+document.querySelectorAll('.decobtn').forEach(b=>{b.onclick=()=>{const ta=document.getElementById('ftext');ta.value+=decodeURIComponent(b.dataset.d);render();ta.focus();};});
+document.getElementById('divlist').innerHTML=DIVIDERS.map(d=>'<div class="fontrow"><div class="fout" style="flex:1;min-width:0">'+escH(d)+'</div><button class="copybtn" data-text="'+encodeURIComponent(d)+'">Kopieren</button></div>').join('');
+wireCopy(document.getElementById('divlist'));
+render();
+""".strip()
+
 # ---------------------------------------------------------------- page shell
 
 
@@ -868,6 +965,25 @@ def build_hub(meta, adds, ings, nutrients):
 </section>
 
 <section class="section">
+  <h2>Für Content Creator</h2>
+  <p class="lead">Eigener Bereich für vegane, Tierschutz- und Food-Accounts auf Instagram, TikTok und Co.</p>
+  <div class="toolcards">
+    <a class="toolcard" href="{url(FONT_BASE)}">
+      <span class="badge">Live</span>
+      <h3>Schriftarten-Generator</h3>
+      <p>Text in 18 Stilen kopieren: fett, kursiv, Schreibschrift, durchgestrichen, kopfüber und mehr, plus vegane Deko und Trenner für Bio und Caption.</p>
+      <span class="meta">Schrift stylen →</span>
+    </a>
+    <a class="toolcard" href="{url(CREATOR_BASE)}">
+      <span class="badge">Neu</span>
+      <h3>Creator-Bereich</h3>
+      <p>Alle Tools für deinen veganen Account an einem Ort. Wir bauen den Bereich Stück für Stück aus.</p>
+      <span class="meta">Bereich ansehen →</span>
+    </a>
+  </div>
+</section>
+
+<section class="section">
   <h2>Mehr von This Is Vegan</h2>
   <p class="lead">Die Tools gehören zum This-Is-Vegan-Magazin. Dort findest du Tests, Guides und Rezepte rund um den veganen Alltag.</p>
   <div class="linklist">
@@ -948,6 +1064,12 @@ def build_hub(meta, adds, ings, nutrients):
                         "position": 10,
                         "name": "Protein-pro-Mahlzeit-Rechner",
                         "url": BASE_URL + url(MEAL_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 11,
+                        "name": "Schriftarten-Generator für Creator",
+                        "url": BASE_URL + url(FONT_BASE),
                     },
                 ],
             },
@@ -2569,6 +2691,136 @@ def build_meal(meta, foods):
     )
 
 
+CREATOR_BASE = "/creator/"
+FONT_BASE = "/creator/schriftarten/"
+CREATOR_META = {"lastUpdated": "2026-06-13"}
+
+
+def build_creator_hub(meta):
+    body = site_header("Für Creator", "Gratis · ohne Anmeldung") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>Für Content Creator</nav>
+<section class="hero left">
+  <div class="eyebrow">Tools für vegane Accounts</div>
+  <h1>Mehr Reichweite, <span class="q">weniger Reibung.</span></h1>
+  <p class="sub">Kleine Helfer für vegane, Tierschutz- und Food-Accounts auf Instagram, TikTok und Co. Mehr Kreativität in Bio, Caption und Story, in Sekunden.</p>
+</section>
+
+<section class="section">
+  <div class="toolcards">
+    <a class="toolcard" href="{url(FONT_BASE)}">
+      <span class="badge">Live</span>
+      <h3>Schriftarten-Generator</h3>
+      <p>Text eingeben und in 18 Stilen kopieren: fett, kursiv, Schreibschrift, durchgestrichen, kopfüber und mehr, plus vegane Deko und Trenner für Bio und Caption.</p>
+      <span class="meta">Schrift stylen →</span>
+    </a>
+    <div class="toolcard soon">
+      <span class="badge">In Arbeit</span>
+      <h3>Mehr Creator-Tools</h3>
+      <p>Hashtag-Helfer, Caption-Ideen, Best-Time-Planer und mehr. Sag uns, was dir den Account-Alltag leichter machen würde.</p>
+      <span class="meta">Bald verfügbar</span>
+    </div>
+  </div>
+</section>
+""" + site_footer(meta, full_disclaimer=False)
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": "Tools für vegane Content Creator",
+            "description": "Kostenlose Tools für vegane, Tierschutz- und Food-Accounts auf Social Media.",
+            "url": BASE_URL + url(CREATOR_BASE),
+            "isPartOf": {"@type": "WebSite", "name": "This Is Vegan", "url": MAIN_SITE},
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Für Content Creator", "item": BASE_URL + url(CREATOR_BASE)},
+            ],
+        },
+    ]
+    return page(
+        "Tools für vegane Content Creator | This Is Vegan",
+        "Kostenlose Tools für vegane, Tierschutz- und Food-Accounts auf Instagram und TikTok. Schriftarten, Deko und mehr Kreativität für Bio und Caption.",
+        CREATOR_BASE,
+        body,
+        jsonld,
+    )
+
+
+def build_font_tool(meta):
+    js = FONT_JS
+    body = site_header("Schriftarten") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span><a href="{url(CREATOR_BASE)}">Für Creator</a><span>›</span>Schriftarten</nav>
+<section class="hero">
+  <div class="eyebrow">Für Bio, Caption und Story</div>
+  <h1>Schriftarten zum <span class="q">Kopieren.</span></h1>
+  <p class="sub">Tipp deinen Text ein und kopier ihn in fett, kursiv, Schreibschrift, durchgestrichen, kopfüber und mehr. Funktioniert in Instagram, TikTok, WhatsApp und überall sonst.</p>
+  <textarea id="ftext" class="fontinput" aria-label="Dein Text">vegan 🌱</textarea>
+  <div class="fontlist" id="fontlist"></div>
+</section>
+
+<section class="section">
+  <h2>Vegane Deko zum Einsetzen</h2>
+  <p class="lead">Tipp ein Symbol an, es landet direkt in deinem Text. Ideal für die Bio.</p>
+  <div class="decogrid" id="decogrid"></div>
+</section>
+
+<section class="section">
+  <h2>Fertige Trenner</h2>
+  <p class="lead">Hübsche Trennlinien für die Bio oder zwischen Caption-Absätzen.</p>
+  <div class="fontlist" id="divlist"></div>
+</section>
+
+<section class="section">
+  <h2>So nutzt du die Schriften richtig</h2>
+  <p class="prose">Die Stile sind besondere Unicode-Zeichen, keine echten Schriftarten. Deshalb kannst du sie überall einfügen, wo du normal tippst, also in deine Instagram-Bio, in Captions, Stories, TikTok, WhatsApp oder die Twitch-Bio. Ein Hinweis aus der Praxis: Setz sie sparsam ein. Screenreader lesen verzierte Schrift oft nicht sauber vor, deshalb lieber nur einzelne Wörter hervorheben als ganze Sätze. Der durchgestrichene Stil ist übrigens perfekt, um pflanzliche Statements zu setzen.</p>
+</section>
+""" + site_footer(meta, full_disclaimer=False) + f"\n<script>{js}</script>"
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Schriftarten-Generator",
+            "url": BASE_URL + url(FONT_BASE),
+            "applicationCategory": "DesignApplication",
+            "operatingSystem": "Web",
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+            "description": "Wandelt Text in 18 kopierbare Schriftstile für Instagram, TikTok und Co., inklusive durchgestrichen, kursiv und kopfüber.",
+            "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": "Wie bekomme ich andere Schriftarten in meine Instagram-Bio?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Tipp deinen Text in den Generator, kopier den gewünschten Stil und füg ihn in deine Bio oder Caption ein. Die Stile sind Unicode-Zeichen und funktionieren ohne App direkt in Instagram."}},
+                {"@type": "Question", "name": "Funktionieren die Schriftarten auch bei TikTok und WhatsApp?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Ja. Da es sich um Unicode-Zeichen handelt, lassen sie sich überall einfügen, wo du Text eingeben kannst, also auch bei TikTok, WhatsApp, Threads oder Discord."}},
+            ],
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Für Creator", "item": BASE_URL + url(CREATOR_BASE)},
+                {"@type": "ListItem", "position": 3, "name": "Schriftarten", "item": BASE_URL + url(FONT_BASE)},
+            ],
+        },
+    ]
+    return page(
+        "Schriftarten-Generator für Instagram: Fonts zum Kopieren | This Is Vegan",
+        "Text in coole Schriftarten umwandeln und kopieren, für Instagram, TikTok und Co. Fett, kursiv, Schreibschrift, durchgestrichen, kopfüber, plus vegane Deko. Kostenlos.",
+        FONT_BASE,
+        body,
+        jsonld,
+    )
+
+
 def build_404(meta):
     body = site_header("Tools") + f"""
 <section class="hero">
@@ -2670,6 +2922,10 @@ def main():
 
     # Protein-pro-Mahlzeit-Rechner
     pages[MEAL_BASE] = build_meal(protein_meta, protein_foods)
+
+    # Creator-Bereich
+    pages[CREATOR_BASE] = build_creator_hub(CREATOR_META)
+    pages[FONT_BASE] = build_font_tool(CREATOR_META)
 
     for path, content in pages.items():
         out = DIST / path.lstrip("/") / "index.html"
