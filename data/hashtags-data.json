@@ -1,0 +1,92 @@
+{
+  "meta": {
+    "version": 1,
+    "lastUpdated": "2026-06-13"
+  },
+  "topics": [
+    {
+      "key": "allgemein", "label": "Vegan allgemein",
+      "tags": [
+        {"t": "vegan", "lang": "en"}, {"t": "govegan", "lang": "en"}, {"t": "veganfood", "lang": "en"},
+        {"t": "plantbased", "lang": "en"}, {"t": "veganlife", "lang": "en"}, {"t": "vegansofinstagram", "lang": "en"},
+        {"t": "crueltyfree", "lang": "en"}, {"t": "plantpower", "lang": "en"}, {"t": "veganismus", "lang": "de"},
+        {"t": "veganleben", "lang": "de"}, {"t": "pflanzlich", "lang": "de"}, {"t": "vegandeutschland", "lang": "de"},
+        {"t": "veganwerden", "lang": "de"}, {"t": "pflanzenbasiert", "lang": "de"}, {"t": "veganfoodgermany", "lang": "de"},
+        {"t": "vegancommunity", "lang": "en"}, {"t": "whatveganseat", "lang": "en"}, {"t": "veganösterreich", "lang": "de"},
+        {"t": "veganschweiz", "lang": "de"}, {"t": "veganismusrettetleben", "lang": "de"}
+      ]
+    },
+    {
+      "key": "rezepte", "label": "Rezepte & Food",
+      "tags": [
+        {"t": "veganrecipes", "lang": "en"}, {"t": "veganfoodshare", "lang": "en"}, {"t": "plantbasedrecipes", "lang": "en"},
+        {"t": "veganfoodlovers", "lang": "en"}, {"t": "easyvegan", "lang": "en"}, {"t": "veganfoodporn", "lang": "en"},
+        {"t": "foodie", "lang": "en"}, {"t": "veganerezepte", "lang": "de"}, {"t": "vegankochen", "lang": "de"},
+        {"t": "pflanzlichgenießen", "lang": "de"}, {"t": "veganlecker", "lang": "de"}, {"t": "rezeptideen", "lang": "de"},
+        {"t": "schnelleküche", "lang": "de"}, {"t": "mealprep", "lang": "en"}, {"t": "veganmealprep", "lang": "en"},
+        {"t": "veganfoodie", "lang": "en"}, {"t": "gesundessen", "lang": "de"}, {"t": "veganbreakfast", "lang": "en"},
+        {"t": "veganesessen", "lang": "de"}, {"t": "homemadevegan", "lang": "en"}
+      ]
+    },
+    {
+      "key": "backen", "label": "Backen",
+      "tags": [
+        {"t": "veganbacken", "lang": "de"}, {"t": "veganbaking", "lang": "en"}, {"t": "veganesgebäck", "lang": "de"},
+        {"t": "plantbasedbaking", "lang": "en"}, {"t": "vegancake", "lang": "en"}, {"t": "backenmachtglücklich", "lang": "de"},
+        {"t": "veganerkuchen", "lang": "de"}, {"t": "vegandesserts", "lang": "en"}, {"t": "eierlosbacken", "lang": "de"},
+        {"t": "veganesüßigkeiten", "lang": "de"}, {"t": "dairyfree", "lang": "en"}, {"t": "veganbakery", "lang": "en"},
+        {"t": "homebaking", "lang": "en"}, {"t": "veganfoodbloggers", "lang": "en"}, {"t": "süßundvegan", "lang": "de"}
+      ]
+    },
+    {
+      "key": "tierschutz", "label": "Tierschutz",
+      "tags": [
+        {"t": "tierschutz", "lang": "de"}, {"t": "tierrechte", "lang": "de"}, {"t": "animalrights", "lang": "en"},
+        {"t": "goveganfortheanimals", "lang": "en"}, {"t": "fortheanimals", "lang": "en"}, {"t": "tierleid", "lang": "de"},
+        {"t": "tierwohl", "lang": "de"}, {"t": "fleischlosglücklich", "lang": "de"}, {"t": "animalliberation", "lang": "en"},
+        {"t": "speziesismus", "lang": "de"}, {"t": "stopanimalcruelty", "lang": "en"}, {"t": "mitgefühl", "lang": "de"},
+        {"t": "tiereretten", "lang": "de"}, {"t": "veganforthem", "lang": "en"}, {"t": "lebenrettenmitgabel", "lang": "de"}
+      ]
+    },
+    {
+      "key": "fitness", "label": "Fitness & Protein",
+      "tags": [
+        {"t": "veganfitness", "lang": "en"}, {"t": "veganprotein", "lang": "en"}, {"t": "plantbasedathlete", "lang": "en"},
+        {"t": "pflanzlichesprotein", "lang": "de"}, {"t": "veganbodybuilding", "lang": "en"}, {"t": "proteinreich", "lang": "de"},
+        {"t": "veganmuskelaufbau", "lang": "de"}, {"t": "fitnessfood", "lang": "en"}, {"t": "vegansport", "lang": "de"},
+        {"t": "plantstrong", "lang": "en"}, {"t": "eiweißreich", "lang": "de"}, {"t": "veganathlete", "lang": "en"},
+        {"t": "gesundundfit", "lang": "de"}, {"t": "veganpower", "lang": "en"}, {"t": "fitwithplants", "lang": "en"}
+      ]
+    },
+    {
+      "key": "nachhaltigkeit", "label": "Nachhaltigkeit",
+      "tags": [
+        {"t": "nachhaltigkeit", "lang": "de"}, {"t": "sustainability", "lang": "en"}, {"t": "klimaschutz", "lang": "de"},
+        {"t": "plantbasedfortheplanet", "lang": "en"}, {"t": "zerowaste", "lang": "en"}, {"t": "umweltschutz", "lang": "de"},
+        {"t": "nachhaltigleben", "lang": "de"}, {"t": "sustainableliving", "lang": "en"}, {"t": "klimafreundlich", "lang": "de"},
+        {"t": "veganforfuture", "lang": "en"}, {"t": "ressourcenschonen", "lang": "de"}, {"t": "ecofriendly", "lang": "en"},
+        {"t": "co2sparen", "lang": "de"}, {"t": "savetheplanet", "lang": "en"}, {"t": "bewusstleben", "lang": "de"}
+      ]
+    },
+    {
+      "key": "reise", "label": "Restaurant & Reise",
+      "tags": [
+        {"t": "veganrestaurant", "lang": "en"}, {"t": "veganreisen", "lang": "de"}, {"t": "vegantravel", "lang": "en"},
+        {"t": "veganfoodguide", "lang": "en"}, {"t": "veganauswärts", "lang": "de"}, {"t": "veganeats", "lang": "en"},
+        {"t": "happycow", "lang": "en"}, {"t": "veganrestaurantsofgermany", "lang": "de"}, {"t": "veganunterwegs", "lang": "de"},
+        {"t": "foodguide", "lang": "en"}, {"t": "veganinberlin", "lang": "de"}, {"t": "vegancity", "lang": "en"},
+        {"t": "streetfoodvegan", "lang": "en"}, {"t": "veganbrunch", "lang": "en"}, {"t": "reisetipps", "lang": "de"}
+      ]
+    },
+    {
+      "key": "motivation", "label": "Motivation",
+      "tags": [
+        {"t": "govegan", "lang": "en"}, {"t": "veganmotivation", "lang": "en"}, {"t": "vegancommunity", "lang": "en"},
+        {"t": "crueltyfree", "lang": "en"}, {"t": "kindness", "lang": "en"}, {"t": "mindfulliving", "lang": "en"},
+        {"t": "veganinspiration", "lang": "en"}, {"t": "machdenanfang", "lang": "de"}, {"t": "veränderungbeginntbeidir", "lang": "de"},
+        {"t": "besservegan", "lang": "de"}, {"t": "kleineschritte", "lang": "de"}, {"t": "veganistliebe", "lang": "de"},
+        {"t": "compassion", "lang": "en"}, {"t": "plantbasedjourney", "lang": "en"}, {"t": "veganaffirmation", "lang": "de"}
+      ]
+    }
+  ]
+}

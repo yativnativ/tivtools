@@ -355,6 +355,18 @@ CSS += """
 .dlbtn:active{transform:scale(.98)}
 """
 
+# Zusatz-Styles für den Hashtag-Helfer (Creator)
+CSS += """
+.htags{display:flex;flex-wrap:wrap;gap:8px;max-width:760px;margin:22px auto 0;justify-content:center}
+.htag{cursor:pointer;border:1px solid var(--line);background:rgba(248,222,205,.05);color:var(--peach);font-family:'Figtree';font-weight:600;font-size:14px;padding:8px 13px;border-radius:999px;transition:all .12s}
+.htag:hover{border-color:var(--peach)}
+.htag.sel{background:var(--peach);color:var(--ink);border-color:var(--peach)}
+.hcopybar{text-align:center;margin-top:22px}
+.hcopy{cursor:pointer;border:0;background:var(--green-deep);color:var(--peach);font-family:'Gabarito';font-weight:700;font-size:15px;padding:13px 26px;border-radius:13px;transition:background .15s}
+.hcopy:hover{background:var(--green)}
+.hcopy.done{background:var(--green)}
+"""
+
 # ---------------------------------------------------------------- JS (Checker)
 
 CHECKER_JS = r"""
@@ -878,6 +890,48 @@ drop.addEventListener('drop', e=>{ e.preventDefault(); drop.classList.remove('ov
 document.querySelectorAll('.sw').forEach(s=>s.addEventListener('click', ()=> setBg(s.dataset.bg)));
 """.strip()
 
+# ---------------------------------------------------------------- JS (Hashtag-Helfer)
+
+HASH_JS = r"""
+const T = __DATA__;
+let topic = T[0].key, lang = 'mix', selected = new Set();
+function current(){ return T.find(x => x.key === topic); }
+function visibleTags(){ return current().tags.filter(t => lang === 'mix' || t.lang === lang); }
+function selectAllVisible(){ selected = new Set(visibleTags().map(t => t.t)); }
+function copyText(text){
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text); }
+  else { const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} ta.remove(); }
+}
+function updateBtn(){
+  const n = visibleTags().filter(t => selected.has(t.t)).length;
+  const b = document.getElementById('hcopy');
+  if(!b.classList.contains('done')) b.textContent = 'Auswahl kopieren (' + n + ')';
+}
+function render(){
+  document.querySelectorAll('[data-topic]').forEach(b => b.classList.toggle('active', b.dataset.topic === topic));
+  document.querySelectorAll('[data-lang]').forEach(b => b.classList.toggle('on', b.dataset.lang === lang));
+  document.getElementById('htags').innerHTML = visibleTags().map(t =>
+    '<button class="htag' + (selected.has(t.t) ? ' sel' : '') + '" data-t="' + encodeURIComponent(t.t) + '">#' + t.t + '</button>').join('');
+  document.querySelectorAll('.htag').forEach(b => b.onclick = () => {
+    const t = decodeURIComponent(b.dataset.t);
+    if(selected.has(t)) selected.delete(t); else selected.add(t);
+    render();
+  });
+  updateBtn();
+}
+document.querySelectorAll('[data-topic]').forEach(b => b.addEventListener('click', () => { topic = b.dataset.topic; selectAllVisible(); render(); }));
+document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => { lang = b.dataset.lang; selectAllVisible(); render(); }));
+document.getElementById('hcopy').addEventListener('click', () => {
+  const tags = visibleTags().filter(t => selected.has(t.t)).map(t => '#' + t.t);
+  if(!tags.length) return;
+  copyText(tags.join(' '));
+  const b = document.getElementById('hcopy');
+  b.textContent = 'Kopiert!'; b.classList.add('done');
+  setTimeout(() => { b.classList.remove('done'); updateBtn(); }, 1300);
+});
+selectAllVisible(); render();
+""".strip()
+
 # ---------------------------------------------------------------- page shell
 
 
@@ -1052,6 +1106,12 @@ def build_hub(meta, adds, ings, nutrients):
       <p>Hintergrund automatisch entfernen, komplett im Browser, ohne Upload. Transparentes PNG für Posts und Produktbilder, kostenlos und privat.</p>
       <span class="meta">Bild freistellen →</span>
     </a>
+    <a class="toolcard" href="{url(HASH_BASE)}">
+      <span class="badge">Live</span>
+      <h3>Hashtag-Helfer</h3>
+      <p>Kuratierte vegane Hashtag-Sets nach Thema, auf Deutsch und Englisch. Auswählen, kopieren, mehr Reichweite für deine Posts.</p>
+      <span class="meta">Hashtags finden →</span>
+    </a>
     <a class="toolcard" href="{url(CREATOR_BASE)}">
       <span class="badge">Neu</span>
       <h3>Creator-Bereich</h3>
@@ -1154,6 +1214,12 @@ def build_hub(meta, adds, ings, nutrients):
                         "position": 12,
                         "name": "Bild freistellen",
                         "url": BASE_URL + url(FREI_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 13,
+                        "name": "Vegane Hashtags",
+                        "url": BASE_URL + url(HASH_BASE),
                     },
                 ],
             },
@@ -2803,10 +2869,16 @@ def build_creator_hub(meta):
       <p>Hintergrund automatisch entfernen, komplett im Browser und ohne Upload. Transparentes PNG für Posts, Sticker und Produktbilder, kostenlos und privat.</p>
       <span class="meta">Bild freistellen →</span>
     </a>
+    <a class="toolcard" href="{url(HASH_BASE)}">
+      <span class="badge">Live</span>
+      <h3>Hashtag-Helfer</h3>
+      <p>Kuratierte vegane Hashtag-Sets nach Thema, von Rezepten bis Tierschutz, auf Deutsch und Englisch. Auswählen, kopieren, mehr Reichweite.</p>
+      <span class="meta">Hashtags finden →</span>
+    </a>
     <div class="toolcard soon">
       <span class="badge">In Arbeit</span>
       <h3>Mehr Creator-Tools</h3>
-      <p>Hashtag-Helfer, Caption-Ideen, Best-Time-Planer und mehr. Sag uns, was dir den Account-Alltag leichter machen würde.</p>
+      <p>Caption-Ideen, Best-Time-Planer und mehr. Sag uns, was dir den Account-Alltag leichter machen würde.</p>
       <span class="meta">Bald verfügbar</span>
     </div>
   </div>
@@ -2996,6 +3068,87 @@ def build_bgremove(meta):
     )
 
 
+HASH_BASE = "/creator/hashtags/"
+
+
+def build_hashtags(meta, topics):
+    js = HASH_JS.replace("__DATA__", json.dumps(topics, ensure_ascii=False, separators=(",", ":")))
+    topic_btns = "\n".join(
+        f'    <button class="filt{" active" if i == 0 else ""}" data-topic="{esc(t["key"])}">{esc(t["label"])}</button>'
+        for i, t in enumerate(topics)
+    )
+    total = sum(len(t["tags"]) for t in topics)
+
+    body = site_header("Hashtag-Helfer") + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span><a href="{url(CREATOR_BASE)}">Für Creator</a><span>›</span>Hashtags</nav>
+<section class="hero">
+  <div class="eyebrow">Mehr Reichweite für deine Posts</div>
+  <h1>Vegane <span class="q">Hashtags.</span></h1>
+  <p class="sub">Such dir ein Thema, wähl deine Hashtags und kopier sie als fertiges Set in deine Caption oder den ersten Kommentar.</p>
+
+  <div class="filters" style="justify-content:center;margin:24px auto 0;max-width:760px">
+{topic_btns}
+  </div>
+  <div class="psort">
+    <div class="seg">
+      <button type="button" data-lang="mix" class="on">DE + EN</button>
+      <button type="button" data-lang="de">Nur Deutsch</button>
+      <button type="button" data-lang="en">Nur Englisch</button>
+    </div>
+  </div>
+
+  <div class="htags" id="htags"></div>
+  <div class="hcopybar"><button class="hcopy" id="hcopy">Auswahl kopieren</button></div>
+</section>
+
+<section class="section">
+  <h2>So setzt du Hashtags richtig ein</h2>
+  <p class="prose">Nutz eine Mischung aus großen und kleineren Hashtags. Die ganz großen bringen kurz Reichweite, in den kleineren bleibst du länger sichtbar. 10 bis 20 gut gewählte schlagen 30 beliebige. Tipp aus der Praxis: Variier deine Sets von Post zu Post, immer dieselben Hashtags wirken auf Instagram schnell wie Spam.</p>
+  <p class="prose">Du kannst die Hashtags in die Caption packen oder in den ersten Kommentar, beides funktioniert. Tipp an einzelne Hashtags, um deine Auswahl anzupassen, dann auf Kopieren.</p>
+</section>
+""" + site_footer(meta, full_disclaimer=False) + f"\n<script>{js}</script>"
+
+    jsonld = [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Vegane Hashtags",
+            "url": BASE_URL + url(HASH_BASE),
+            "applicationCategory": "UtilityApplication",
+            "operatingSystem": "Web",
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+            "description": f"Kuratierte vegane Hashtag-Sets nach Thema, {total} Hashtags auf Deutsch und Englisch zum Auswählen und Kopieren.",
+            "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": "Wie viele Hashtags sollte ich auf Instagram nutzen?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "10 bis 20 gut gewählte Hashtags reichen meist aus und wirken natürlicher als 30 beliebige. Wichtiger als die Menge ist die Mischung aus großen und kleinen, themenpassenden Hashtags."}},
+                {"@type": "Question", "name": "Welche Hashtags sind gut für vegane Accounts?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Eine Mischung passend zum Post: allgemeine wie vegan und govegan, dazu thematische wie veganrecipes, tierschutz oder veganfitness, und ein paar kleinere Nischen-Hashtags für längere Sichtbarkeit."}},
+            ],
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Für Creator", "item": BASE_URL + url(CREATOR_BASE)},
+                {"@type": "ListItem", "position": 3, "name": "Hashtags", "item": BASE_URL + url(HASH_BASE)},
+            ],
+        },
+    ]
+    return page(
+        "Vegane Hashtags für Instagram: fertige Sets zum Kopieren | This Is Vegan",
+        "Kuratierte vegane Hashtag-Sets nach Thema, von Rezepten über Tierschutz bis Fitness. Auf Deutsch und Englisch auswählen und kopieren. Kostenlos, für mehr Reichweite.",
+        HASH_BASE,
+        body,
+        jsonld,
+    )
+
+
 def build_404(meta):
     body = site_header("Tools") + f"""
 <section class="hero">
@@ -3102,6 +3255,7 @@ def main():
     pages[CREATOR_BASE] = build_creator_hub(CREATOR_META)
     pages[FONT_BASE] = build_font_tool(CREATOR_META)
     pages[FREI_BASE] = build_bgremove(CREATOR_META)
+    pages[HASH_BASE] = build_hashtags(CREATOR_META, json.loads((ROOT / "data" / "hashtags-data.json").read_text(encoding="utf-8"))["topics"])
 
     for path, content in pages.items():
         out = DIST / path.lstrip("/") / "index.html"
