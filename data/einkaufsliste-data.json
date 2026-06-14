@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "version": 1,
+    "lastUpdated": "2026-06-14",
+    "hinweis": "Orientierung für den Einstieg, kein medizinischer Rat. Bei Supplementen wie B12 im Zweifel die ärztliche Empfehlung einholen."
+  },
+  "categories": [
+    {"key": "basis", "label": "Basis & Sattmacher", "items": [
+      {"n": "Haferflocken", "note": "Porridge, Müsli, zum Backen"},
+      {"n": "Reis & Vollkornreis", "note": "schnelle Beilage, Vorrat"},
+      {"n": "Vollkornnudeln", "note": "halten ewig, machen satt"},
+      {"n": "Kartoffeln & Süßkartoffeln", "note": "vielseitig, regional"},
+      {"n": "Couscous, Bulgur oder Quinoa", "note": "in Minuten fertig"},
+      {"n": "Vollkornbrot", "note": "Hefe- statt Milchbrot wählen"},
+      {"n": "Haferflocken-Mehl & Vollkornmehl", "note": "Backen ohne Ei geht gut"}
+    ]},
+    {"key": "protein", "label": "Hülsenfrüchte & Protein", "items": [
+      {"n": "Rote & braune Linsen", "note": "Eiweiß, kochen schnell"},
+      {"n": "Kichererbsen", "note": "Dose oder getrocknet, für Curry und Hummus"},
+      {"n": "Kidney- & weiße Bohnen", "note": "Eintopf, Chili, Salat"},
+      {"n": "Tofu natur & geräuchert", "note": "vorher gut abtropfen und würzen"},
+      {"n": "Tempeh", "note": "nussig, fest, viel Eiweiß"},
+      {"n": "Sojaschnetzel oder Soja-Granulat", "note": "günstiger Hackfleisch-Ersatz"},
+      {"n": "Erdnussmus & Mandelmus", "note": "Protein und gute Fette"}
+    ]},
+    {"key": "milch", "label": "Milchalternativen", "items": [
+      {"n": "Haferdrink", "note": "neutral, schäumt für Kaffee"},
+      {"n": "Sojadrink (mit Calcium)", "note": "meiste Proteine, auf Calcium achten"},
+      {"n": "Pflanzenjoghurt (Soja oder Kokos)", "note": "Frühstück, Dips"},
+      {"n": "Pflanzensahne (Hafer oder Soja)", "note": "Saucen und Suppen"},
+      {"n": "Veganer Streukäse (optional)", "note": "zum Überbacken, in Maßen"}
+    ]},
+    {"key": "gemuese", "label": "Obst & Gemüse", "items": [
+      {"n": "Saisonales Gemüse", "note": "frisch und günstig, siehe Saisonkalender"},
+      {"n": "Tiefkühlgemüse & TK-Beeren", "note": "immer da, kein Verderb"},
+      {"n": "Bananen", "note": "Snack und Ei-Ersatz beim Backen"},
+      {"n": "Zwiebeln & Knoblauch", "note": "Basis für fast jedes Gericht"},
+      {"n": "Tomaten (passiert & stückig)", "note": "Vorrat für Saucen"},
+      {"n": "Blattspinat (frisch oder TK)", "note": "Eisen, schnell in der Pfanne"},
+      {"n": "Avocado", "note": "gute Fette, aufs Brot"}
+    ]},
+    {"key": "nuesse", "label": "Nüsse, Samen & Öle", "items": [
+      {"n": "Walnüsse", "note": "pflanzliches Omega-3"},
+      {"n": "Cashews", "note": "für cremige Saucen und Käse"},
+      {"n": "Geschrotete Leinsamen", "note": "Omega-3 und Ei-Ersatz (1 EL + 3 EL Wasser)"},
+      {"n": "Chiasamen", "note": "Pudding, Bindemittel"},
+      {"n": "Sonnenblumen- & Kürbiskerne", "note": "über Salat und Bowl"},
+      {"n": "Olivenöl & Rapsöl", "note": "Raps liefert Omega-3"},
+      {"n": "Tahin (Sesammus)", "note": "Calcium, für Dressings"}
+    ]},
+    {"key": "wuerzen", "label": "Würzen & Backen", "items": [
+      {"n": "Sojasauce oder Tamari", "note": "Umami für alles Herzhafte"},
+      {"n": "Hefeflocken", "note": "käsiger Geschmack, oft mit B12 angereichert"},
+      {"n": "Tomatenmark", "note": "Tiefe in Saucen"},
+      {"n": "Kala Namak (Schwarzsalz)", "note": "schmeckt nach Ei, top für Rührtofu"},
+      {"n": "Senf & Essig", "note": "Dressings ohne Ei"},
+      {"n": "Agavendicksaft oder Ahornsirup", "note": "süßen ohne Honig"},
+      {"n": "Backpulver & Natron", "note": "Kuchen gelingt auch ohne Ei"}
+    ]},
+    {"key": "snacks", "label": "Snacks & Süßes", "items": [
+      {"n": "Dunkle Schokolade", "note": "ab etwa 50 Prozent oft ohne Milch, Zutaten prüfen"},
+      {"n": "Hummus", "note": "Dip und Brotaufstrich"},
+      {"n": "Trockenfrüchte & Nussriegel", "note": "schnelle Energie unterwegs"},
+      {"n": "Reiswaffeln & Knäckebrot", "note": "Basis für schnelle Snacks"},
+      {"n": "Popcorn (Mais pur)", "note": "selbst gemacht statt Butter-Mix"}
+    ]},
+    {"key": "supplemente", "label": "Nicht vergessen", "items": [
+      {"n": "Vitamin B12", "note": "Pflicht bei veganer Ernährung, als Tropfen oder Tablette"},
+      {"n": "Vitamin D3 (vegan, aus Flechten)", "note": "vor allem im Winter sinnvoll"},
+      {"n": "Omega-3 aus Algenöl", "note": "liefert EPA und DHA direkt"},
+      {"n": "Jodiertes Speisesalz", "note": "deckt die Jodversorgung mit ab"}
+    ]}
+  ]
+}

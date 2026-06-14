@@ -52,6 +52,7 @@ CARDS = {
     "versteckte-zutaten": ("TOOL · CHECK", "Versteckte tierische Zutaten", "Gelatine, Karmin, Molke: was heimlich tierisch ist und wo es sich versteckt."),
     "vegane-materialien": ("TOOL · MODE", "Vegane Materialien", "Leder, Wolle, Seide oder doch Kork und Apfelleder? Was tierfrei ist und was nicht."),
     "getraenke-vegan": ("TOOL · CHECK", "Ist mein Getränk vegan?", "Wein, Bier, Sekt und Likör im Check, samt versteckter tierischer Klärhilfen."),
+    "vegane-einkaufsliste": ("TOOL · START", "Vegane Einkaufsliste", "Die komplette Starter-Küche zum Abhaken, Kopieren und Drucken. Für den Einstieg."),
 }
 
 

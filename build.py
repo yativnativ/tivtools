@@ -1121,6 +1121,7 @@ OG_MAP = {
     "/versteckte-zutaten/": "versteckte-zutaten",
     "/vegane-materialien/": "vegane-materialien",
     "/getraenke-vegan/": "getraenke-vegan",
+    "/vegane-einkaufsliste/": "vegane-einkaufsliste",
 }
 
 
@@ -1332,6 +1333,12 @@ def build_hub(meta, adds, ings, nutrients):
       <p>Leder, Wolle, Seide oder doch Kork und Apfelleder? Welche Stoffe tierisch sind und welche vegane Alternative es gibt, von Mode bis Accessoires.</p>
       <span class="meta">Material checken →</span>
     </a>
+    <a class="toolcard" href="{url(EINK_BASE)}">
+      <span class="badge">Neu</span>
+      <h3>Vegane Einkaufsliste</h3>
+      <p>Die komplette Starter-Küche zum Abhaken: Basics, Eiweiß, Milchersatz und Co. nach Kategorien. Hak ab, was du hast, kopier oder druck den Rest.</p>
+      <span class="meta">Liste öffnen →</span>
+    </a>
     <div class="toolcard soon">
       <span class="badge">In Arbeit</span>
       <h3>Mehr Tools kommen</h3>
@@ -1501,6 +1508,12 @@ def build_hub(meta, adds, ings, nutrients):
                         "position": 18,
                         "name": "Vegane Materialien: Stoff-Check",
                         "url": BASE_URL + url(MAT_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 19,
+                        "name": "Vegane Einkaufsliste: Starter-Küche",
+                        "url": BASE_URL + url(EINK_BASE),
                     },
                 ],
             },
@@ -4478,6 +4491,141 @@ def getraenke_cfg(meta):
     }
 
 
+# ================================================================ Vegane Einkaufsliste
+EINK_BASE = "/vegane-einkaufsliste/"
+
+EINK_CSS = (
+    ".ebar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:22px 0 6px}"
+    ".ecount{font-family:'Gabarito';font-weight:700;color:#f6ece1;font-size:16px;margin-right:auto}"
+    ".ecat{margin-top:26px}"
+    ".ecat h2{font-size:20px;margin-bottom:4px}"
+    ".elist{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:12px}"
+    ".eitem{display:flex;gap:12px;align-items:flex-start;padding:13px 15px;border:1px solid var(--line);border-radius:13px;background:rgba(248,222,205,.03);cursor:pointer;transition:background .14s}"
+    ".eitem:hover{background:rgba(248,222,205,.07)}"
+    ".eitem input{position:absolute;opacity:0;width:0;height:0}"
+    ".ech{flex:0 0 22px;width:22px;height:22px;border:2px solid var(--line);border-radius:7px;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .14s}"
+    ".ech::after{content:'';width:11px;height:6px;border-left:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);transform:rotate(-45deg) scale(0);transition:transform .14s;margin-top:-2px}"
+    ".eitem input:checked+.ech{background:var(--green);border-color:var(--green)}"
+    ".eitem input:checked+.ech::after{transform:rotate(-45deg) scale(1)}"
+    ".eitem input:checked~div{opacity:.5}"
+    ".eitem input:checked~div b{text-decoration:line-through}"
+    ".eitem b{font-family:'Gabarito';font-weight:700;font-size:15.5px;color:#f6ece1;display:block}"
+    ".eitem small{font-size:13px;opacity:.7;display:block;margin-top:1px}"
+    "@media print{.site,.crumbs,.ebar,.cta,footer,.hero-illu,.eyebrow,.sub{display:none!important}.eitem{break-inside:avoid}}"
+)
+
+EINK_JS = r"""
+(function(){
+  var KEY='tiv-eink';
+  var boxes=[].slice.call(document.querySelectorAll('.eitem input'));
+  var saved={}; try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){}
+  function upd(){
+    var done=boxes.filter(function(b){return b.checked;}).length;
+    var el=document.getElementById('ecount'); if(el) el.textContent=done+' von '+boxes.length+' erledigt';
+    var st={}; boxes.forEach(function(b){ if(b.checked) st[b.dataset.n]=1; });
+    try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}
+  }
+  boxes.forEach(function(b){ if(saved[b.dataset.n]) b.checked=true; b.addEventListener('change',upd); });
+  upd();
+  var reset=document.getElementById('ereset');
+  if(reset) reset.onclick=function(){ boxes.forEach(function(b){b.checked=false;}); upd(); };
+  var copy=document.getElementById('ecopy');
+  if(copy) copy.onclick=function(){
+    var out=['Meine vegane Einkaufsliste',''];
+    document.querySelectorAll('.ecat').forEach(function(c){
+      out.push(c.querySelector('h2').textContent.trim()+':');
+      c.querySelectorAll('.eitem').forEach(function(it){ out.push('- '+it.querySelector('b').textContent.trim()); });
+      out.push('');
+    });
+    out.push('Mehr auf this-is-vegan.com');
+    var t=out.join('\n');
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t);
+    else { var ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} ta.remove(); }
+    var o=copy.textContent; copy.textContent='Kopiert!'; copy.classList.add('done'); setTimeout(function(){copy.textContent=o; copy.classList.remove('done');},1300);
+  };
+  var pr=document.getElementById('eprint'); if(pr) pr.onclick=function(){ window.print(); };
+})();
+""".strip()
+
+
+def build_einkaufsliste(meta, data):
+    cats = data["categories"]
+    total = sum(len(c["items"]) for c in cats)
+    cats_html = ""
+    for c in cats:
+        rows = []
+        for it in c["items"]:
+            note = f'<small>{esc(it["note"])}</small>' if it.get("note") else ""
+            rows.append(
+                f'      <label class="eitem"><input type="checkbox" data-n="{esc(it["n"])}"><span class="ech"></span>'
+                f'<div><b>{esc(it["n"])}</b>{note}</div></label>'
+            )
+        items = "\n".join(rows)
+        cats_html += (
+            f'\n<section class="ecat">\n  <h2>{esc(c["label"])}</h2>\n  <div class="elist">\n{items}\n  </div>\n</section>'
+        )
+
+    body = site_header("Vegane Einkaufsliste") + f"""
+<style>{EINK_CSS}</style>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>Vegane Einkaufsliste</nav>
+<section class="hero left">
+  <div class="eyebrow">Die Starter-Küche zum Abhaken</div>
+  <h1 class="detail">Vegane <span class="q">Einkaufsliste.</span></h1>
+  <p class="sub">Alles, was eine vegane Küche zum Start braucht, nach Kategorien sortiert. Hak ab, was du schon hast, der Rest ist dein Einkaufszettel. Wird im Browser gespeichert.</p>
+</section>
+
+<div class="ebar">
+  <span class="ecount" id="ecount"></span>
+  <button class="sharebtn cp" id="ecopy">Liste kopieren</button>
+  <button class="sharebtn" id="eprint">Drucken</button>
+  <button class="sharebtn" id="ereset">Zurücksetzen</button>
+</div>
+{cats_html}
+
+<section class="section">
+  <h2>So kommst du gut durch den Start</h2>
+  <p class="prose">Du musst nicht alles auf einmal kaufen. Ein paar Basics, eine Hülsenfrucht, ein Milchersatz und etwas Gemüse reichen für die erste Woche. Tofu, Linsen und Haferflocken bringen dich überraschend weit.</p>
+  <p class="prose">Das einzige Supplement, das bei veganer Ernährung wirklich Pflicht ist, ist Vitamin B12. Den Rest passt du nach Bedarf an. Welche pflanzlichen Lebensmittel am meisten Eiweiß liefern, zeigt dir die <a href="{url(PROT_BASE)}">Protein-Tabelle</a>, und was du wie ersetzt, der <a href="{url(ERSATZ_BASE)}">Vegan-Ersatz-Finder</a>.</p>
+</section>
+
+<div class="cta">
+  <div>
+    <h2>Beim Einkaufen unsicher?</h2>
+    <p>Ob ein Produkt vegan ist, klärt der Lebensmittel-Checker, versteckte Zutaten der Zutaten-Check.</p>
+  </div>
+  <a class="btn" href="{url(FOOD_BASE)}">Lebensmittel prüfen →</a>
+</div>
+""" + site_footer(meta, full_disclaimer=False) + f"\n<script>{VEG_COPY_JS}\n{EINK_JS}</script>"
+
+    faq_answer = "Basics wie Haferflocken, Reis und Nudeln, dazu Hülsenfrüchte und Tofu für Eiweiß, ein Milchersatz wie Hafer- oder Sojadrink, viel Obst und Gemüse, Nüsse und Samen, ein paar Würzmittel und Vitamin B12 als Supplement."
+    jsonld = [
+        {
+            "@context": "https://schema.org", "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": "Was gehört auf eine vegane Einkaufsliste?",
+                 "acceptedAnswer": {"@type": "Answer", "text": faq_answer}},
+                {"@type": "Question", "name": "Welche Supplemente brauche ich vegan?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Vitamin B12 ist bei veganer Ernährung Pflicht. Vitamin D3 (aus Flechten), Omega-3 aus Algenöl und jodiertes Salz sind je nach Bedarf sinnvoll."}},
+            ],
+        },
+        {
+            "@context": "https://schema.org", "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Vegane Einkaufsliste", "item": BASE_URL + url(EINK_BASE)},
+            ],
+        },
+    ]
+    return page(
+        "Vegane Einkaufsliste: die Starter-Küche zum Abhaken | This Is Vegan",
+        f"Die komplette vegane Einkaufsliste für den Start: {total} Lebensmittel und Basics nach Kategorien, zum Abhaken, Kopieren und Drucken. Kostenlos.",
+        EINK_BASE,
+        body,
+        jsonld,
+        og_image="vegane-einkaufsliste",
+    )
+
+
 def build_404(meta):
     body = site_header("Tools") + f"""
 <section class="hero">
@@ -4542,6 +4690,8 @@ def main():
 
     get_data = json.loads((ROOT / "data" / "getraenke-data.json").read_text(encoding="utf-8"))
     get_cfg, get_items = getraenke_cfg(get_data["meta"]), get_data["drinks"]
+
+    eink_data = json.loads((ROOT / "data" / "einkaufsliste-data.json").read_text(encoding="utf-8"))
 
     if DIST.exists():
         shutil.rmtree(DIST)
@@ -4619,6 +4769,9 @@ def main():
     pages[GET_BASE] = build_ampel_hub(get_cfg, get_items)
     for dr in get_items:
         pages[GET_BASE + dr["slug"] + "/"] = build_ampel_detail(get_cfg, dr, get_items)
+
+    # Vegane Einkaufsliste
+    pages[EINK_BASE] = build_einkaufsliste(eink_data["meta"], eink_data)
 
     # Creator-Bereich
     pages[CREATOR_BASE] = build_creator_hub(CREATOR_META)
