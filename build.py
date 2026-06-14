@@ -3794,6 +3794,13 @@ def build_reise_detail(lang, meta, data):
 </div>
 
 <section class="section">
+  <h2>Zum Speichern aufs Handy</h2>
+  <p class="lead">Lad dir die Karte im Handyformat herunter und zeig sie offline im Restaurant, auch ohne Netz.</p>
+  <img class="vcardimg" style="max-width:300px" src="{url('/reise-grafik/' + lang['slug'] + '.png')}" alt="Vegane Sätze auf {esc(name)}, Karte zum Speichern von This Is Vegan" loading="lazy" width="1080" height="1920">
+  <div style="text-align:center;margin-top:14px"><a class="dlbtn" href="{url('/reise-grafik/' + lang['slug'] + '.png')}" download="vegan-auf-reisen-{lang['slug']}.png">Als Bild speichern</a></div>
+</section>
+
+<section class="section">
   <h2>Worauf du achten solltest</h2>
   <p class="prose">Brühe, Butter, Fischsauce und Ei verstecken sich oft in Gerichten, die vegan aussehen. Die Frage „Ist da Fleisch, Fisch, Ei oder Milch drin?“ klärt das Meiste. Im Zweifel lieber einmal mehr nachfragen oder die Sätze zeigen.</p>
 </section>
@@ -4265,6 +4272,15 @@ def main():
     if og_src.exists():
         for f in sorted(og_src.glob("*.png")):
             shutil.copy2(f, og_dir / f.name)
+
+    # Reise-Sprachkarten (1080x1920, zum Download/Speichern aufs Handy), committet
+    # in reise-cards/ -> dist/reise-grafik/<slug>.png.
+    reise_dir = DIST / "reise-grafik"
+    reise_dir.mkdir(parents=True, exist_ok=True)
+    reise_src = ROOT / "reise-cards"
+    if reise_src.exists():
+        for f in sorted(reise_src.glob("*.png")):
+            shutil.copy2(f, reise_dir / f.name)
 
     (DIST / "404.html").write_text(build_404(meta), encoding="utf-8")
 
