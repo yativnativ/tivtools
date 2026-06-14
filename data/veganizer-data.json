@@ -149,6 +149,316 @@
       "category": "Ethik",
       "konter": "Stärker oder klüger zu sein gibt einem nicht das Recht, anderen wehzutun, das gilt unter Menschen genauso. Ein Kleinkind ist auch nicht klüger als ein Schwein, und trotzdem würden wir ihm nichts antun. Macht ist kein moralisches Argument.",
       "fakt": "Entscheidend ist die Fähigkeit zu leiden, nicht die Intelligenz. Schweine gelten als ähnlich klug wie Hunde."
+    },
+    {
+      "slug": "kann-man-kein-leder-tragen",
+      "title": "Kann man als Veganer wirklich kein Leder tragen?",
+      "aka": ["leder", "lederjacke", "schuhe", "gürtel", "kleidung"],
+      "category": "Kleidung",
+      "konter": "Tragen schon, aber Leder ist Tierhaut, dafür stirbt ein Tier. Es ist auch kein bloßer Abfall, sondern ein lohnendes Nebenprodukt, das die Schlachtung mitfinanziert. Inzwischen gibt es richtig gutes veganes Leder aus Apfel, Kaktus, Kork oder Pilz. Muss also nicht die Kuh sein.",
+      "fakt": "Leder ist ein wirtschaftlich wertvolles Koppelprodukt der Fleisch- und Milchindustrie, nicht nur Abfall, und macht Tierhaltung mit rentabel."
+    },
+    {
+      "slug": "wolle-tut-den-schafen-nicht-weh",
+      "title": "Wolle tut den Schafen doch nicht weh, die müssen geschoren werden",
+      "aka": ["wolle", "schaf", "schafe", "scheren", "merino"],
+      "category": "Kleidung",
+      "konter": "Dass Schafe geschoren werden müssen, kommt erst durch die Zucht, Wildschafe verlieren ihr Fell von selbst. In der Wollindustrie zählt Tempo, dabei kommt es oft zu Schnittverletzungen, und am Ende landen die Tiere im Schlachthof. Baumwolle, Hanf oder Tencel halten auch warm.",
+      "fakt": "Wollschafe wurden auf maximale Wollmenge gezüchtet und müssen deshalb geschoren werden. Akkordscheren verursacht häufig Verletzungen, ausgediente Tiere werden geschlachtet."
+    },
+    {
+      "slug": "echtpelz-ist-natuerlicher",
+      "title": "Echtpelz ist doch natürlicher als Plastik-Kunstpelz",
+      "aka": ["pelz", "echtpelz", "fell", "nerz"],
+      "category": "Kleidung",
+      "konter": "Für den Pelz stirbt ein Tier, das oft sein ganzes Leben in einem winzigen Käfig verbracht hat. Und damit echter Pelz nicht verrottet, wird er stark chemisch behandelt, so natürlich ist das nicht. Ehrlich, kein Mensch braucht heute echten Pelz, um nicht zu frieren.",
+      "fakt": "Pelz stammt überwiegend aus Käfighaltung und wird zur Haltbarkeit chemisch gegerbt und behandelt."
+    },
+    {
+      "slug": "seide-sind-nur-wuermer",
+      "title": "Seide ist doch okay, das sind nur Würmer",
+      "aka": ["seide", "seidenraupe", "würmer", "raupe"],
+      "category": "Kleidung",
+      "konter": "Für klassische Seide werden die Raupen im Kokon mit heißem Wasser oder Dampf getötet, damit der Faden nicht reißt, pro Schal sind das tausende Tiere. Ob Raupen leiden, ist nicht ganz klar, aber mit Tencel oder Bambusseide stellt sich die Frage gar nicht erst.",
+      "fakt": "Bei herkömmlicher Seidengewinnung werden die Seidenraupen im Kokon abgetötet, für ein Kilo Seide sterben tausende Tiere."
+    },
+    {
+      "slug": "daunen-fallen-eh-aus",
+      "title": "Daunen für die Jacke, die Federn fallen doch eh aus",
+      "aka": ["daunen", "federn", "gans", "jacke", "bettdecke"],
+      "category": "Kleidung",
+      "konter": "Ein Teil der Daunen wird lebenden Tieren ausgerissen, das nennt sich Lebendrupf und tut weh. Der Rest kommt aus der Schlachtung. Moderne Kunstfaser wärmt genauso und trocknet sogar besser. Die Gans muss dafür nicht herhalten.",
+      "fakt": "Daunen stammen aus der Schlachtung oder teils aus schmerzhaftem Lebendrupf. Synthetische Füllungen sind in der Wärmeleistung ebenbürtig."
+    },
+    {
+      "slug": "was-ist-mit-deiner-alten-lederjacke",
+      "title": "Und was ist mit deiner alten Lederjacke?",
+      "aka": ["alte lederjacke", "second hand", "gebraucht", "wegwerfen"],
+      "category": "Kleidung",
+      "konter": "Die ist von früher, und sie wegzuwerfen würde dem Tier auch nicht mehr helfen, dann war es ganz umsonst. Es geht nicht um Reinheit, sondern darum, ab jetzt nichts Neues mehr nachzukaufen. Aufbrauchen oder weitergeben ist sinnvoller als Tonne.",
+      "fakt": "Vorhandene Tierprodukte aufzubrauchen schafft keine Nachfrage. Entscheidend ist, nichts Neues zu kaufen."
+    },
+    {
+      "slug": "fuer-eier-und-milch-stirbt-kein-tier",
+      "title": "Für Eier und Milch stirbt doch kein Tier",
+      "aka": ["eier", "milch", "stirbt kein tier", "kein tod"],
+      "category": "Tiere",
+      "konter": "Leider doch. In der Eierindustrie werden die männlichen Küken getötet, weil sie keine Eier legen. Für Milch muss die Kuh jedes Jahr ein Kalb bekommen, das ihr genommen wird, und beide landen im Schlachthof, sobald die Leistung nachlässt. Ohne Tod gibt es keine kommerzielle Milch und kein Ei.",
+      "fakt": "In der Lege-Industrie werden männliche Küken getötet. Milchkühe werden jährlich besamt, das Kalb wird getrennt, ausgediente Tiere werden geschlachtet."
+    },
+    {
+      "slug": "ich-hab-eigene-huehner",
+      "title": "Ich hab eigene Hühner im Garten, die Eier sind doch okay",
+      "aka": ["eigene hühner", "garten", "hinterhof", "hühnerhaltung"],
+      "category": "Tiere",
+      "konter": "Das ist schon viel besser als aus der Industrie, ehrlich. Trotzdem stammen fast alle Hühner aus Brütereien, in denen die männlichen Küken getötet wurden. Und heutige Hennen legen extrem viele Eier, das zehrt am Körper. Wenn deine Tiere ein gutes Leben haben, ist das aber ein ganz anderes Thema als der Supermarkt.",
+      "fakt": "Auch Gartenhühner stammen meist aus Brütereien mit Kükentöten. Hochleistungszucht belastet die Hennen gesundheitlich stark."
+    },
+    {
+      "slug": "freilandeier-sind-in-ordnung",
+      "title": "Freilandeier und Bio-Eier sind doch in Ordnung",
+      "aka": ["freiland", "bio eier", "freilandeier", "bodenhaltung"],
+      "category": "Tiere",
+      "konter": "Freiland ist besser als Käfig, keine Frage. Aber auch dort werden die männlichen Küken aussortiert, und die Hennen werden geschlachtet, sobald sie weniger legen, oft nach ein bis zwei Jahren, obwohl sie zehn werden könnten. Am Grundproblem ändert das Label wenig.",
+      "fakt": "Auch bei Bio und Freiland werden männliche Küken getötet und Legehennen nach kurzer Nutzungsdauer geschlachtet."
+    },
+    {
+      "slug": "milch-ist-gesund-woher-calcium",
+      "title": "Milch ist doch gesund, woher kriegst du sonst Calcium?",
+      "aka": ["milch gesund", "calcium", "kalzium", "knochen", "osteoporose"],
+      "category": "Ernährung",
+      "konter": "Calcium kommt ursprünglich aus Pflanzen, die Kuh holt es sich aus dem Gras. Angereicherte Pflanzendrinks, Tofu, Sesam, Grünkohl und calciumreiches Wasser liefern reichlich. Und ehrlich, kein Säugetier trinkt nach dem Abstillen Milch, schon gar nicht die einer anderen Art.",
+      "fakt": "Calcium lässt sich gut über angereicherte Pflanzendrinks, Tofu, grünes Gemüse und Mineralwasser decken.",
+      "studie": ["Positionspapier der Academy of Nutrition and Dietetics, 2016", "https://doi.org/10.1016/j.jand.2016.09.025"],
+      "links": [["Calcium vegan decken", "/naehrstoffrechner/calcium/"]]
+    },
+    {
+      "slug": "von-soja-kriegst-du-maennerbrueste",
+      "title": "Von Soja kriegst du doch Männerbrüste",
+      "aka": ["soja hormone", "männerbrüste", "testosteron", "östrogen", "phytoöstrogene"],
+      "category": "Ernährung",
+      "konter": "Das ist ein hartnäckiger Mythos. Die größte Auswertung der Studien zeigt klar, weder Soja noch die enthaltenen Isoflavone senken Testosteron oder vermännlichen oder verweiblichen irgendwen. In ganz Asien essen Männer seit Generationen viel Soja. Alles entspannt also.",
+      "fakt": "Eine Meta-Analyse von 41 klinischen Studien fand keinen Effekt von Soja oder Isoflavonen auf Testosteron oder Östrogen bei Männern.",
+      "studie": ["Soja und Hormone, Meta-Analyse in Reprod Toxicol 2021", "https://doi.org/10.1016/j.reprotox.2020.12.019"]
+    },
+    {
+      "slug": "veganer-haben-alle-eisenmangel",
+      "title": "Veganer kriegen doch alle Eisenmangel",
+      "aka": ["eisenmangel", "eisen", "blutarmut", "anämie"],
+      "category": "Ernährung",
+      "konter": "Eisenmangel ist auch bei Mischköstlern verbreitet, gerade bei Frauen, das hat mit vegan wenig zu tun. Linsen, Kürbiskerne, Haferflocken und Tofu liefern reichlich Eisen, und mit etwas Vitamin C dazu nimmt der Körper es richtig gut auf. Kaffee zur Mahlzeit bremst, das ist der eigentliche Hebel.",
+      "fakt": "Pflanzliches Eisen wird mit Vitamin C deutlich besser aufgenommen. Eisenmangel ist nicht vegan-spezifisch, sondern allgemein verbreitet.",
+      "links": [["Eisen vegan decken", "/naehrstoffrechner/eisen/"]]
+    },
+    {
+      "slug": "dir-fehlt-omega-3",
+      "title": "Dir fehlt doch Omega-3 ohne Fisch",
+      "aka": ["omega 3", "fischöl", "epa", "dha", "fettsäuren"],
+      "category": "Ernährung",
+      "konter": "Der Fisch hat sein Omega-3 auch nur aus Algen, ich hole es mir direkt von dort. Leinöl, Walnüsse und Chiasamen liefern die pflanzliche Form, und für die aktiven Fettsäuren gibt es Algenöl, ganz ohne Fisch und ohne Mikroplastik. Eleganter als der Umweg übers Tier.",
+      "fakt": "Die aktiven Omega-3-Fettsäuren EPA und DHA stammen ursprünglich aus Algen. Algenöl liefert sie direkt, ohne Schadstoffe aus dem Meer.",
+      "links": [["Omega-3 vegan decken", "/naehrstoffrechner/omega-3/"]]
+    },
+    {
+      "slug": "du-siehst-so-blass-aus",
+      "title": "Du siehst so blass und müde aus, bestimmt der Mangel",
+      "aka": ["blass", "müde", "schwach", "krank aussehen"],
+      "category": "Ernährung",
+      "konter": "Blass war ich schon vorher, das liegt eher am deutschen Winter als am Tofu. Wenn jemand schlapp ist, steckt meist B12 oder Eisen dahinter, und beides kann man einfach testen und in den Griff kriegen. Gut geplant macht pflanzlich eher fit als müde.",
+      "fakt": "Müdigkeit hat viele Ursachen. Bei veganer Ernährung lohnt der Blick auf B12 und Eisen, beides ist per Bluttest und Supplement leicht zu klären."
+    },
+    {
+      "slug": "vegane-kinder-ist-misshandlung",
+      "title": "Vegane Kinder ist doch Kindesmisshandlung",
+      "aka": ["vegane kinder", "kindesmisshandlung", "baby vegan", "schwangerschaft"],
+      "category": "Ernährung",
+      "konter": "Gut geplant und mit B12 halten Fachverbände eine vegane Ernährung für jede Lebensphase für geeignet, auch für Kinder. Wichtig ist, dass man es ernst nimmt und bewusst zusammenstellt, nicht einfach weglässt. Schlecht geplant ist jede Ernährung ein Problem, auch die mit Würstchen und Pommes.",
+      "fakt": "Fachgesellschaften halten gut geplante, supplementierte vegane Ernährung für alle Lebensphasen für geeignet, betonen aber Planung und ärztliche Begleitung gerade bei Kindern.",
+      "studie": ["Positionspapier der Academy of Nutrition and Dietetics, 2016", "https://doi.org/10.1016/j.jand.2016.09.025"],
+      "links": [["Nährstoff-Rechner", "/naehrstoffrechner/"]]
+    },
+    {
+      "slug": "mensch-ist-durch-fleisch-intelligent",
+      "title": "Der Mensch ist nur durchs Fleisch so intelligent geworden",
+      "aka": ["intelligenz", "gehirn", "evolution fleisch", "klug"],
+      "category": "Natur",
+      "konter": "Beim Gehirnwachstum spielte vor allem das Kochen eine Rolle, das machte Nahrung leichter verdaulich, pflanzliche wie tierische. Heute brauchst du dafür kein Fleisch mehr, dein Gehirn läuft prima mit pflanzlicher Kost. Was damals half, ist kein Muss für heute.",
+      "fakt": "Das Wachstum des menschlichen Gehirns wird vor allem mit dem Kochen von Nahrung in Verbindung gebracht. Für die heutige Hirnfunktion ist Fleisch nicht nötig."
+    },
+    {
+      "slug": "mandelmilch-braucht-viel-wasser",
+      "title": "Mandelmilch braucht doch voll viel Wasser",
+      "aka": ["mandelmilch", "wasser", "mandel", "wasserverbrauch"],
+      "category": "Umwelt",
+      "konter": "Stimmt, Mandeln sind durstig. Aber Kuhmilch braucht über die ganze Kette noch deutlich mehr Wasser, Fläche und verursacht mehr CO2, weil die Kuh erst gefüttert werden muss. Und wenn dir Wasser wichtig ist, Hafer- oder Sojadrink schneiden noch besser ab als Mandel.",
+      "fakt": "Kuhmilch verursacht über die gesamte Lieferkette mehr Treibhausgase, Flächen- und Wasserverbrauch als jeder gängige Pflanzendrink.",
+      "studie": ["Umweltbilanz von Milch und Drinks, Our World in Data", "https://ourworldindata.org/environmental-impact-milks"],
+      "links": [["Pflanzendrink-Vergleich", "/pflanzendrink-vergleich/"]]
+    },
+    {
+      "slug": "regionales-fleisch-besser-als-tofu",
+      "title": "Regionales Fleisch ist besser als importierter Tofu",
+      "aka": ["regional", "transport", "import", "lokal", "tofu import"],
+      "category": "Umwelt",
+      "konter": "Transport macht beim Klima-Fußabdruck nur einen kleinen Teil aus, entscheidend ist, was produziert wird. Selbst regionales Rind verursacht ein Vielfaches der Emissionen von Tofu, der oft sogar aus europäischem Soja ist. Regional ist gut, aber pflanzlich schlägt tierisch fast immer.",
+      "fakt": "Der Transport macht meist nur einen kleinen Teil des CO2-Fußabdrucks aus. Pflanzliche Lebensmittel liegen fast immer deutlich unter tierischen, auch regional gegen importiert.",
+      "studie": ["Warum die Lebensmittelwahl mehr zählt als die Herkunft, Our World in Data", "https://ourworldindata.org/food-choice-vs-eating-local"],
+      "links": [["CO2-Fußabdruck der Lebensmittel", "/co2-fussabdruck/"]]
+    },
+    {
+      "slug": "kuehe-pupsen-halt-methan-natuerlich",
+      "title": "Kühe pupsen halt, Methan ist doch natürlich",
+      "aka": ["methan", "kühe", "pupsen", "rülpsen", "treibhausgas"],
+      "category": "Umwelt",
+      "konter": "Natürlich heißt nicht harmlos. Es geht ja nicht um eine Kuh, sondern um Milliarden, die wir gezielt züchten. Methan ist als Treibhausgas viel stärker als CO2, nur kurzlebiger. Weniger Tierhaltung wirkt deshalb sogar besonders schnell aufs Klima.",
+      "fakt": "Methan ist kurzfristig ein deutlich stärkeres Treibhausgas als CO2. Die riesige Zahl an Nutztieren ist menschengemacht, nicht natürlich."
+    },
+    {
+      "slug": "avocados-sind-auch-nicht-nachhaltig",
+      "title": "Eure Avocados sind doch auch nicht nachhaltig",
+      "aka": ["avocado", "avocados", "nachhaltig", "wasser avocado"],
+      "category": "Umwelt",
+      "konter": "Da ist was dran, Avocados haben einen ordentlichen Wasser- und Transport-Rucksack, und niemand muss sie täglich essen. Aber sie spielen in einer ganz anderen Liga als Fleisch. Vegan heißt ja nicht Avocado, sondern vor allem Hülsenfrüchte, Getreide und Gemüse. Den Punkt nehme ich trotzdem an.",
+      "fakt": "Avocados haben einen erhöhten Wasser- und Transportaufwand, liegen aber weit unter tierischen Lebensmitteln und sind kein Grundpfeiler veganer Ernährung."
+    },
+    {
+      "slug": "einsame-insel-fleisch",
+      "title": "Würdest du auf einer einsamen Insel nicht auch ein Tier essen?",
+      "aka": ["einsame insel", "überleben", "notfall", "extremsituation"],
+      "category": "Ethik",
+      "konter": "Im echten Überlebensfall vielleicht, klar. Aber wir sitzen ja nicht auf einer Insel, sondern vor einem vollen Supermarkt. Aus was tätest du in einer Extremsituation folgt nichts fürs ganz normale Mittagessen. Notwehr ist kein Maßstab für den Alltag.",
+      "fakt": "Ein Extremszenario sagt nichts über alltägliche Entscheidungen im Überfluss aus. Veganismus meint, soweit praktisch möglich, nicht ums nackte Überleben."
+    },
+    {
+      "slug": "fische-fuehlen-keinen-schmerz",
+      "title": "Fische fühlen doch keinen Schmerz",
+      "aka": ["fische", "fisch", "schmerz", "angeln", "meerestiere"],
+      "category": "Tiere",
+      "konter": "Doch, das ist inzwischen gut belegt. Fische haben Schmerzrezeptoren, reagieren auf Betäubungsmittel und zeigen Stressverhalten. Sie sind nur stiller als ein Säugetier, deshalb fällt es uns leichter, das zu übersehen. Leise heißt nicht schmerzfrei.",
+      "fakt": "Fische besitzen Nozizeptoren und zeigen Schmerz- und Stressreaktionen. Die Forschung geht überwiegend davon aus, dass sie Schmerz empfinden.",
+      "studie": ["Haben Fische Schmerzrezeptoren? (Forschung, PubMed)", "https://pubmed.ncbi.nlm.nih.gov/12816648/"]
+    },
+    {
+      "slug": "austern-haben-kein-gehirn",
+      "title": "Austern haben kein Gehirn, die kann man doch essen",
+      "aka": ["austern", "muscheln", "gehirn", "bivalven"],
+      "category": "Ethik",
+      "konter": "Das ist tatsächlich der ehrlichste Grenzfall, Muscheln und Austern haben kein zentrales Gehirn, ein paar Veganer essen sie deshalb. Die meisten lassen sie trotzdem weg, weil es ein Tier bleibt und man die Grenze sonst schwer zieht. Wenn wir nur noch über Austern streiten, sind wir uns zu 99 Prozent einig.",
+      "fakt": "Austern und Muscheln haben kein zentrales Nervensystem. Die Einordnung ist unter Veganern umstritten, betrifft aber nur einen Randbereich."
+    },
+    {
+      "slug": "insekten-essen-ist-nachhaltig",
+      "title": "Insekten essen ist doch nachhaltig, machst du das?",
+      "aka": ["insekten", "mehlwürmer", "grillen", "insektenprotein"],
+      "category": "Ethik",
+      "konter": "Insekten sind ressourcenärmer als Rind, das stimmt. Aber es sind trotzdem Tiere, die in riesiger Zahl getötet werden, und ob sie leiden, ist nicht geklärt. Wenn es ums Klima und um weniger Leid geht, sind Linsen und Tofu der einfachere und sicherere Weg.",
+      "fakt": "Insektenzucht ist ressourcenärmer als Rinderhaltung, tötet aber sehr viele Tiere mit ungeklärtem Schmerzempfinden. Hülsenfrüchte sind die risikoärmere Proteinquelle."
+    },
+    {
+      "slug": "laborfleisch-ist-unnatuerlich",
+      "title": "Laborfleisch ist doch auch unnatürlich",
+      "aka": ["laborfleisch", "kultiviertes fleisch", "clean meat", "zellfleisch"],
+      "category": "Ethik",
+      "konter": "Unnatürlich ist erst mal kein Argument, Insulin und Impfungen sind auch nicht natürlich und retten Leben. Kultiviertes Fleisch kommt ohne Schlachtung und mit viel weniger Umweltschaden aus. Man muss es nicht mögen, aber als Brücke für alle, die nicht verzichten wollen, ist es eine echte Chance.",
+      "fakt": "Kultiviertes Fleisch wird aus Zellen gezüchtet, ohne Schlachtung, und verursacht potenziell deutlich weniger Umweltschäden. Unnatürlich allein ist kein moralisches Argument."
+    },
+    {
+      "slug": "kreislauf-der-natur",
+      "title": "Das ist halt der Kreislauf der Natur",
+      "aka": ["kreislauf der natur", "natur", "nahrungskette", "tiere fressen tiere"],
+      "category": "Natur",
+      "konter": "Wir haben uns aus ziemlich vielen Naturkreisläufen herausgenommen, wir heizen, impfen und verhüten. Massentierhaltung mit Milliarden Tieren in Hallen hat mit Naturkreislauf wenig zu tun. Das ist kein Kreislauf, das ist ein System, das wir eingerichtet haben und auch ändern können.",
+      "fakt": "Industrielle Tierhaltung ist menschengemacht und hat mit natürlichen Kreisläufen wenig gemein. Der Mensch greift ohnehin in viele Naturprozesse ein."
+    },
+    {
+      "slug": "spitze-der-nahrungskette",
+      "title": "Wir stehen nun mal an der Spitze der Nahrungskette",
+      "aka": ["nahrungskette", "spitze", "oben", "raubtier mensch"],
+      "category": "Natur",
+      "konter": "An der Spitze stehen wir vor allem, weil wir denken und Mitgefühl haben können, nicht wegen spitzer Zähne. Genau das gibt uns die Möglichkeit, anders zu entscheiden. Macht haben heißt nicht, sie ausnutzen zu müssen. Im echten Wald hätte ein Wolf übrigens leichtes Spiel mit uns.",
+      "fakt": "Die Sonderstellung des Menschen beruht auf kognitiven Fähigkeiten, die gerade die Wahl ermöglichen, anderen nicht zu schaden."
+    },
+    {
+      "slug": "vegan-ist-zu-teuer",
+      "title": "Vegan ist doch viel zu teuer",
+      "aka": ["teuer", "preis", "geld", "kosten", "billig"],
+      "category": "Gesellschaft",
+      "konter": "Die Basics sind mit das Günstigste im Laden, Reis, Linsen, Bohnen, Haferflocken, Saisongemüse. Teuer wird es nur durch die ganzen Ersatzprodukte, und die sind kein Muss. Fleisch und Käse sind oft die teuersten Posten im Wagen. Vegan kann richtig günstig sein.",
+      "fakt": "Pflanzliche Grundnahrungsmittel wie Hülsenfrüchte, Reis und Haferflocken gehören zu den günstigsten Lebensmitteln überhaupt."
+    },
+    {
+      "slug": "ihr-veganer-seid-so-missionarisch",
+      "title": "Ihr Veganer seid immer so missionarisch",
+      "aka": ["missionarisch", "belehrend", "moralapostel", "nervig"],
+      "category": "Gesellschaft",
+      "konter": "Verstehe ich, niemand mag Belehrung. Oft kommt das Thema aber gar nicht von uns, sondern es wird gefragt, warum man dies oder das nicht isst. Mir geht es nicht ums Bekehren, sondern darum, ehrlich zu antworten. Und Hand aufs Herz, beim Essen teilt jeder gern seine Meinung.",
+      "fakt": "Gespräche über Ernährung entstehen oft durch Nachfragen an den Veganer selbst. Der Tonfall entscheidet mehr als das Argument."
+    },
+    {
+      "slug": "du-verpasst-doch-so-viel",
+      "title": "Du verpasst doch so viel Gutes",
+      "aka": ["verpasst", "verzicht", "genuss", "missen"],
+      "category": "Gesellschaft",
+      "konter": "Ehrlich gesagt fühlt es sich nicht nach Verpassen an, sondern nach Entdecken. Ich koche heute abwechslungsreicher als früher, weil ich ständig Neues ausprobiere. Geschmack ist Gewohnheit, und die ändert sich schneller, als man denkt. Verzicht ist es nur in den ersten Wochen.",
+      "fakt": "Geschmacksvorlieben sind erlernt und passen sich an. Pflanzliche Küche erweitert das Repertoire eher, als es einzuschränken."
+    },
+    {
+      "slug": "was-isst-du-dann-ueberhaupt",
+      "title": "Was isst du dann überhaupt, nur Salat?",
+      "aka": ["nur salat", "was isst du", "gras", "körner"],
+      "category": "Gesellschaft",
+      "konter": "Fast alles, nur eben pflanzlich, Pasta, Curry, Burger, Pizza, Falafel, Kuchen. Überleg mal, wie viele Gerichte schon von Natur aus vegan sind oder es mit einem Handgriff werden. Salat ist eher Beilage. Es wird viel weniger eng als gedacht, sobald man einmal hinschaut.",
+      "fakt": "Ein Großteil gängiger Gerichte ist vegan oder leicht vegan zu machen. Die Auswahl ist größer als das Klischee.",
+      "links": [["Vegan-Ersatz-Finder", "/vegan-ersetzen/"]]
+    },
+    {
+      "slug": "mit-dir-essen-ist-kompliziert",
+      "title": "Mit dir auswärts essen ist voll kompliziert",
+      "aka": ["kompliziert", "auswärts essen", "restaurant", "umständlich"],
+      "category": "Gesellschaft",
+      "konter": "Verstehe ich, kann am Anfang so wirken. Aber fast jede Küche hat von Natur aus vegane Klassiker, italienisch, indisch, orientalisch, asiatisch. Ich finde fast überall was und mache keinen Aufstand. Sag einfach, wohin, ich bin unkompliziert, versprochen.",
+      "fakt": "Viele Länderküchen bieten von Haus aus vegane Gerichte. In der Praxis ist auswärts essen meist problemlos."
+    },
+    {
+      "slug": "mach-mir-kein-schlechtes-gewissen",
+      "title": "Hör auf, mir ein schlechtes Gewissen zu machen",
+      "aka": ["schlechtes gewissen", "moralkeule", "rechtfertigen", "druck"],
+      "category": "Gesellschaft",
+      "konter": "Das will ich gar nicht, ehrlich. Wenn beim Thema ein schlechtes Gewissen aufkommt, sagt das eher, dass dir Tiere nicht egal sind. Du musst dich vor mir nicht rechtfertigen. Ich erzähl nur, warum ich es mache, wenn du fragst, den Rest entscheidest du selbst.",
+      "fakt": "Unbehagen beim Thema deutet oft auf grundsätzliche Empathie hin. Druck erzeugt eher Abwehr als Veränderung."
+    },
+    {
+      "slug": "was-wird-aus-den-bauern",
+      "title": "Wenn alle vegan wären, was wird aus den Landwirten?",
+      "aka": ["bauern", "landwirte", "jobs", "arbeitsplätze", "höfe"],
+      "category": "Gesellschaft",
+      "konter": "Landwirtschaft verschwindet ja nicht, sie verschiebt sich. Schon heute wächst der Markt für Hafer, Erbsen und Hülsenfrüchte, viele Höfe stellen um, oft mit Förderung. Wandel gab es immer, der Schmied ist auch nicht arbeitslos geblieben. Mit gutem Übergang gewinnen am Ende viele.",
+      "fakt": "Eine pflanzlichere Nachfrage verlagert die Landwirtschaft, statt sie abzuschaffen. Anbau für den direkten menschlichen Verzehr braucht ebenfalls Höfe."
+    },
+    {
+      "slug": "du-kannst-eh-nicht-alle-retten",
+      "title": "Du kannst doch eh nicht alle Tiere retten",
+      "aka": ["alle retten", "bringt nichts einzeln", "sinnlos retten"],
+      "category": "Gesellschaft",
+      "konter": "Stimmt, alle nicht. Aber über ein Leben summiert sind das hunderte Tiere, die nicht für mich sterben. Niemand würde sagen, rette ruhig keinen Ertrinkenden, weil du nicht alle retten kannst. Jedes einzelne zählt für genau dieses eine Tier.",
+      "fakt": "Über die Jahre summiert sich der Effekt auf hunderte Tiere. Nicht alles zu können ist kein Grund, nichts zu tun.",
+      "links": [["Impact-Rechner", "/impact-rechner/"]]
+    },
+    {
+      "slug": "hitler-war-auch-vegetarier",
+      "title": "Hitler war doch auch Vegetarier",
+      "aka": ["hitler", "vegetarier", "diktator"],
+      "category": "Gesellschaft",
+      "konter": "Erstens ist das historisch umstritten, er aß nachweislich auch Fleisch. Zweitens war er auch Maler, deshalb ist Malen nicht böse. Was eine einzelne furchtbare Person gegessen hat, sagt nichts über richtig oder falsch. Das ist ein Ablenkungsmanöver, kein Argument.",
+      "fakt": "Die Behauptung ist historisch fragwürdig und vor allem ein Fehlschluss, vom Einzelfall auf die Sache zu schließen."
+    },
+    {
+      "slug": "ein-bisschen-fleisch-schadet-nicht",
+      "title": "Ein bisschen Fleisch hat noch keinem geschadet",
+      "aka": ["ein bisschen fleisch", "maßhalten", "alles in maßen", "ab und zu"],
+      "category": "Ethik",
+      "konter": "Beim Tier geht es nicht um ein bisschen, für das Schnitzel war es ganz tot, nicht ein bisschen. Maßhalten ist trotzdem super, weniger ist immer besser als viel. Aber wenn weniger gut ist, warum dann nicht gleich der nächste Schritt? Niemand muss perfekt sein, anfangen reicht.",
+      "fakt": "Reduktion ist sinnvoll, ändert für das einzelne getötete Tier aber nichts. Der Schritt von weniger zu pflanzlich ist oft kleiner als gedacht."
     }
   ],
   "quiz": [
@@ -230,6 +540,30 @@
         {"t": "\"Stärker zu sein gibt einem nicht das Recht, anderen wehzutun. Ein Kleinkind ist auch nicht klüger als ein Schwein, und wir würden ihm nichts tun.\"", "ok": true, "fb": "Konsequenter Vergleich, der das Machtargument entkräftet."},
         {"t": "\"Genau, und Veganer stehen über euch.\"", "ok": false, "fb": "Überheblich, spiegelt nur das Problem."},
         {"t": "\"Da kann man wohl nichts machen.\"", "ok": false, "fb": "Resignation, dabei gibt es eine gute Antwort."}
+      ]
+    },
+    {
+      "frage": "\"Für Eier und Milch stirbt doch kein Tier.\"",
+      "options": [
+        {"t": "\"Leider doch. Männliche Küken werden getötet, und für Milch wird der Kuh jedes Jahr das Kalb weggenommen, am Ende geht's für beide zum Schlachter.\"", "ok": true, "fb": "Nennt ruhig die konkreten Fakten, ohne zu dramatisieren."},
+        {"t": "\"Milch ist eh ekelhaft.\"", "ok": false, "fb": "Geschmacksurteil statt Argument, geht am Punkt vorbei."},
+        {"t": "\"Ist mir auch egal, Hauptsache vegan.\"", "ok": false, "fb": "Wirkt ideologisch und beantwortet die Frage nicht."}
+      ]
+    },
+    {
+      "frage": "\"Von Soja kriegst du doch Männerbrüste.\"",
+      "options": [
+        {"t": "\"Das ist ein Mythos. Die größte Studienauswertung zeigt: Soja senkt weder Testosteron noch verändert es Östrogen. In Asien essen Männer es seit Generationen.\"", "ok": true, "fb": "Sachlich, mit Verweis auf die Studienlage, das entkräftet das Klischee."},
+        {"t": "\"Dann hätte halb Asien ja Brüste, lol.\"", "ok": false, "fb": "Der Gedanke stimmt, aber als Spott überzeugt er weniger als der Fakt."},
+        {"t": "\"Ich ess sowieso kaum Soja.\"", "ok": false, "fb": "Defensiv, bestätigt unausgesprochen den Mythos."}
+      ]
+    },
+    {
+      "frage": "\"Leder ist doch nur ein Abfallprodukt vom Fleisch.\"",
+      "options": [
+        {"t": "\"Es ist kein Abfall, sondern ein lohnendes Nebenprodukt, das die Schlachtung mitfinanziert. Und es gibt echt gutes Leder aus Kaktus oder Pilz.\"", "ok": true, "fb": "Korrigiert den Abfall-Mythos und bietet gleich eine Alternative."},
+        {"t": "\"Leder ist Mord!\"", "ok": false, "fb": "Plakativ und konfrontativ, das blockt eher ab."},
+        {"t": "\"Stimmt eigentlich, dann ist es ja okay.\"", "ok": false, "fb": "Übernimmt die falsche Prämisse, dabei stimmt sie nicht."}
       ]
     }
   ]
