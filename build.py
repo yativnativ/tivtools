@@ -389,6 +389,10 @@ CSS += """
 .qdone{font-family:'Gabarito';font-weight:700;color:var(--peach);font-size:17px}
 .qdone .btn{margin-left:10px}
 .vcardimg{display:block;max-width:380px;width:100%;height:auto;margin:18px auto 0;border-radius:18px;box-shadow:0 20px 50px -24px rgba(0,0,0,.6)}
+.hero-illu{width:120px;height:120px;border-radius:50%;overflow:hidden;background:#fff;margin:0 auto 20px;box-shadow:0 18px 44px -20px rgba(0,0,0,.55);border:1px solid rgba(248,222,205,.18)}
+.hero-illu img{width:100%;height:100%;object-fit:cover;display:block}
+.hero.left .hero-illu{margin-left:0;margin-right:auto}
+@media(max-width:560px){.hero-illu{width:96px;height:96px;margin-bottom:16px}}
 """
 
 # Zusatz-Styles für den Hashtag-Helfer (Creator)
@@ -1115,13 +1119,30 @@ OG_MAP = {
     "/creator/hashtags/": "hashtags",
     "/vegan-auf-reisen/": "vegan-auf-reisen",
     "/versteckte-zutaten/": "versteckte-zutaten",
+    "/vegane-materialien/": "vegane-materialien",
+    "/getraenke-vegan/": "getraenke-vegan",
 }
+
+
+def hero_illu(slug):
+    """Rundes Hero-Emblem mit der Tool-Illustration (weißer Hintergrund der Illu
+    verschmilzt mit dem weißen Kreis, kein Freistell-Halo)."""
+    return (
+        f'<div class="hero-illu"><img src="{url("/illu/" + slug + ".png")}" '
+        f'alt="" width="600" height="600" loading="eager" decoding="async"></div>'
+    )
 
 
 def page(title, desc, path, body, jsonld=None, og_type="website", og_image=None):
     canonical = BASE_URL + url(path)
     if og_image is None:
         og_image = OG_MAP.get(path)
+    # Hero-Emblem nur auf den Tool-Landingpages (genau die Pfade in OG_MAP):
+    # die Tool-Illustration als rundes Bild am Anfang des Heros einfügen.
+    if path in OG_MAP and '<section class="hero' in body:
+        gt = body.find(">", body.find('<section class="hero'))
+        if gt != -1:
+            body = body[:gt + 1] + "\n  " + hero_illu(OG_MAP[path]) + body[gt + 1:]
     if og_image:
         og_url = BASE_URL + url(f"/og/{og_image}.png")
         og_alt = esc(title)
@@ -1299,6 +1320,18 @@ def build_hub(meta, adds, ings, nutrients):
       <p>„Ich bin vegan“ und die wichtigsten Sätze in 12 Sprachen, zum Vorlesen oder Zeigen. Damit im Urlaub klar ist, was auf den Teller darf.</p>
       <span class="meta">Spickzettel öffnen →</span>
     </a>
+    <a class="toolcard" href="{url(GET_BASE)}">
+      <span class="badge">Neu</span>
+      <h3>Ist mein Getränk vegan?</h3>
+      <p>Wein, Bier, Sekt und Spirituosen im Check, samt der versteckten Klärhilfen wie Hausenblase und Gelatine. Plus, wie du veganen Wein erkennst.</p>
+      <span class="meta">Getränk prüfen →</span>
+    </a>
+    <a class="toolcard" href="{url(MAT_BASE)}">
+      <span class="badge">Neu</span>
+      <h3>Vegane Materialien</h3>
+      <p>Leder, Wolle, Seide oder doch Kork und Apfelleder? Welche Stoffe tierisch sind und welche vegane Alternative es gibt, von Mode bis Accessoires.</p>
+      <span class="meta">Material checken →</span>
+    </a>
     <div class="toolcard soon">
       <span class="badge">In Arbeit</span>
       <h3>Mehr Tools kommen</h3>
@@ -1456,6 +1489,18 @@ def build_hub(meta, adds, ings, nutrients):
                         "position": 16,
                         "name": "Vegan auf Reisen: Sprach-Spickzettel",
                         "url": BASE_URL + url(REISE_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 17,
+                        "name": "Ist mein Getränk vegan? Wein, Bier und Co.",
+                        "url": BASE_URL + url(GET_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 18,
+                        "name": "Vegane Materialien: Stoff-Check",
+                        "url": BASE_URL + url(MAT_BASE),
                     },
                 ],
             },
@@ -4116,6 +4161,323 @@ def build_versteckte_detail(i, meta, ings):
     return page(f"Ist {name} vegan? Herkunft erklärt | This Is Vegan", desc, path, body, jsonld, og_type="article", og_image="versteckte-zutaten")
 
 
+# ================================================================ Generischer Ampel-Checker
+# Gemeinsames Muster (tierisch/kann-tierisch/vegan + Such-Lookup + Filter + Detailseiten),
+# konfiguriert pro Tool. Inhalte (Texte, SEO) sind je Tool eigenstaendig.
+_AMPEL_JS_BASE = r"""
+const DATA = __DATA__;
+const L = __L__;
+const norm = s => s.toLowerCase().replace(/\s+/g,"").replace(/[^a-z0-9äöüß]/g,"");
+function find(query){
+  const q = norm(query);
+  if(!q) return null;
+  return DATA.find(d => norm(d.name) === q)
+    || DATA.find(d => d.aka.some(a => norm(a) === q))
+    || DATA.find(d => norm(d.name).startsWith(q))
+    || DATA.find(d => norm(d.name).includes(q) || d.aka.some(a => norm(a).includes(q)))
+    || null;
+}
+function render(item){
+  const r = document.getElementById("result");
+  if(!item){
+    r.innerHTML = '<div class="miss"><h3>Dazu habe ich noch keinen Eintrag</h3><p>__MB__</p></div>';
+    return;
+  }
+  const x = L[item.s];
+  r.innerHTML =
+    '<div class="card"><div class="verdict '+item.s+'"><div class="mark">'+x.i+'</div>'+
+    '<div class="vtext">'+x.t+'<small>'+x.s+'</small></div></div>'+
+    '<div class="card-body"><div class="enum">'+item.name+'</div>'+
+    '<span class="klasse">'+item.cat+'</span><p class="info">'+item.info+'</p>'+
+    (item.note ? '<div class="note"><span>!</span><span><b>Achte drauf:</b> '+item.note+'</span></div>' : '')+
+    '<a class="detail-link" href="'+item.u+'">Alle Details zu '+item.name+' →</a></div></div>';
+}
+function search(){
+  const v = document.getElementById("q").value;
+  if(!v.trim()){ document.getElementById("result").innerHTML=""; return; }
+  render(find(v));
+}
+document.getElementById("go").addEventListener("click", search);
+document.getElementById("q").addEventListener("keydown", e => { if(e.key==="Enter") search(); });
+document.getElementById("q").addEventListener("input", e => {
+  if(e.target.value.trim().length >= 2) search();
+  else document.getElementById("result").innerHTML="";
+});
+document.querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => {
+  document.getElementById("q").value = c.dataset.c;
+  search();
+  document.getElementById("result").scrollIntoView({behavior:"smooth", block:"center"});
+}));
+document.querySelectorAll(".filt").forEach(f => f.addEventListener("click", () => {
+  document.querySelectorAll(".filt").forEach(x=>x.classList.remove("active"));
+  f.classList.add("active");
+  const flt = f.dataset.f;
+  let shown = 0;
+  document.querySelectorAll("#grid .item").forEach(el => {
+    const show = flt==="all" || el.classList.contains(flt);
+    el.classList.toggle("hidden", !show);
+    if(show) shown++;
+  });
+  document.querySelector("#grid .empty").style.display = shown ? "none" : "block";
+}));
+""".strip()
+
+
+def _ampel_js(labels, miss_body, compact):
+    short = {k: {"t": v["t"], "s": v["s"], "i": v["icon"]} for k, v in labels.items()}
+    return (_AMPEL_JS_BASE
+            .replace("__L__", json.dumps(short, ensure_ascii=False))
+            .replace("__MB__", esc(miss_body))
+            .replace("__DATA__", json.dumps(compact, ensure_ascii=False, separators=(",", ":"))))
+
+
+def build_ampel_hub(cfg, items):
+    order = {"no": 0, "maybe": 1, "yes": 2}
+    base = cfg["base"]
+    sorted_items = sorted(items, key=lambda x: (order[x["status"]], x["name"].lower()))
+    items_html = "\n".join(
+        f'    <a class="item {i["status"]}" href="{url(base + i["slug"] + "/")}">'
+        f'<span class="bar"></span><div><div class="en">{esc(i["name"])}</div>'
+        f'<div class="nm">{esc(i["category"])}</div></div></a>'
+        for i in sorted_items
+    )
+    compact = [
+        {"name": i["name"], "aka": i.get("aka", []), "cat": i["category"], "s": i["status"],
+         "info": i["info"], **({"note": i["note"]} if i.get("note") else {}),
+         "u": url(base + i["slug"] + "/")}
+        for i in items
+    ]
+    js = _ampel_js(cfg["labels"], cfg["miss_body"], compact)
+    chips = "\n".join(f'    <button class="chip" data-c="{esc(c)}">{esc(c)}</button>' for c in cfg["popular"])
+    counts = {s: sum(1 for i in items if i["status"] == s) for s in ("yes", "no", "maybe")}
+    filt_btns = "\n".join(
+        f'      <button class="filt s-{k}" data-f="{k}"><span class="swatch"></span>{esc(lbl)}</button>'
+        for k, lbl in cfg["filter_order"]
+    )
+    countline = cfg["countline"].format(total=len(items), yes=counts["yes"], no=counts["no"], maybe=counts["maybe"])
+
+    body = site_header(cfg["header"]) + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>{esc(cfg["crumb"])}</nav>
+<section class="hero">
+  <div class="eyebrow">{esc(cfg["eyebrow"])}</div>
+  <h1>{esc(cfg["h1a"])} <span class="q">{esc(cfg["h1b"])}</span></h1>
+  <p class="sub">{esc(cfg["sub"])}</p>
+
+  <div class="search-shell">
+    <div class="search-box">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+      <input id="q" type="text" autocomplete="off" placeholder="{esc(cfg["placeholder"])}" aria-label="Suchen">
+      <button class="go" id="go">Prüfen</button>
+    </div>
+  </div>
+
+  <div class="chips">
+    <span>Häufig gesucht:</span>
+{chips}
+  </div>
+
+  <div id="result" aria-live="polite"></div>
+</section>
+
+<section class="listsec">
+  <div class="listhead">
+    <div>
+      <h2>{esc(cfg["listh2"])}</h2>
+      <p>{esc(countline)}</p>
+    </div>
+    <div class="filters" id="filters">
+      <button class="filt active" data-f="all">Alle</button>
+{filt_btns}
+    </div>
+  </div>
+  <div class="grid" id="grid">
+{items_html}
+    <div class="empty">Keine Einträge in diesem Filter.</div>
+  </div>
+</section>
+""" + site_footer(cfg["meta"]) + f"\n<script>{js}</script>"
+
+    jsonld = [
+        {
+            "@context": "https://schema.org", "@type": "WebApplication",
+            "name": cfg["schema_name"], "url": BASE_URL + url(base),
+            "applicationCategory": "UtilityApplication", "operatingSystem": "Web",
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+            "description": cfg["schema_desc"].format(n=len(items)),
+            "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
+        },
+        {
+            "@context": "https://schema.org", "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": cfg["crumb"], "item": BASE_URL + url(base)},
+            ],
+        },
+    ]
+    return page(cfg["seo_title"], cfg["seo_desc"].format(n=len(items)), base, body, jsonld, og_image=cfg["og"])
+
+
+def build_ampel_detail(cfg, item, items):
+    name, s, status, base = item["name"], item["slug"], item["status"], cfg["base"]
+    path = base + s + "/"
+    L = cfg["labels"][status]
+    note_html = ""
+    if item.get("note"):
+        note_html = f'<div class="note"><span>!</span><span><b>Achte drauf:</b> {esc(item["note"])}</span></div>'
+    related = [x for x in items if x["category"] == item["category"] and x["slug"] != s][:6]
+    if len(related) < 4:
+        related += [x for x in items if x["slug"] != s and x not in related][: 4 - len(related)]
+    rel_html = "\n".join(
+        f'    <a class="item {r["status"]}" href="{url(base + r["slug"] + "/")}">'
+        f'<span class="bar"></span><div><div class="en">{esc(r["name"])}</div>'
+        f'<div class="nm">{esc(r["category"])}</div></div></a>'
+        for r in related
+    )
+    verdict_long = cfg["verdict_long"][status].format(name=name)
+    body = site_header(cfg["header"]) + f"""
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span><a href="{url(base)}">{esc(cfg["crumb"])}</a><span>›</span>{esc(name)}</nav>
+<section class="hero left">
+  <div class="eyebrow">{esc(item["category"])} · {esc(cfg["detail_eyebrow"])}</div>
+  <h1 class="detail">Ist {esc(name)} <span class="q">vegan?</span></h1>
+</section>
+
+<div id="result" style="margin:24px 0 0;max-width:620px">
+  <div class="card" style="animation:none">
+    <div class="verdict {status}">
+      <div class="mark">{L["icon"]}</div>
+      <div class="vtext">{L["t"]}<small>{L["s"]}</small></div>
+    </div>
+    <div class="card-body">
+      <div class="enum">{esc(name)}</div>
+      <span class="klasse">{esc(item["category"])}</span>
+      <p class="info">{esc(item["info"])}</p>
+      {note_html}
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <h2>Was heißt das für dich?</h2>
+  <p class="prose">{esc(verdict_long)}</p>
+</section>
+
+<section class="section">
+  <h2>{esc(cfg["related_h2"])}</h2>
+  <div class="related">
+{rel_html}
+  </div>
+</section>
+
+<div class="cta">
+  <div>
+    <h2>{esc(cfg["cta_h2"])}</h2>
+    <p>{esc(cfg["cta_p"].format(n=len(items)))}</p>
+  </div>
+  <a class="btn" href="{url(base)}">{esc(cfg["cta_btn"])}</a>
+</div>
+""" + site_footer(cfg["meta"])
+
+    answer = f"{L['t']}: {item['info']}"
+    jsonld = [
+        {
+            "@context": "https://schema.org", "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": f"Ist {name} vegan?",
+                 "acceptedAnswer": {"@type": "Answer", "text": answer}},
+            ],
+        },
+        {
+            "@context": "https://schema.org", "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+                {"@type": "ListItem", "position": 2, "name": cfg["crumb"], "item": BASE_URL + url(base)},
+                {"@type": "ListItem", "position": 3, "name": name, "item": BASE_URL + url(path)},
+            ],
+        },
+    ]
+    lead = cfg["detail_lead"][status].format(name=name)
+    desc = f"{lead} {item['info']}"
+    if len(desc) > 155:
+        desc = desc[:152].rstrip() + "..."
+    return page(cfg["detail_title"].format(name=name), desc, path, body, jsonld, og_type="article", og_image=cfg["og"])
+
+
+MAT_BASE = "/vegane-materialien/"
+GET_BASE = "/getraenke-vegan/"
+
+
+def materialien_cfg(meta):
+    return {
+        "meta": meta, "base": MAT_BASE, "og": "vegane-materialien",
+        "header": "Vegane Materialien", "crumb": "Vegane Materialien",
+        "eyebrow": "Mode und Textilien ohne Tier",
+        "h1a": "Vegane", "h1b": "Materialien.",
+        "sub": "Material oder Stoff eingeben und sofort sehen, ob es tierisch ist, von Leder über Wolle und Seide bis zu Kork und Apfelleder.",
+        "placeholder": "z. B. Leder, Wolle oder Kork",
+        "popular": ["Leder", "Wolle", "Seide", "Daunen", "Kork", "Kunstleder"],
+        "labels": {
+            "yes": {"t": "Vegan", "s": "pflanzlich oder synthetisch", "icon": "✓"},
+            "maybe": {"t": "Kommt drauf an", "s": "Mischung möglich", "icon": "?"},
+            "no": {"t": "Tierisch", "s": "vom Tier gewonnen", "icon": "✕"},
+        },
+        "filter_order": [("no", "Tierisch"), ("maybe", "Kommt drauf an"), ("yes", "Vegan")],
+        "listh2": "Alle Materialien",
+        "countline": "{total} Materialien: {no} tierisch, {maybe} mit Vorsicht, {yes} vegan.",
+        "detail_eyebrow": "Material-Check", "related_h2": "Ähnliche Materialien",
+        "verdict_long": {
+            "no": "{name} ist tierischen Ursprungs und damit nicht vegan. Die gute Nachricht: Für fast jedes Tiermaterial gibt es heute eine überzeugende pflanzliche oder recycelte Alternative.",
+            "maybe": "Ob {name} vegan ist, hängt von der konkreten Zusammensetzung ab. Ein Blick auf das Pflegeetikett oder ein Vegan-Siegel schafft Klarheit.",
+            "yes": "{name} ist tierfrei. Achte bei einem Kleidungsstück trotzdem auf Details wie Knöpfe, Futter oder Kleber, die vereinzelt tierisch sein können.",
+        },
+        "cta_h2": "Noch ein Material prüfen?",
+        "cta_p": "Der Check kennt {n} Materialien und zeigt dir sofort, ob etwas tierisch ist.",
+        "cta_btn": "Zum Material-Check →",
+        "seo_title": "Vegane Materialien: ist der Stoff tierfrei? | This Is Vegan",
+        "seo_desc": "Ist Leder, Wolle oder Seide vegan und was sind die besten Alternativen? {n} Materialien von Kork bis Apfelleder im Check. Kostenlos.",
+        "schema_name": "Vegane Materialien: Stoff-Check",
+        "schema_desc": "Check für {n} Materialien und Stoffe: sofort sehen, ob ein Material tierisch ist, und die beste vegane Alternative finden.",
+        "detail_title": "Ist {name} vegan? Material erklärt | This Is Vegan",
+        "detail_lead": {"no": "{name} ist tierisch und nicht vegan.", "maybe": "{name} ist nicht immer vegan.", "yes": "{name} ist vegan."},
+        "miss_body": "Versuch ein anderes Material oder einen Teil des Namens. Die Liste wächst laufend.",
+    }
+
+
+def getraenke_cfg(meta):
+    return {
+        "meta": meta, "base": GET_BASE, "og": "getraenke-vegan",
+        "header": "Getränke-Check", "crumb": "Ist mein Getränk vegan?",
+        "eyebrow": "Wein, Bier und Co. im Check",
+        "h1a": "Ist mein Getränk", "h1b": "vegan?",
+        "sub": "Getränk eingeben und sofort sehen, ob es vegan ist, von Wein über Bier bis Likör. Mit den versteckten tierischen Klärhilfen.",
+        "placeholder": "z. B. Rotwein, Bier oder Likör",
+        "popular": ["Rotwein", "Bier", "Sekt", "Likör", "Gin", "Fruchtsaft"],
+        "labels": {
+            "yes": {"t": "Meist vegan", "s": "in der Regel ohne Tierisches", "icon": "✓"},
+            "maybe": {"t": "Kommt drauf an", "s": "hängt vom Hersteller ab", "icon": "?"},
+            "no": {"t": "Nicht vegan", "s": "enthält Tierisches", "icon": "✕"},
+        },
+        "filter_order": [("yes", "Meist vegan"), ("maybe", "Kommt drauf an"), ("no", "Nicht vegan")],
+        "listh2": "Alle Getränke",
+        "countline": "{total} Getränke: {yes} meist vegan, {maybe} herstellerabhängig, {no} nicht vegan.",
+        "detail_eyebrow": "Getränke-Check", "related_h2": "Ähnliche Getränke",
+        "verdict_long": {
+            "yes": "{name} ist in der Regel vegan. Ein kurzer Blick auf ein Vegan-Siegel oder die Marke schadet bei verarbeiteten Produkten trotzdem nie.",
+            "maybe": "Ob {name} vegan ist, hängt vom Klärverfahren des Herstellers ab. Tierische Klärhilfen bleiben nicht im Getränk und müssen nicht deklariert werden. Ein Vegan-Siegel oder ein Verzeichnis wie Barnivore hilft weiter.",
+            "no": "{name} enthält tierische Zutaten und ist nicht vegan. Für viele Klassiker gibt es inzwischen rein pflanzliche Alternativen.",
+        },
+        "cta_h2": "Noch ein Getränk prüfen?",
+        "cta_p": "Der Check kennt {n} Getränke und zeigt dir sofort, ob etwas vegan ist.",
+        "cta_btn": "Zum Getränke-Check →",
+        "seo_title": "Ist mein Getränk vegan? Wein, Bier und Co. | This Is Vegan",
+        "seo_desc": "Ist Wein, Bier oder Sekt vegan? {n} Getränke im Check, mit den versteckten Klärhilfen wie Hausenblase und Gelatine. Kostenlos.",
+        "schema_name": "Getränke-Check: ist das vegan?",
+        "schema_desc": "Check für {n} Getränke: sofort sehen, ob Wein, Bier oder Spirituose vegan ist, inklusive der tierischen Klärhilfen.",
+        "detail_title": "Ist {name} vegan? | This Is Vegan",
+        "detail_lead": {"yes": "{name} ist meist vegan.", "maybe": "{name} ist nicht immer vegan.", "no": "{name} ist nicht vegan."},
+        "miss_body": "Versuch ein anderes Getränk oder einen Teil des Namens. Die Liste wächst laufend.",
+    }
+
+
 def build_404(meta):
     body = site_header("Tools") + f"""
 <section class="hero">
@@ -4174,6 +4536,12 @@ def main():
 
     vzut_data = json.loads((ROOT / "data" / "versteckte-zutaten-data.json").read_text(encoding="utf-8"))
     vzut_meta, vzut_ings = vzut_data["meta"], vzut_data["ingredients"]
+
+    mat_data = json.loads((ROOT / "data" / "materialien-data.json").read_text(encoding="utf-8"))
+    mat_cfg, mat_items = materialien_cfg(mat_data["meta"]), mat_data["materials"]
+
+    get_data = json.loads((ROOT / "data" / "getraenke-data.json").read_text(encoding="utf-8"))
+    get_cfg, get_items = getraenke_cfg(get_data["meta"]), get_data["drinks"]
 
     if DIST.exists():
         shutil.rmtree(DIST)
@@ -4242,6 +4610,16 @@ def main():
     for ing in vzut_ings:
         pages[VZUT_BASE + ing["slug"] + "/"] = build_versteckte_detail(ing, vzut_meta, vzut_ings)
 
+    # Vegane Materialien (Mode/Textil)
+    pages[MAT_BASE] = build_ampel_hub(mat_cfg, mat_items)
+    for m in mat_items:
+        pages[MAT_BASE + m["slug"] + "/"] = build_ampel_detail(mat_cfg, m, mat_items)
+
+    # Ist mein Getränk vegan?
+    pages[GET_BASE] = build_ampel_hub(get_cfg, get_items)
+    for dr in get_items:
+        pages[GET_BASE + dr["slug"] + "/"] = build_ampel_detail(get_cfg, dr, get_items)
+
     # Creator-Bereich
     pages[CREATOR_BASE] = build_creator_hub(CREATOR_META)
     pages[FONT_BASE] = build_font_tool(CREATOR_META)
@@ -4281,6 +4659,14 @@ def main():
     if reise_src.exists():
         for f in sorted(reise_src.glob("*.png")):
             shutil.copy2(f, reise_dir / f.name)
+
+    # Hero-Emblem-Illustrationen je Tool (rundes Bild im Hero), committet in site-illu/.
+    illu_dir = DIST / "illu"
+    illu_dir.mkdir(parents=True, exist_ok=True)
+    illu_src = ROOT / "site-illu"
+    if illu_src.exists():
+        for f in sorted(illu_src.glob("*.png")):
+            shutil.copy2(f, illu_dir / f.name)
 
     (DIST / "404.html").write_text(build_404(meta), encoding="utf-8")
 

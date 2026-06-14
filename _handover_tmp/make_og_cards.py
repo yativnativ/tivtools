@@ -50,6 +50,8 @@ CARDS = {
     "hashtags": ("CREATOR · HASHTAGS", "Hashtag-Helfer", "Kuratierte vegane Hashtag-Sets nach Thema, auf Deutsch und Englisch."),
     "vegan-auf-reisen": ("TOOL · REISEN", "Vegan auf Reisen", "„Ich bin vegan“ und die wichtigsten Sätze in 12 Sprachen, zum Zeigen."),
     "versteckte-zutaten": ("TOOL · CHECK", "Versteckte tierische Zutaten", "Gelatine, Karmin, Molke: was heimlich tierisch ist und wo es sich versteckt."),
+    "vegane-materialien": ("TOOL · MODE", "Vegane Materialien", "Leder, Wolle, Seide oder doch Kork und Apfelleder? Was tierfrei ist und was nicht."),
+    "getraenke-vegan": ("TOOL · CHECK", "Ist mein Getränk vegan?", "Wein, Bier, Sekt und Likör im Check, samt versteckter tierischer Klärhilfen."),
 }
 
 
