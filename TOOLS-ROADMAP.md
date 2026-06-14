@@ -37,6 +37,10 @@ Eigener Bereich für vegane, Tierschutz- und Food-Accounts auf Social Media.
 C1. **Schriftarten-Generator** (`/creator/schriftarten/`) — 18 Unicode-Stile (fett,
     kursiv, Schreibschrift, gotisch, durchgestrichen, kopfüber u.a.), vegane Deko
     und Trenner, Copy-Buttons. Targets "instagram schriftarten", "schrift kopieren".
+C2. **Bild freistellen** (`/creator/bild-freistellen/`) — Hintergrund-Entferner, der
+    ein KI-Modell komplett im Browser lädt (@imgly/background-removal via CDN). Kein
+    Upload, kein Server-Load, dauerhaft kostenlos. Transparentes PNG + Farb-Swatches.
+    Targets "bild freistellen kostenlos", "hintergrund entfernen".
 
 Creator-Backlog: Hashtag-Helfer (vegane/Food-Hashtag-Sets), Caption-Ideen-Generator,
 Emoji- und Symbol-Bibliothek, Best-Time-to-Post-Übersicht, Bio-Link-Vorlagen.
