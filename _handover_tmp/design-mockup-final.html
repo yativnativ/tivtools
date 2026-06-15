@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,600;1,9..144,700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&display=swap" rel="stylesheet">
+<style>
+:root{--teal:#0a4a4a;--tealdeep:#0a3a30;--green:#29a579;--greend:#106050;--terra:#e59875;--terral:#f7b79a;--peach:#f8decd;--cream:#f6ece1;--paper:#fbf6ee;--ink:#0a3030}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:'Bricolage Grotesque',sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+.serif{font-family:'Fraunces',serif}
+a{color:inherit}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0 12px}
+.nav .logo{height:34px;display:block}
+.navpill{font-family:'Bricolage Grotesque';font-weight:700;font-size:12px;letter-spacing:.03em;color:var(--greend);background:#fff;border:1.5px solid var(--peach);padding:8px 15px;border-radius:999px}
+.crumbs{font-size:13px;color:#7a8a82;padding:6px 0 18px}.crumbs b{color:var(--ink);font-weight:600}
+/* stickers + speech bubbles */
+.sticker{display:inline-block;font-family:'Bricolage Grotesque';font-weight:700;font-size:13px;letter-spacing:.02em;padding:8px 15px;border-radius:999px;box-shadow:0 6px 16px -8px rgba(0,0,0,.4)}
+.st-peach{background:var(--peach);color:#8a4a2a}.st-green{background:var(--green);color:#053a2c}
+.bubble{position:relative;display:inline-block;font-family:'Bricolage Grotesque';font-weight:700;font-size:13px;padding:9px 15px;border-radius:16px;box-shadow:0 8px 18px -8px rgba(0,0,0,.42)}
+.bubble::after{content:"";position:absolute;left:20px;bottom:-9px;width:0;height:0;border:9px solid transparent;border-top-color:inherit;border-bottom:0}
+.bb-peach{background:var(--peach);color:#8a4a2a;border-top-color:var(--peach)}
+.bb-green{background:var(--green);color:#053a2c;border-top-color:var(--green)}
+.bb-terra{background:var(--terra);color:#5a2a14;border-top-color:var(--terra)}
+.seal{width:90px;height:90px;display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Fraunces',serif;font-weight:700;font-size:15px;line-height:1.05;border-radius:49% 51% 52% 48%/52% 47% 53% 48%;box-shadow:0 8px 20px -8px rgba(0,0,0,.45)}
+/* hero */
+.hero{position:relative;background:var(--teal);border-radius:34px;padding:44px 50px;overflow:hidden;margin-top:6px}
+.hero::before{content:"";position:absolute;right:-90px;top:-120px;width:340px;height:340px;border-radius:50%;background:rgba(41,165,121,.16)}
+.hgrid{position:relative;display:grid;grid-template-columns:1.22fr .85fr;gap:30px;align-items:center}
+.h1{font-family:'Fraunces',serif;font-weight:700;font-size:64px;line-height:1;letter-spacing:-1px;color:var(--cream);margin:16px 0 0}
+.h1 em{font-style:italic;color:var(--terral)}
+.hsub{color:var(--peach);font-size:18px;max-width:430px;margin-top:18px;opacity:.92}
+.search{display:flex;gap:8px;margin-top:24px;max-width:440px;background:var(--cream);border-radius:16px;padding:7px 7px 7px 16px;align-items:center}
+.search input{flex:1;border:0;background:transparent;font-family:'Bricolage Grotesque';font-size:15px;color:var(--ink);outline:none}
+.search .go{font-family:'Bricolage Grotesque';font-weight:700;font-size:14px;background:var(--green);color:#fff;border:0;padding:11px 20px;border-radius:11px;cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.chip{font-weight:500;font-size:12.5px;color:var(--peach);border:1px solid rgba(248,222,205,.32);padding:6px 12px;border-radius:999px}
+.illuwrap{position:relative;justify-self:center}
+.illu{width:240px;height:240px;background:#fff;border-radius:30px;box-shadow:0 26px 60px -26px rgba(0,0,0,.6);transform:rotate(-4deg);display:flex;align-items:center;justify-content:center}
+.illu img{width:90%;height:90%;object-fit:contain}
+.illuwrap .seal{position:absolute;background:var(--green);color:#053a2c;right:-26px;bottom:-18px;transform:rotate(11deg)}
+.heroBub{position:absolute;left:50px;top:30px;z-index:2}
+/* section */
+.sec{padding:52px 0 8px}
+.sec-h{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.sec h2{font-family:'Fraunces',serif;font-weight:600;font-size:36px;color:var(--ink);letter-spacing:-.4px}
+.sec .lead{color:#5f6f67;font-size:14.5px;margin-top:2px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 22px}
+.filt{font-family:'Bricolage Grotesque';font-weight:600;font-size:13px;padding:9px 16px;border-radius:999px;border:1.5px solid #e3d6c4;background:#fff;color:var(--ink);display:flex;align-items:center;gap:7px}
+.filt.on{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.sw{width:9px;height:9px;border-radius:50%}.sw.y{background:#2a9d6f}.sw.m{background:#d68a3a}.sw.n{background:#c0392b}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:13px}
+.card{position:relative;display:flex;gap:13px;align-items:center;background:#fff;border:1px solid #efe3d2;border-radius:17px;padding:16px 18px;box-shadow:0 10px 24px -20px rgba(0,0,0,.4)}
+.bar{width:5px;align-self:stretch;border-radius:4px}.bar.y{background:#2a9d6f}.bar.m{background:#d68a3a}.bar.n{background:#c0392b}
+.card .en{font-family:'Bricolage Grotesque';font-weight:700;font-size:16px;color:var(--ink)}
+.card .nm{font-size:12.5px;color:#8a8073;margin-top:1px}
+.verdict{margin-left:auto;font-family:'Bricolage Grotesque';font-weight:700;font-size:10.5px;letter-spacing:.02em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
+.vy{background:#e7f4ec;color:#1d7a52}.vm{background:#faecd8;color:#9a6418}.vn{background:#f8e4e1;color:#a23527}
+/* tip */
+.tip{position:relative;background:var(--tealdeep);border-radius:30px;padding:42px 48px;margin-top:50px;overflow:hidden;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center}
+.tip h3{font-family:'Fraunces',serif;font-weight:600;font-size:30px;color:var(--cream);max-width:520px}
+.tip p{color:var(--peach);font-size:15px;max-width:540px;margin-top:12px;opacity:.9}
+.tip .bubble{position:absolute;right:54px;top:30px}
+.btn{display:inline-block;font-family:'Bricolage Grotesque';font-weight:700;font-size:15px;background:var(--green);color:#fff;padding:14px 24px;border-radius:13px;margin-top:20px;text-decoration:none}
+/* more tools */
+.mt{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.tcard{display:flex;gap:13px;align-items:center;background:#fff;border:1px solid #efe3d2;border-radius:18px;padding:16px;text-decoration:none;box-shadow:0 10px 24px -20px rgba(0,0,0,.4)}
+.tcard .ic{flex:0 0 52px;width:52px;height:52px;border-radius:14px;background:var(--cream);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.tcard .ic img{width:90%;height:90%;object-fit:contain}
+.tcard b{font-family:'Bricolage Grotesque';font-weight:700;font-size:15px;color:var(--ink);display:block}
+.tcard small{font-size:12.5px;color:#8a8073;display:block;margin-top:2px}
+/* articles */
+.arts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+.art{display:flex;gap:16px;background:#fff;border:1px solid #efe3d2;border-radius:18px;overflow:hidden;text-decoration:none;box-shadow:0 10px 24px -20px rgba(0,0,0,.4)}
+.art .thumb{flex:0 0 120px;background:var(--peach);display:flex;align-items:center;justify-content:center}
+.art .thumb img{width:84%;height:84%;object-fit:contain}
+.art .body{padding:15px 16px 15px 0}
+.art .kk{font-family:'Bricolage Grotesque';font-weight:700;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--green)}
+.art h4{font-family:'Fraunces',serif;font-weight:600;font-size:18px;color:var(--ink);line-height:1.15;margin:5px 0 4px}
+.art p{font-size:13px;color:#7a7064}
+/* support */
+.support{position:relative;background:var(--peach);border-radius:30px;padding:40px 46px;margin-top:54px;overflow:hidden}
+.support .bubble{position:absolute;right:46px;top:-2px}
+.support h3{font-family:'Fraunces',serif;font-weight:600;font-size:31px;color:#7a3f22;max-width:580px}
+.support p{color:#8a5638;font-size:15px;max-width:600px;margin-top:12px}
+.slabel{font-family:'Bricolage Grotesque';font-weight:700;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:#a35c33;margin:24px 0 10px}
+.sicons{display:flex;gap:10px}
+.sicon{width:46px;height:46px;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--ink);text-decoration:none;border:1px solid #f0d6c2;transition:all .14s}
+.sicon:hover{background:var(--green);color:#fff;border-color:var(--green)}
+.sicon svg{width:22px;height:22px}
+.amts{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.amt{font-family:'Bricolage Grotesque';font-weight:700;font-size:15px;background:#fff;border:1.5px solid #e6c3a8;color:#8a4a2a;padding:11px 18px;border-radius:12px;text-decoration:none}
+.amt.pri{background:var(--green);border-color:var(--green);color:#fff}
+.amt.steady{background:transparent;border-color:#c98f63;color:#8a4a2a}
+/* footer */
+.foot{margin-top:40px;border-top:1px solid #e7dccb;padding:34px 0 44px}
+.foot .frow{display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;align-items:center}
+.foot .flogo{height:30px}
+.foot .flinks{display:flex;flex-wrap:wrap;gap:18px;font-weight:500;font-size:14px;color:#5f6f67}
+.foot .flinks a{text-decoration:none}
+.foot .fnote{font-size:12.5px;color:#9a9183;margin-top:18px}
+@media(max-width:760px){.hgrid{grid-template-columns:1fr}.h1{font-size:44px}.illuwrap{justify-self:start}.tip{grid-template-columns:1fr}.mt{grid-template-columns:1fr}.arts{grid-template-columns:1fr}.foot .frow{flex-direction:column;align-items:flex-start;gap:14px}}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="nav">
+    <a href="https://this-is-vegan.com" aria-label="This Is Vegan Startseite"><img class="logo" src="/_logo-dark.png" alt="This Is Vegan"></a>
+    <div class="navpill">Gratis · ohne Anmeldung</div>
+  </div>
+  <div class="crumbs">Tools › <b>Ist mein Getränk vegan?</b></div>
+
+  <section class="hero">
+    <span class="bubble bb-peach heroBub" style="transform:rotate(-4deg)">Wein, Bier &amp; Co.</span>
+    <div class="hgrid">
+      <div>
+        <h1 class="h1">Ist dein Getränk <em>vegan?</em></h1>
+        <p class="hsub">Wein, Bier, Sekt oder Likör eingeben und sofort sehen, was drin ist, samt der versteckten tierischen Klärhilfen.</p>
+        <div class="search"><input placeholder="z. B. Rotwein, Bier oder Likör"><button class="go">Prüfen</button></div>
+        <div class="chips"><span class="chip">Rotwein</span><span class="chip">Bier</span><span class="chip">Sekt</span><span class="chip">Likör</span><span class="chip">Gin</span><span class="chip">Fruchtsaft</span></div>
+      </div>
+      <div class="illuwrap">
+        <div class="illu"><img src="/illu/getraenke-vegan.png" alt=""></div>
+        <div class="seal">Neu</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h">
+      <div>
+        <h2>Alle Getränke</h2>
+        <p class="lead">22 Getränke: 7 meist vegan, 12 herstellerabhängig, 3 nicht vegan.</p>
+      </div>
+      <div class="filters">
+        <button class="filt on">Alle</button>
+        <button class="filt"><span class="sw y"></span>Meist vegan</button>
+        <button class="filt"><span class="sw m"></span>Kommt drauf an</button>
+        <button class="filt"><span class="sw n"></span>Nicht vegan</button>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="card"><span class="bar m"></span><div><div class="en">Rotwein</div><div class="nm">Wein</div></div><span class="verdict vm">Kommt drauf an</span></div>
+      <div class="card"><span class="bar y"></span><div><div class="en">Pils &amp; Lager</div><div class="nm">Bier</div></div><span class="verdict vy">Meist vegan</span></div>
+      <div class="card"><span class="bar n"></span><div><div class="en">Cremelikör</div><div class="nm">Likör</div></div><span class="verdict vn">Nicht vegan</span></div>
+      <div class="card"><span class="bar m"></span><div><div class="en">Sekt &amp; Champagner</div><div class="nm">Wein</div></div><span class="verdict vm">Kommt drauf an</span></div>
+      <div class="card"><span class="bar y"></span><div><div class="en">Gin</div><div class="nm">Spirituosen</div></div><span class="verdict vy">Meist vegan</span></div>
+      <div class="card"><span class="bar n"></span><div><div class="en">Eierlikör</div><div class="nm">Likör</div></div><span class="verdict vn">Nicht vegan</span></div>
+    </div>
+  </section>
+
+  <section class="tip">
+    <span class="bubble bb-terra">Tipp</span>
+    <div>
+      <h3 class="serif">Woran erkennst du veganen Wein?</h3>
+      <p>Steht „vegan" auf dem Rückenetikett oder ein Siegel, bist du sicher. Sonst hilft ein Blick in Verzeichnisse wie Barnivore, denn Klärhilfen wie Hausenblase müssen nicht deklariert werden.</p>
+      <a class="btn" href="#">Zum Getränke-Check →</a>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Diese Tools passen dazu</h2>
+    <div class="mt">
+      <a class="tcard" href="#"><span class="ic"><img src="/illu/ist-das-vegan.png" alt=""></span><span><b>Ist das vegan?</b><small>Lebensmittel-Check</small></span></a>
+      <a class="tcard" href="#"><span class="ic"><img src="/illu/versteckte-zutaten.png" alt=""></span><span><b>Versteckte Zutaten</b><small>Tierisches enttarnen</small></span></a>
+      <a class="tcard" href="#"><span class="ic"><img src="/illu/vegan-auf-reisen.png" alt=""></span><span><b>Vegan auf Reisen</b><small>Sätze in 12 Sprachen</small></span></a>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Passende Artikel aus dem Magazin</h2>
+    <div class="arts">
+      <a class="art" href="https://this-is-vegan.com"><span class="thumb"><img src="/illu/getraenke-vegan.png" alt=""></span><span class="body"><span class="kk">Getränke</span><h4>Ist Wein wirklich vegan? Was im Glas steckt</h4><p>Hausenblase, Gelatine, Eiklar: wie Wein geklärt wird und wie du vegane Tropfen findest.</p></span></a>
+      <a class="art" href="https://this-is-vegan.com"><span class="thumb"><img src="/illu/saisonkalender.png" alt=""></span><span class="body"><span class="kk">Ratgeber</span><h4>Veganes Bier: die besten Marken im Überblick</h4><p>Welche Biere ohne Klärung aus Fischblase auskommen und überall zu haben sind.</p></span></a>
+    </div>
+  </section>
+
+  <section class="support">
+    <span class="bubble bb-green" style="transform:rotate(5deg)">Danke!</span>
+    <h3 class="serif">Unsere Tools sind und bleiben gratis.</h3>
+    <p>Wir bauen sie aus Überzeugung, ohne Anmeldung und ohne Bezahlschranke. Wenn sie dir helfen, freuen wir uns, wenn du This Is Vegan folgst oder die Redaktion unterstützt. Genau das hält das Projekt am Leben.</p>
+    <div class="slabel">Folge uns</div>
+    <div class="sicons">
+      <a class="sicon" href="https://www.instagram.com/thisisvegan.magazin/" aria-label="Instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></a>
+      <a class="sicon" href="https://www.youtube.com/@thisisvegan" aria-label="YouTube" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10.5 9.2l4.2 2.8-4.2 2.8z" fill="currentColor" stroke="none"/></svg></a>
+      <a class="sicon" href="https://chat.whatsapp.com/LWHZUiMm2e53IdlvQ91fia" aria-label="WhatsApp-Newsletter" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></a>
+      <a class="sicon" href="https://this-is-vegan.com/podcast/" aria-label="PLANTBASED Podcast" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4M8.5 21h7"/></svg></a>
+    </div>
+    <div class="slabel">Oder unterstütz die Redaktion</div>
+    <div class="amts">
+      <a class="amt" href="https://this-is-vegan.com/spenden/" target="_blank" rel="noopener">5 €</a>
+      <a class="amt" href="https://this-is-vegan.com/spenden/" target="_blank" rel="noopener">15 €</a>
+      <a class="amt" href="https://this-is-vegan.com/spenden/" target="_blank" rel="noopener">30 €</a>
+      <a class="amt pri" href="https://this-is-vegan.com/spenden/" target="_blank" rel="noopener">Jetzt spenden →</a>
+      <a class="amt steady" href="https://steadyhq.com/de/thisisvegan" target="_blank" rel="noopener">Monatlich über Steady</a>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="frow">
+      <a href="https://this-is-vegan.com"><img class="flogo" src="/_logo-dark.png" alt="This Is Vegan"></a>
+      <div class="flinks">
+        <a href="/">Alle Tools</a>
+        <a href="https://this-is-vegan.com">Zum Magazin</a>
+        <a href="https://this-is-vegan.com/impressum/">Impressum</a>
+        <a href="https://this-is-vegan.com/datenschutzerklaerung/">Datenschutz</a>
+      </div>
+    </div>
+    <p class="fnote">Alle Tools sind kostenlos, laufen direkt im Browser und speichern nichts. Stand: Juni 2026.</p>
+  </footer>
+</div>
+</body></html>
