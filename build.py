@@ -89,6 +89,23 @@ def url(path):
     return PREFIX + path
 
 
+# ---- Amazon-Affiliate (Tag tiv0f-21), direkte Suchlinks + Pflicht-Offenlegung
+AMZN_TAG = "tiv0f-21"
+
+
+def amazon_url(term):
+    return "https://www.amazon.de/s?k=" + urllib.parse.quote(term) + "&tag=" + AMZN_TAG
+
+
+def amazon_btn(term, label="Bei Amazon ansehen"):
+    return (f'<a class="amzn" href="{amazon_url(term)}" target="_blank" '
+            f'rel="sponsored nofollow noopener">{esc(label)}</a>')
+
+
+AFFILIATE_DISCLOSURE = ('<p class="afdisc">Anzeige · Als Amazon-Partner verdienen wir an '
+                        'qualifizierten Käufen. Für dich ändert sich am Preis nichts.</p>')
+
+
 def german_date(iso):
     months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
               "August", "September", "Oktober", "November", "Dezember"]
@@ -252,6 +269,12 @@ a.toolcard:hover{transform:translateY(-3px);box-shadow:0 22px 44px -26px rgba(0,
 .amt:hover{transform:translateY(-1px)}
 .amt.pri{background:var(--green);border-color:var(--green);color:#fff}
 .amt.steady{background:transparent;border-color:#c98f63}
+.amzn{display:inline-flex;align-items:center;gap:7px;font-family:'Bricolage Grotesque';font-weight:700;font-size:13.5px;color:#7a4a1a;background:rgba(229,152,117,.16);border:1px solid rgba(229,152,117,.5);padding:9px 15px;border-radius:11px;text-decoration:none;transition:all .14s}
+.amzn::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--terra)}
+.amzn:hover{background:var(--terra);color:#fff}
+.amzn:hover::before{background:#fff}
+.afbox{margin-top:16px;display:flex;flex-wrap:wrap;gap:9px}
+.afdisc{margin-top:9px;font-size:11.5px;color:#a8957f;line-height:1.45;max-width:560px}
 /* magazine article cards */
 .arts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
 .artcard{display:flex;gap:15px;background:#fff;border:1px solid var(--cardline);border-radius:18px;overflow:hidden;text-decoration:none;box-shadow:0 12px 28px -22px rgba(0,0,0,.4);transition:transform .14s}
@@ -2007,6 +2030,12 @@ def build_ersatz_detail(ing, meta, ings):
 
     intro = ing.get("intro", "")
     answer = f"Am vielseitigsten ist {top['name']} ({top['ratio']}). Insgesamt gibt es {len(subs)} gute vegane Alternativen, je nachdem, was {name} im Rezept tun soll."
+    af_block = (
+        f'<section class="section"><h2>{esc(name)}-Ersatz kaufen</h2>'
+        '<p class="lead">Viele Alternativen gibt es im Supermarkt oder online:</p>'
+        '<div class="afbox">' + "".join(amazon_btn(x["name"] + " vegan", x["name"]) for x in subs[:3]) + '</div>'
+        + AFFILIATE_DISCLOSURE + '</section>'
+    )
 
     body = site_header("Vegan-Ersatz-Finder") + f"""
 <nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span><a href="{url(ERSATZ_BASE)}">Vegan ersetzen</a><span>›</span>{esc(name)}</nav>
@@ -2024,6 +2053,8 @@ def build_ersatz_detail(ing, meta, ings):
     </div>
   </div></div>
 </div>
+
+{af_block}
 
 <section class="section">
   <h2>Was eignet sich wofür?</h2>
@@ -2226,6 +2257,21 @@ def build_naehrstoff_detail(n, meta, nutrients):
             + "</div></section>"
         )
 
+    # Affiliate nur für echte Supplemente, Nutri+ als erster Pick (Markenvorgabe)
+    af_block = ""
+    amzn_terms = None
+    if "b12" in s.lower():
+        amzn_terms = ("Nutri+ Vitamin B12 vegan", "veganes Vitamin B12")
+    elif "omega" in s.lower():
+        amzn_terms = ("Nutri+ Omega-3 Algenöl vegan", "Omega-3 Algenöl vegan")
+    if amzn_terms:
+        af_block = (
+            '<section class="section"><h2>Passende Supplemente</h2>'
+            '<p class="lead">Wenn du ergänzt, achte auf rein pflanzliche Produkte. Unsere Empfehlung zuerst:</p>'
+            '<div class="afbox">' + amazon_btn(amzn_terms[0], "Nutri+ bei Amazon")
+            + amazon_btn(amzn_terms[1], "Weitere Optionen") + '</div>' + AFFILIATE_DISCLOSURE + '</section>'
+        )
+
     body = site_header("Nährstoff-Rechner") + f"""
 <nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span><a href="{url(NAEHR_BASE)}">Nährstoff-Rechner</a><span>›</span>{esc(name)}</nav>
 <section class="hero left">
@@ -2252,6 +2298,8 @@ def build_naehrstoff_detail(n, meta, nutrients):
   </div>
   <div class="infobox"><b>Tipp:</b> {esc(n["tip"])}</div>
 </section>
+
+{af_block}
 
 <section class="section">
   <h2>Weitere Nährstoffe</h2>
@@ -2890,6 +2938,13 @@ def build_drink_detail(d, meta, drinks, usecases):
 <section class="section">
   <h2>Klima und Anbau</h2>
   <p class="prose">{esc(d["eco"])}</p>
+</section>
+
+<section class="section">
+  <h2>{esc(name)} kaufen</h2>
+  <p class="lead">Gibt es im Supermarkt, Bioladen und online. Ein paar Optionen:</p>
+  <div class="afbox">{amazon_btn(name + " Pflanzendrink", name + " bei Amazon")}{(amazon_btn("Barista " + name, "Barista-Variante") if d.get("barista") else "")}</div>
+  {AFFILIATE_DISCLOSURE}
 </section>
 
 <section class="section">
@@ -3776,11 +3831,11 @@ REISE_CSS = (
     ".langbtn.active{background:var(--peach);color:var(--ink);border-color:var(--peach)}"
     ".langbtn .fl{font-size:17px;line-height:1}"
     ".pb{display:grid;gap:12px;margin-top:6px}"
-    ".prow{display:grid;grid-template-columns:1fr 1.25fr;gap:16px;align-items:start;padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:rgba(248,222,205,.03)}"
-    ".pde{font-family:'Figtree';font-weight:600;color:var(--peach);opacity:.72;font-size:15px;line-height:1.35}"
+    ".prow{display:grid;grid-template-columns:1fr 1.25fr;gap:16px;align-items:start;padding:16px 18px;border:1px solid var(--cardline);border-radius:14px;background:#fff;box-shadow:0 10px 26px -22px rgba(0,0,0,.4)}"
+    ".pde{font-family:'Bricolage Grotesque';font-weight:600;color:#8a8073;font-size:15px;line-height:1.35}"
     ".pxwrap{display:flex;flex-direction:column;gap:9px;align-items:flex-start}"
-    ".px{font-family:'Gabarito';font-weight:700;font-size:19px;color:#f6ece1;line-height:1.3}"
-    ".pr{font-size:13px;opacity:.6;font-style:italic;margin-top:-5px}"
+    ".px{font-family:var(--serif);font-weight:700;font-size:20px;color:var(--ink);line-height:1.25}"
+    ".pr{font-size:13px;color:#8a8073;font-style:italic;margin-top:-5px}"
     "@media(max-width:560px){.prow{grid-template-columns:1fr;gap:9px}}"
 )
 
@@ -4432,6 +4487,17 @@ def build_ampel_detail(cfg, item, items):
         for r in related
     )
     verdict_long = cfg["verdict_long"][status].format(name=name)
+    af_block = ""
+    if cfg.get("affiliate"):
+        if status == "yes":
+            term, h, lead = name, f"{esc(name)} kaufen", "Tierfrei und online erhältlich:"
+        else:
+            term, h, lead = "vegane Alternative " + name, "Vegane Alternative kaufen", f"Statt {esc(name)} gibt es gute vegane Alternativen:"
+        af_block = (
+            f'<section class="section"><h2>{h}</h2><p class="lead">{lead}</p>'
+            '<div class="afbox">' + amazon_btn(term, "Bei Amazon ansehen") + '</div>'
+            + AFFILIATE_DISCLOSURE + '</section>'
+        )
     body = site_header(cfg["header"]) + f"""
 <nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span><a href="{url(base)}">{esc(cfg["crumb"])}</a><span>›</span>{esc(name)}</nav>
 <section class="hero left">
@@ -4458,6 +4524,8 @@ def build_ampel_detail(cfg, item, items):
   <h2>Was heißt das für dich?</h2>
   <p class="prose">{esc(verdict_long)}</p>
 </section>
+
+{af_block}
 
 <section class="section">
   <h2>{esc(cfg["related_h2"])}</h2>
@@ -4506,7 +4574,7 @@ GET_BASE = "/getraenke-vegan/"
 
 def materialien_cfg(meta):
     return {
-        "meta": meta, "base": MAT_BASE, "og": "vegane-materialien",
+        "meta": meta, "base": MAT_BASE, "og": "vegane-materialien", "affiliate": True,
         "header": "Vegane Materialien", "crumb": "Vegane Materialien",
         "eyebrow": "Mode und Textilien ohne Tier",
         "h1a": "Vegane", "h1b": "Materialien.",
@@ -4580,23 +4648,23 @@ def getraenke_cfg(meta):
 EINK_BASE = "/vegane-einkaufsliste/"
 
 EINK_CSS = (
-    ".ebar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:22px 0 6px}"
-    ".ecount{font-family:'Gabarito';font-weight:700;color:#f6ece1;font-size:16px;margin-right:auto}"
-    ".ecat{margin-top:26px}"
-    ".ecat h2{font-size:20px;margin-bottom:4px}"
-    ".elist{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:12px}"
-    ".eitem{display:flex;gap:12px;align-items:flex-start;padding:13px 15px;border:1px solid var(--line);border-radius:13px;background:rgba(248,222,205,.03);cursor:pointer;transition:background .14s}"
-    ".eitem:hover{background:rgba(248,222,205,.07)}"
+    ".ebar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:24px 0 6px}"
+    ".ecount{font-family:'Bricolage Grotesque';font-weight:700;color:var(--ink);font-size:16px;margin-right:auto}"
+    ".ecat{margin-top:30px}"
+    ".ecat h2{font-size:24px;margin-bottom:4px}"
+    ".elist{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:14px}"
+    ".eitem{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border:1px solid var(--cardline);border-radius:14px;background:#fff;cursor:pointer;transition:all .14s;box-shadow:0 8px 22px -20px rgba(0,0,0,.4)}"
+    ".eitem:hover{transform:translateY(-1px)}"
     ".eitem input{position:absolute;opacity:0;width:0;height:0}"
-    ".ech{flex:0 0 22px;width:22px;height:22px;border:2px solid var(--line);border-radius:7px;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .14s}"
-    ".ech::after{content:'';width:11px;height:6px;border-left:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);transform:rotate(-45deg) scale(0);transition:transform .14s;margin-top:-2px}"
+    ".ech{flex:0 0 22px;width:22px;height:22px;border:2px solid var(--pill);border-radius:7px;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .14s}"
+    ".ech::after{content:'';width:11px;height:6px;border-left:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:rotate(-45deg) scale(0);transition:transform .14s;margin-top:-2px}"
     ".eitem input:checked+.ech{background:var(--green);border-color:var(--green)}"
     ".eitem input:checked+.ech::after{transform:rotate(-45deg) scale(1)}"
-    ".eitem input:checked~div{opacity:.5}"
+    ".eitem input:checked~div{opacity:.45}"
     ".eitem input:checked~div b{text-decoration:line-through}"
-    ".eitem b{font-family:'Gabarito';font-weight:700;font-size:15.5px;color:#f6ece1;display:block}"
-    ".eitem small{font-size:13px;opacity:.7;display:block;margin-top:1px}"
-    "@media print{.site,.crumbs,.ebar,.cta,footer,.hero-illu,.eyebrow,.sub{display:none!important}.eitem{break-inside:avoid}}"
+    ".eitem b{font-family:'Bricolage Grotesque';font-weight:700;font-size:15.5px;color:var(--ink);display:block}"
+    ".eitem small{font-size:13px;color:#8a8073;display:block;margin-top:1px}"
+    "@media print{.site,.crumbs,.ebar,.cta,footer.site,.support,.pshare,.hero-illu,.eyebrow,.sub{display:none!important}.eitem{break-inside:avoid}}"
 )
 
 EINK_JS = r"""
@@ -4646,8 +4714,15 @@ def build_einkaufsliste(meta, data):
                 f'<div><b>{esc(it["n"])}</b>{note}</div></label>'
             )
         items = "\n".join(rows)
+        af = ""
+        if c["key"] == "supplemente":
+            af = ('<div class="afbox" style="margin-top:14px">'
+                  + amazon_btn("Nutri+ Vitamin B12 vegan", "B12 (Nutri+)")
+                  + amazon_btn("Omega-3 Algenöl vegan", "Omega-3 (Algenöl)")
+                  + amazon_btn("veganes Vitamin D3 Flechten", "Vitamin D3")
+                  + '</div>' + AFFILIATE_DISCLOSURE)
         cats_html += (
-            f'\n<section class="ecat">\n  <h2>{esc(c["label"])}</h2>\n  <div class="elist">\n{items}\n  </div>\n</section>'
+            f'\n<section class="ecat">\n  <h2>{esc(c["label"])}</h2>\n  <div class="elist">\n{items}\n  </div>\n{af}\n</section>'
         )
 
     body = site_header("Vegane Einkaufsliste") + f"""
