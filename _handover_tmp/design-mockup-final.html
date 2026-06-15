@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mockup</title>
+<title>Ist mein Getränk vegan? | This Is Vegan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,600;1,9..144,700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&display=swap" rel="stylesheet">
 <style>
@@ -100,6 +100,23 @@ a{color:inherit}
 .foot .flinks{display:flex;flex-wrap:wrap;gap:18px;font-weight:500;font-size:14px;color:#5f6f67}
 .foot .flinks a{text-decoration:none}
 .foot .fnote{font-size:12.5px;color:#9a9183;margin-top:18px}
+/* share bar */
+.sharebar{position:fixed;left:16px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:9px;z-index:40;align-items:center}
+.sharebar .sl{writing-mode:vertical-rl;font-family:'Bricolage Grotesque';font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#a8957f;margin-bottom:2px}
+.shb{width:46px;height:46px;border-radius:50%;background:#fff;border:1px solid #ecdcc8;display:flex;align-items:center;justify-content:center;color:var(--ink);text-decoration:none;box-shadow:0 8px 20px -10px rgba(0,0,0,.35);transition:transform .14s,background .14s,color .14s,border-color .14s}
+.shb:hover{transform:translateY(-2px)}
+.shb svg{width:21px;height:21px}
+.shb.wa:hover{background:#25D366;color:#fff;border-color:#25D366}
+.shb.ml:hover{background:var(--green);color:#fff;border-color:var(--green)}
+.shb.fb:hover{background:#1877F2;color:#fff;border-color:#1877F2}
+.shb.cp:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.shb.cp.done{background:var(--green);color:#fff;border-color:var(--green)}
+@media(max-width:1280px){
+.sharebar{left:0;right:0;top:auto;bottom:0;transform:none;flex-direction:row;justify-content:center;gap:11px;background:rgba(251,246,238,.95);backdrop-filter:blur(8px);border-top:1px solid #ecdcc8;padding:9px 12px calc(9px + env(safe-area-inset-bottom))}
+.sharebar .sl{writing-mode:horizontal-tb;margin:0 2px 0 0;align-self:center}
+.shb{width:42px;height:42px;box-shadow:none}
+body{padding-bottom:76px}
+}
 @media(max-width:760px){.hgrid{grid-template-columns:1fr}.h1{font-size:44px}.illuwrap{justify-self:start}.tip{grid-template-columns:1fr}.mt{grid-template-columns:1fr}.arts{grid-template-columns:1fr}.foot .frow{flex-direction:column;align-items:flex-start;gap:14px}}
 </style></head>
 <body>
@@ -209,4 +226,27 @@ a{color:inherit}
     <p class="fnote">Alle Tools sind kostenlos, laufen direkt im Browser und speichern nichts. Stand: Juni 2026.</p>
   </footer>
 </div>
+<div class="sharebar" aria-label="Diese Seite teilen">
+  <span class="sl">Teilen</span>
+  <a class="shb wa" id="sh-wa" aria-label="Per WhatsApp teilen" target="_blank" rel="noopener" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></a>
+  <a class="shb ml" id="sh-ml" aria-label="Per Mail teilen" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></svg></a>
+  <a class="shb fb" id="sh-fb" aria-label="Auf Facebook teilen" target="_blank" rel="noopener" href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.5 9H17V6h-2.5C12.6 6 11 7.6 11 9.5V12H8.5v3H11v6h3v-6h2.3l.7-3H14V9.7c0-.4.3-.7.7-.7z"/></svg></a>
+  <a class="shb cp" id="sh-cp" aria-label="Link kopieren" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15l6-6M10.5 6.5l1-1a4 4 0 0 1 6 6l-1 1M13.5 17.5l-1 1a4 4 0 0 1-6-6l1-1"/></svg></a>
+</div>
+<script>
+(function(){
+  var url=location.href.split('#')[0].split('?')[0];
+  var t=(document.title||'This Is Vegan').replace(/\s*\|.*$/,'').trim();
+  var share=encodeURIComponent(t+' – '+url), u=encodeURIComponent(url);
+  var wa=document.getElementById('sh-wa'); if(wa) wa.href='https://wa.me/?text='+share;
+  var ml=document.getElementById('sh-ml'); if(ml) ml.href='mailto:?subject='+encodeURIComponent(t)+'&body='+share;
+  var fb=document.getElementById('sh-fb'); if(fb) fb.href='https://www.facebook.com/sharer/sharer.php?u='+u;
+  var cp=document.getElementById('sh-cp'); if(cp) cp.addEventListener('click',function(e){
+    e.preventDefault();
+    if(navigator.share){navigator.share({title:t,url:url}).catch(function(){});return;}
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(url);
+    cp.classList.add('done'); setTimeout(function(){cp.classList.remove('done');},1200);
+  });
+})();
+</script>
 </body></html>
