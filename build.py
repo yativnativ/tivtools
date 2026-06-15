@@ -284,6 +284,14 @@ a.toolcard:hover{transform:translateY(-3px);box-shadow:0 22px 44px -26px rgba(0,
 .artcard .kk{font-family:'Bricolage Grotesque';font-weight:700;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--green)}
 .artcard h3{font-family:var(--serif);font-weight:600;font-size:18px;line-height:1.18;margin:5px 0 4px;color:var(--ink)}
 .artcard p{font-size:13px;color:#7a7064}
+.reltools{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.reltool{display:flex;gap:13px;align-items:center;background:#fff;border:1px solid var(--cardline);border-radius:16px;padding:15px;text-decoration:none;box-shadow:0 12px 28px -22px rgba(0,0,0,.4);transition:transform .14s}
+.reltool:hover{transform:translateY(-2px)}
+.reltool .ic{flex:0 0 50px;width:50px;height:50px;border-radius:13px;background:var(--cream);overflow:hidden}
+.reltool .ic img{width:100%;height:100%;object-fit:cover}
+.reltool b{font-family:'Bricolage Grotesque';font-weight:700;font-size:15px;color:var(--ink);display:block;line-height:1.15}
+.reltool small{font-size:12.5px;color:var(--ink2);display:block;margin-top:2px}
+@media(max-width:640px){.reltools{grid-template-columns:1fr}.arts{grid-template-columns:1fr}}
 /* footer */
 footer.site{margin-top:46px;border-top:1px solid var(--line);padding:32px 0 90px}
 .frow{display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:center}
@@ -1182,6 +1190,101 @@ OG_MAP = {
 }
 
 
+TOOLS = {
+    "hub": ("/", "Alle Tools", "Die ganze Sammlung"),
+    "e-nummern": ("/e-nummern/", "E-Nummern-Checker", "Ist der Zusatzstoff vegan?"),
+    "vegan-ersetzen": ("/vegan-ersetzen/", "Vegan-Ersatz-Finder", "Die beste Alternative"),
+    "naehrstoffrechner": ("/naehrstoffrechner/", "Nährstoff-Rechner", "Protein, B12, Eisen & Co."),
+    "ist-das-vegan": ("/ist-das-vegan/", "Ist das vegan?", "Der Lebensmittel-Check"),
+    "impact-rechner": ("/impact-rechner/", "Impact-Rechner", "Was deine Ernährung bewegt"),
+    "saisonkalender": ("/saisonkalender/", "Saisonkalender", "Was gerade Saison hat"),
+    "pflanzendrink-vergleich": ("/pflanzendrink-vergleich/", "Pflanzendrink-Vergleich", "Hafer, Soja, Mandel & Co."),
+    "protein-tabelle": ("/protein-tabelle/", "Protein-Tabelle", "Eiweiß pro 100 g"),
+    "co2-fussabdruck": ("/co2-fussabdruck/", "CO2-Fußabdruck", "Klimabilanz im Vergleich"),
+    "protein-pro-mahlzeit": ("/protein-pro-mahlzeit/", "Protein pro Mahlzeit", "Eiweiß summieren"),
+    "veganizer": ("/veganizer/", "Veganizer", "Konter auf Anti-Vegan-Sprüche"),
+    "vegan-auf-reisen": ("/vegan-auf-reisen/", "Vegan auf Reisen", "Sätze in 12 Sprachen"),
+    "versteckte-zutaten": ("/versteckte-zutaten/", "Versteckte Zutaten", "Tierisches enttarnen"),
+    "vegane-materialien": ("/vegane-materialien/", "Vegane Materialien", "Leder, Wolle & Alternativen"),
+    "getraenke-vegan": ("/getraenke-vegan/", "Ist mein Getränk vegan?", "Wein, Bier & Co."),
+    "vegane-einkaufsliste": ("/vegane-einkaufsliste/", "Vegane Einkaufsliste", "Starter-Küche zum Abhaken"),
+    "vegan-vokabeln": ("/vegan-vokabeln/", "Vegan-Vokabeln", "Begriffe in 12 Sprachen"),
+    "creator": ("/creator/", "Creator-Tools", "Für deinen veganen Account"),
+    "schriftarten": ("/creator/schriftarten/", "Schriftarten-Generator", "Text in 18 Stilen"),
+    "bild-freistellen": ("/creator/bild-freistellen/", "Bild freistellen", "Hintergrund entfernen"),
+    "hashtags": ("/creator/hashtags/", "Hashtag-Helfer", "Vegane Hashtag-Sets"),
+}
+RELATED = {
+    "hub": ["ist-das-vegan", "naehrstoffrechner", "veganizer"],
+    "e-nummern": ["ist-das-vegan", "versteckte-zutaten", "getraenke-vegan"],
+    "vegan-ersetzen": ["ist-das-vegan", "vegane-einkaufsliste", "protein-tabelle"],
+    "naehrstoffrechner": ["protein-tabelle", "protein-pro-mahlzeit", "vegane-einkaufsliste"],
+    "ist-das-vegan": ["e-nummern", "versteckte-zutaten", "getraenke-vegan"],
+    "impact-rechner": ["co2-fussabdruck", "ist-das-vegan", "veganizer"],
+    "saisonkalender": ["ist-das-vegan", "vegane-einkaufsliste", "protein-tabelle"],
+    "pflanzendrink-vergleich": ["vegan-ersetzen", "protein-tabelle", "ist-das-vegan"],
+    "protein-tabelle": ["protein-pro-mahlzeit", "naehrstoffrechner", "vegane-einkaufsliste"],
+    "co2-fussabdruck": ["impact-rechner", "ist-das-vegan", "saisonkalender"],
+    "protein-pro-mahlzeit": ["protein-tabelle", "naehrstoffrechner", "vegane-einkaufsliste"],
+    "veganizer": ["vegan-vokabeln", "versteckte-zutaten", "impact-rechner"],
+    "vegan-auf-reisen": ["vegan-vokabeln", "getraenke-vegan", "ist-das-vegan"],
+    "versteckte-zutaten": ["ist-das-vegan", "e-nummern", "getraenke-vegan"],
+    "vegane-materialien": ["versteckte-zutaten", "veganizer", "ist-das-vegan"],
+    "getraenke-vegan": ["ist-das-vegan", "versteckte-zutaten", "e-nummern"],
+    "vegane-einkaufsliste": ["vegan-ersetzen", "protein-tabelle", "naehrstoffrechner"],
+    "vegan-vokabeln": ["vegan-auf-reisen", "veganizer", "versteckte-zutaten"],
+    "creator": ["schriftarten", "bild-freistellen", "hashtags"],
+    "schriftarten": ["hashtags", "bild-freistellen", "veganizer"],
+    "bild-freistellen": ["schriftarten", "hashtags", "creator"],
+    "hashtags": ["schriftarten", "bild-freistellen", "creator"],
+}
+# Echte Magazin-Artikel (per WP-API geprüft): key -> (kicker, title, pfad, thumb-slug)
+ART_POOL = {
+    "protein": ("Ernährung", "Vegane Proteinquellen: die 50 besten Lebensmittel", "/vegane-proteinquellen-liste-2026/", "protein-tabelle"),
+    "b12": ("Nährstoffe", "Vitamin B12 vegan: was die Studienlage wirklich sagt", "/vitamin-b12-vegan-2026/", "naehrstoffrechner"),
+    "reisen": ("Reisen", "Vegan auf Reisen 2026: der ehrliche Praxis-Guide", "/vegan-auf-reisen-2026/", "vegan-auf-reisen"),
+    "start": ("Einstieg", "Vegan starten: der komplette 30-Tage-Plan", "/vegan-starten-30-tage-plan/", "vegane-einkaufsliste"),
+    "markt": ("Trend", "Pflanzlich kaufen liegt im Trend", "/plantbased-markt-deutschland/", "hub"),
+    "brunch": ("Genuss", "Veganer Brunch 2026: was du wirklich kaufst", "/veganer-brunch-pfingsten-2026/", "ist-das-vegan"),
+    "grillen": ("Küche", "Vegan grillen: was wirklich funktioniert", "/vegan-grillen/", "ist-das-vegan"),
+    "bali": ("Tierschutz", "Mission Bali: Femke Den Haas’ Kampf für den Tierschutz", "/femke-den-haas-interview-bali-tierschutz-vegan/", "veganizer"),
+    "rumaenien": ("Tierschutz", "Nathan Goldblat über den Tierschutz in Rumänien", "/nathan-goldblat-interview-hunde-mafia-rumaenien-tierschutz/", "veganizer"),
+    "schlacht": ("Hintergrund", "Schlachthofprozess: was das Urteil bedeutet", "/schlachthofprozess-urteil-olg-oldenburg/", "impact-rechner"),
+}
+ART_MAP = {
+    "vegan-ersetzen": ["protein", "grillen"], "naehrstoffrechner": ["b12", "protein"],
+    "impact-rechner": ["schlacht", "markt"], "saisonkalender": ["grillen", "markt"],
+    "pflanzendrink-vergleich": ["markt", "brunch"], "protein-tabelle": ["protein", "b12"],
+    "co2-fussabdruck": ["markt", "schlacht"], "protein-pro-mahlzeit": ["protein", "b12"],
+    "veganizer": ["bali", "rumaenien"], "vegan-auf-reisen": ["reisen", "start"],
+    "versteckte-zutaten": ["markt", "start"], "vegane-materialien": ["bali", "rumaenien"],
+    "getraenke-vegan": ["brunch", "markt"], "vegane-einkaufsliste": ["start", "protein"],
+    "vegan-vokabeln": ["reisen", "bali"], "e-nummern": ["markt", "start"],
+    "ist-das-vegan": ["markt", "start"],
+}
+
+
+def page_extras(slug):
+    rel = [r for r in RELATED.get(slug, []) if r in TOOLS]
+    rel_cards = "".join(
+        f'<a class="reltool" href="{url(TOOLS[r][0])}"><span class="ic"><img src="{url("/illu/" + r + ".png")}" alt="" loading="lazy"></span>'
+        f'<span><b>{esc(TOOLS[r][1])}</b><small>{esc(TOOLS[r][2])}</small></span></a>'
+        for r in rel
+    )
+    arts = [ART_POOL[k] for k in ART_MAP.get(slug, ["markt", "start"]) if k in ART_POOL]
+    art_cards = "".join(
+        f'<a class="artcard" href="{MAIN_SITE}{a[2]}"><span class="thumb" style="background-image:url({url("/illu/" + a[3] + ".png")})"></span>'
+        f'<span class="abody"><span class="kk">{esc(a[0])}</span><h3>{esc(a[1])}</h3></span></a>'
+        for a in arts
+    )
+    out = ""
+    if rel_cards:
+        out += f'\n<section class="section"><h2>Diese Tools passen dazu</h2><div class="reltools">{rel_cards}</div></section>\n'
+    if art_cards:
+        out += f'<section class="section"><h2>Aus dem Magazin</h2><div class="arts">{art_cards}</div></section>\n'
+    return out
+
+
 def hero_illu(slug):
     """Rundes Hero-Emblem mit der Tool-Illustration (weißer Hintergrund der Illu
     verschmilzt mit dem weißen Kreis, kein Freistell-Halo)."""
@@ -1201,6 +1304,11 @@ def page(title, desc, path, body, jsonld=None, og_type="website", og_image=None)
         gt = body.find(">", body.find('<section class="hero'))
         if gt != -1:
             body = body[:gt + 1] + "\n  " + hero_illu(OG_MAP[path]) + body[gt + 1:]
+    # Verwandte Tools + Magazin-Artikel vor dem Support-Block (nur Landingpages)
+    if path in OG_MAP:
+        ex = page_extras(OG_MAP[path])
+        if ex and '<section class="support">' in body:
+            body = body.replace('<section class="support">', ex + '<section class="support">', 1)
     if og_image:
         og_url = BASE_URL + url(f"/og/{og_image}.png")
         og_alt = esc(title)
