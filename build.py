@@ -1334,7 +1334,7 @@ def build_hub(meta, adds, ings, nutrients):
 <section class="hero left">
   <div class="eyebrow">Kleine Helfer für den veganen Alltag</div>
   <h1>Vegane <span class="q">Tools.</span></h1>
-  <p class="sub">Schnelle Antworten auf die Fragen, die im Supermarkt oder in der Küche auftauchen. Alles kostenlos, ohne Anmeldung, direkt im Browser.</p>
+  <p class="sub">Checker, Rechner und Helfer für die Fragen aus Supermarkt und Küche. Alles kostenlos, ohne Anmeldung, direkt im Browser, keine App nötig.</p>
 </section>
 
 <section class="section">
@@ -1628,8 +1628,8 @@ def build_hub(meta, adds, ings, nutrients):
         }
     ]
     return page(
-        "Vegane Tools: kostenlose Helfer für den Alltag | This Is Vegan",
-        f"Kostenlose vegane Tools von This Is Vegan: E-Nummern-Checker mit {len(adds)} Zusatzstoffen und mehr. Ohne Anmeldung, direkt im Browser.",
+        "Vegane Tools & Rechner: kostenlose Helfer | This Is Vegan",
+        f"Kostenlose vegane Tools, Rechner und Checker für den Alltag: ist das vegan, E-Nummern, Nährstoffe, Pflanzendrinks und mehr. Ohne Anmeldung, direkt im Browser.",
         "/",
         body,
         jsonld,
