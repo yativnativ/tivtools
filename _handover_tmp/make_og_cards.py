@@ -53,6 +53,7 @@ CARDS = {
     "vegane-materialien": ("TOOL · MODE", "Vegane Materialien", "Leder, Wolle, Seide oder doch Kork und Apfelleder? Was tierfrei ist und was nicht."),
     "getraenke-vegan": ("TOOL · CHECK", "Ist mein Getränk vegan?", "Wein, Bier, Sekt und Likör im Check, samt versteckter tierischer Klärhilfen."),
     "vegane-einkaufsliste": ("TOOL · START", "Vegane Einkaufsliste", "Die komplette Starter-Küche zum Abhaken, Kopieren und Drucken. Für den Einstieg."),
+    "vegan-vokabeln": ("TOOL · LERNEN", "Vegan-Vokabeln", "Begriffe zu Tierschutz und Veganismus in 12 Sprachen, mit Karteikarten und Quiz."),
 }
 
 

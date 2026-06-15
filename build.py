@@ -1155,6 +1155,7 @@ OG_MAP = {
     "/vegane-materialien/": "vegane-materialien",
     "/getraenke-vegan/": "getraenke-vegan",
     "/vegane-einkaufsliste/": "vegane-einkaufsliste",
+    "/vegan-vokabeln/": "vegan-vokabeln",
 }
 
 
@@ -1411,6 +1412,12 @@ def build_hub(meta, adds, ings, nutrients):
       <p>Die komplette Starter-Küche zum Abhaken: Basics, Eiweiß, Milchersatz und Co. nach Kategorien. Hak ab, was du hast, kopier oder druck den Rest.</p>
       <span class="meta">Liste öffnen →</span>
     </a>
+    <a class="toolcard" href="{url(VOK_BASE)}">
+      <span class="badge">Neu</span>
+      <h3>Vegan-Vokabeln</h3>
+      <p>Begriffe rund um Tierschutz und Veganismus in 12 Sprachen lernen, mit Erklärung. Karteikarten zum Üben, Quiz zum Testen und ein Glossar zum Nachschlagen.</p>
+      <span class="meta">Vokabeln lernen →</span>
+    </a>
     <div class="toolcard soon">
       <span class="badge">In Arbeit</span>
       <h3>Mehr Tools kommen</h3>
@@ -1586,6 +1593,12 @@ def build_hub(meta, adds, ings, nutrients):
                         "position": 19,
                         "name": "Vegane Einkaufsliste: Starter-Küche",
                         "url": BASE_URL + url(EINK_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 20,
+                        "name": "Vegan- & Tierschutz-Vokabeln in 12 Sprachen",
+                        "url": BASE_URL + url(VOK_BASE),
                     },
                 ],
             },
@@ -4698,6 +4711,186 @@ def build_einkaufsliste(meta, data):
     )
 
 
+# ================================================================ Vegan-Vokabeln
+VOK_BASE = "/vegan-vokabeln/"
+VOK_CAT = {"grund": "Grundbegriff", "ethik": "Ethik & Haltung", "essen": "Essen & Trinken", "kleidung": "Kleidung & Material", "lifestyle": "Lifestyle"}
+
+VOK_CSS = (
+    ".vokbar{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:6px 0 0}"
+    ".hero.left .vokbar{justify-content:flex-start}"
+    ".langbtn{display:flex;align-items:center;gap:6px;border:1.5px solid rgba(248,222,205,.3);background:transparent;color:var(--peach);font-family:'Bricolage Grotesque';font-weight:600;font-size:13px;padding:7px 12px;border-radius:999px;cursor:pointer;transition:all .14s}"
+    ".langbtn:hover{border-color:var(--peach)}"
+    ".langbtn.on{background:var(--peach);color:var(--ink);border-color:var(--peach)}"
+    ".flash{position:relative;background:#fff;border:1px solid var(--cardline);border-radius:24px;padding:46px 30px 42px;min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;box-shadow:0 18px 44px -26px rgba(0,0,0,.4);margin-top:18px}"
+    ".flash .fcat{font-family:'Bricolage Grotesque';font-weight:700;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--green-deep);background:rgba(16,96,80,.1);padding:5px 11px;border-radius:999px;margin-bottom:18px}"
+    ".flash .fterm{font-family:var(--serif);font-weight:700;font-size:clamp(34px,7vw,48px);color:var(--ink);line-height:1.05}"
+    ".flash .ftrans{font-family:var(--serif);font-weight:700;font-size:clamp(30px,6vw,42px);color:var(--green-deep);line-height:1.05}"
+    ".flash .frfrom{font-style:italic;color:var(--ink2);margin-top:6px;font-size:16px}"
+    ".flash .fdef{font-size:15px;color:#3a4f4b;margin-top:14px;max-width:430px;line-height:1.5}"
+    ".flash .fhint{position:absolute;bottom:14px;left:0;right:0;font-size:12px;color:#b0a08c}"
+    ".fnav{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px}"
+    ".fbtn{width:48px;height:48px;border-radius:50%;border:1.5px solid var(--pill);background:#fff;color:var(--ink);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .14s}"
+    ".fbtn:hover{border-color:var(--green);color:var(--green-deep)}"
+    ".fprog{font-family:'Bricolage Grotesque';font-weight:700;font-size:15px;color:var(--ink);min-width:64px;text-align:center}"
+    ".gloss{display:grid;gap:12px;margin-top:18px}"
+    ".gcard{background:#fff;border:1px solid var(--cardline);border-radius:16px;padding:18px 20px}"
+    ".gcard .gde{font-family:var(--serif);font-weight:700;font-size:22px;color:var(--ink);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}"
+    ".gcard .gcat{font-family:'Bricolage Grotesque';font-weight:700;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--green-deep);background:rgba(16,96,80,.1);padding:3px 9px;border-radius:999px}"
+    ".gcard .gdef{font-size:15px;color:#3a4f4b;margin-top:6px}"
+    ".gtr{margin-top:11px;display:flex;flex-wrap:wrap;gap:7px 16px;font-size:13.5px;color:#5f6f67}"
+    ".gtr b{color:var(--ink);font-weight:600}"
+)
+
+VOK_JS = r"""
+const VD = __DATA__;
+const T = VD.terms, LG = VD.langs;
+const CAT = {grund:"Grundbegriff",ethik:"Ethik & Haltung",essen:"Essen & Trinken",kleidung:"Kleidung & Material",lifestyle:"Lifestyle"};
+let lang="en", idx=0, flipped=false, order=T.map(function(_,i){return i;});
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function langName(c){var l=LG.find(function(x){return x.code===c;});return l?l.flag+" "+l.name:c;}
+const box=document.getElementById("flash"), prog=document.getElementById("fprog");
+function renderCard(){
+  var t=T[order[idx]];
+  if(!flipped){
+    box.innerHTML='<span class="fcat">'+CAT[t.cat]+'</span><div class="fterm">'+t.de+'</div><div class="fhint">Tippen zum Umdrehen</div>';
+  }else{
+    var x=t.t[lang]||{x:"—"};
+    box.innerHTML='<span class="fcat">'+langName(lang)+'</span><div class="ftrans">'+x.x+'</div>'+(x.r?'<div class="frfrom">'+x.r+'</div>':'')+'<div class="fdef">'+t.def+'</div><div class="fhint">Tippen zum Umdrehen</div>';
+  }
+  prog.textContent=(idx+1)+" / "+T.length;
+}
+box.addEventListener("click",function(){flipped=!flipped;renderCard();});
+document.getElementById("fnext").onclick=function(){idx=(idx+1)%T.length;flipped=false;renderCard();};
+document.getElementById("fprev").onclick=function(){idx=(idx-1+T.length)%T.length;flipped=false;renderCard();};
+document.getElementById("fshuffle").onclick=function(){shuffle(order);idx=0;flipped=false;renderCard();};
+document.querySelectorAll(".langbtn").forEach(function(b){b.addEventListener("click",function(){lang=b.dataset.l;document.querySelectorAll(".langbtn").forEach(function(x){x.classList.toggle("on",x.dataset.l===lang);});if(flipped)renderCard();});});
+renderCard();
+// Quiz
+var QN=8, qi=0, qscore=0, qset=[];
+var qlangs=["en","es","fr","it","pt","nl"];
+function buildQuiz(){
+  qset=[];var pool=shuffle(T.slice());var n=0;
+  for(var k=0;k<pool.length && qset.length<QN;k++){
+    var term=pool[k];var ql=qlangs[Math.floor(Math.random()*qlangs.length)];
+    var correct=(term.t[ql]||{}).x;if(!correct)continue;
+    var opts=[correct];var others=shuffle(T.filter(function(x){return x!==term && x.t[ql];}));
+    for(var o=0;o<others.length && opts.length<4;o++){var v=others[o].t[ql].x;if(opts.indexOf(v)<0)opts.push(v);}
+    shuffle(opts);
+    qset.push({q:'Wie heißt „'+term.de+'“ auf '+langName(ql)+'?',c:correct,opts:opts});
+  }
+}
+function renderQ(){
+  var box2=document.getElementById("vquiz");var q=qset[qi];
+  box2.innerHTML='<div class="qprog">Frage '+(qi+1)+' von '+qset.length+' · '+qscore+' richtig</div>'+
+    '<div class="qfrage">'+q.q+'</div>'+
+    '<div class="qopts">'+q.opts.map(function(o){return '<button class="qopt" data-o="'+encodeURIComponent(o)+'">'+o+'</button>';}).join('')+'</div>'+
+    '<div class="qfb" id="qfb"></div><div id="qnext"></div>';
+  box2.querySelectorAll(".qopt").forEach(function(b){b.onclick=function(){answerQ(decodeURIComponent(b.dataset.o),b);};});
+}
+function answerQ(val,btn){
+  var q=qset[qi];var correct=val===q.c;
+  document.querySelectorAll(".qopt").forEach(function(b){b.disabled=true;var v=decodeURIComponent(b.dataset.o);if(v===q.c)b.classList.add("good");else if(b===btn)b.classList.add("bad");else b.classList.add("dim");});
+  if(correct)qscore++;
+  document.getElementById("qfb").textContent=correct?"Richtig!":"Die richtige Antwort: "+q.c;
+  var nx=document.getElementById("qnext");
+  if(qi<qset.length-1){nx.innerHTML='<button class="btn" id="qnb">Weiter →</button>';document.getElementById("qnb").onclick=function(){qi++;renderQ();};}
+  else{nx.innerHTML='<div class="qdone">'+qscore+' von '+qset.length+' richtig.<button class="btn" id="qrb">Nochmal</button></div>';document.getElementById("qrb").onclick=startQuiz;}
+}
+function startQuiz(){qi=0;qscore=0;buildQuiz();renderQ();}
+var qs=document.getElementById("vqstart");if(qs)qs.onclick=startQuiz;
+""".strip()
+
+
+def build_vokabeln(meta, data):
+    terms, langs = data["terms"], data["languages"]
+    compact = {"terms": [{"de": t["de"], "cat": t["cat"], "def": t["def"], "t": t["t"]} for t in terms],
+               "langs": langs}
+    js = VOK_JS.replace("__DATA__", json.dumps(compact, ensure_ascii=False, separators=(",", ":")))
+    langbtns = "\n".join(
+        f'    <button class="langbtn{" on" if l["code"] == "en" else ""}" data-l="{l["code"]}">{l["flag"]} {esc(l["name"])}</button>'
+        for l in langs
+    )
+    # Glossar (server-gerendert, alle Übersetzungen pro Begriff)
+    gcards = []
+    for t in terms:
+        trs = " ".join(
+            f'<span><b>{l["flag"]} {esc(t["t"][l["code"]]["x"])}</b>{(" (" + esc(t["t"][l["code"]]["r"]) + ")") if t["t"][l["code"]].get("r") else ""}</span>'
+            for l in langs if l["code"] in t["t"]
+        )
+        gcards.append(
+            f'<div class="gcard"><div class="gde">{esc(t["de"])} <span class="gcat">{esc(VOK_CAT[t["cat"]])}</span></div>'
+            f'<p class="gdef">{esc(t["def"])}</p><div class="gtr">{trs}</div></div>'
+        )
+    gloss_html = "\n".join(gcards)
+
+    body = site_header("Vegan-Vokabeln") + f"""
+<style>{VOK_CSS}</style>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>Vegan-Vokabeln</nav>
+<section class="hero">
+  <div class="eyebrow">Tierschutz lernen, in vielen Sprachen</div>
+  <h1>Vegan-<span class="q">Vokabeln.</span></h1>
+  <p class="sub">Die wichtigsten Begriffe rund um Veganismus und Tierschutz in {len(langs)} Sprachen, mit Erklärung. Per Karteikarte üben, im Quiz testen oder im Glossar nachschlagen.</p>
+  <div class="vokbar">
+{langbtns}
+  </div>
+  <div class="vokwrap">
+    <div class="flash" id="flash"></div>
+    <div class="fnav">
+      <button class="fbtn" id="fprev" aria-label="Zurück">‹</button>
+      <span class="fprog" id="fprog"></span>
+      <button class="fbtn" id="fnext" aria-label="Weiter">›</button>
+      <button class="fbtn" id="fshuffle" aria-label="Mischen">⤮</button>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Teste dich im Quiz</h2>
+  <p class="lead">Acht Fragen, zufällig aus den Begriffen und Sprachen. Mal sehen, wie viele du schon kannst.</p>
+  <div id="vquiz" style="margin-top:18px"></div>
+  <div style="margin-top:16px"><button class="btn" id="vqstart">Quiz starten</button></div>
+</section>
+
+<section class="section">
+  <h2>Das ganze Glossar</h2>
+  <p class="lead">{len(terms)} Begriffe rund um Tierschutz und Veganismus, je mit kurzer Erklärung und den Übersetzungen in {len(langs)} Sprachen.</p>
+  <div class="gloss">
+{gloss_html}
+  </div>
+</section>
+
+<div class="cta">
+  <div>
+    <h2>Unterwegs vegan bestellen?</h2>
+    <p>Die wichtigsten Sätze zum Vorlesen oder Zeigen findest du im Reise-Spickzettel.</p>
+  </div>
+  <a class="btn" href="{url(REISE_BASE)}">Zum Reise-Spickzettel →</a>
+</div>
+""" + site_footer(meta, full_disclaimer=False) + f"\n<script>{js}</script>"
+
+    faqs = []
+    for t in terms[:6]:
+        en = t["t"].get("en", {}).get("x")
+        if en:
+            faqs.append({"@type": "Question", "name": f"Was heißt {t['de']} auf Englisch?",
+                         "acceptedAnswer": {"@type": "Answer", "text": f"{t['de']} heißt auf Englisch „{en}“. {t['def']}"}})
+    jsonld = [
+        {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faqs},
+        {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+            {"@type": "ListItem", "position": 2, "name": "Vegan-Vokabeln", "item": BASE_URL + url(VOK_BASE)},
+        ]},
+    ]
+    return page(
+        f"Vegan- & Tierschutz-Vokabeln in {len(langs)} Sprachen lernen | This Is Vegan",
+        f"Die wichtigsten Begriffe zu Veganismus und Tierschutz in {len(langs)} Sprachen, mit Erklärung. Karteikarten, Quiz und Glossar. Kostenlos, ohne Anmeldung.",
+        VOK_BASE,
+        body,
+        jsonld,
+        og_image="vegan-vokabeln",
+    )
+
+
 def build_404(meta):
     body = site_header("Tools") + f"""
 <section class="hero">
@@ -4764,6 +4957,8 @@ def main():
     get_cfg, get_items = getraenke_cfg(get_data["meta"]), get_data["drinks"]
 
     eink_data = json.loads((ROOT / "data" / "einkaufsliste-data.json").read_text(encoding="utf-8"))
+
+    vok_data = json.loads((ROOT / "data" / "vokabeln-data.json").read_text(encoding="utf-8"))
 
     if DIST.exists():
         shutil.rmtree(DIST)
@@ -4844,6 +5039,9 @@ def main():
 
     # Vegane Einkaufsliste
     pages[EINK_BASE] = build_einkaufsliste(eink_data["meta"], eink_data)
+
+    # Vegan-Vokabeln
+    pages[VOK_BASE] = build_vokabeln(vok_data["meta"], vok_data)
 
     # Creator-Bereich
     pages[CREATOR_BASE] = build_creator_hub(CREATOR_META)
