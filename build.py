@@ -29,6 +29,24 @@ PREFIX = ""  # z. B. "/tools" beim Reverse-Proxy-Setup
 
 MAIN_SITE = "https://this-is-vegan.com"
 
+# Google AdSense (Publisher ca-pub-7928547153517351). Loader kommt in den <head>,
+# ADSENSE_UNIT ist eine responsive Display-Anzeige (Unit "TIV Display"), die einmal
+# pro Seite zwischen Tool-Inhalt und Support-Block ausgeliefert wird.
+ADSENSE_LOADER = (
+    '<script async src="https://pagead2.googlesyndication.com/pagead/js/'
+    'adsbygoogle.js?client=ca-pub-7928547153517351" crossorigin="anonymous"></script>'
+)
+ADSENSE_UNIT = (
+    '<div class="tiv-ad" style="margin:2.5rem auto 0;max-width:728px;text-align:center">'
+    '<div style="font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;'
+    'opacity:.45;margin-bottom:.3rem">Anzeige</div>'
+    '<ins class="adsbygoogle" style="display:block" '
+    'data-ad-client="ca-pub-7928547153517351" data-ad-slot="7952111390" '
+    'data-ad-format="auto" data-full-width-responsive="true"></ins>'
+    '<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>'
+    '</div>'
+)
+
 READ_MORE = [
     ("Versteckte tierische Inhaltsstoffe", f"{MAIN_SITE}/versteckte-tierische-inhaltsstoffe/"),
     ("Gelatine erkennen und vegane Alternativen", f"{MAIN_SITE}/gelatine-erkennen-und-vegane-alternativen/"),
@@ -1371,6 +1389,7 @@ def page(title, desc, path, body, jsonld=None, og_type="website", og_image=None)
 <meta name="twitter:description" content="{esc(desc)}">
 {fonts}
 <style>{CSS}</style>
+{ADSENSE_LOADER}
 {ld}</head>
 <body>
 <div class="wrap">
@@ -1418,7 +1437,7 @@ def site_footer(meta, full_disclaimer=True):
         disc = '<p class="disc"><b>Angaben ohne Gewähr.</b> Die Einordnungen dienen der Orientierung. Bei vielen Stoffen hängt die Herkunft vom Hersteller ab und ist auf der Verpackung nicht erkennbar. Im Zweifel beim Hersteller nachfragen oder auf ein Vegan-Siegel achten. Klärhilfen, die im Endprodukt nicht mehr enthalten sind, müssen nicht deklariert werden.</p>'
     else:
         disc = f'<p class="disc">Alle Tools sind kostenlos, laufen direkt im Browser und speichern nichts. Stand: {esc(stand)}.</p>'
-    return SUPPORT_BLOCK + f"""
+    return ADSENSE_UNIT + SUPPORT_BLOCK + f"""
 <footer class="site">
 <div class="frow">
   <a href="{MAIN_SITE}/" aria-label="This Is Vegan"><img class="flogo" src="{url('/logo-tiv.png')}" alt="This Is Vegan" width="160" height="60"></a>
