@@ -286,7 +286,16 @@ a.toolcard:hover{transform:translateY(-3px);box-shadow:0 22px 44px -26px rgba(0,
 .amt{font-family:'Bricolage Grotesque';font-weight:700;font-size:15px;background:#fff;border:1.5px solid #e6c3a8;color:#8a4a2a;padding:11px 18px;border-radius:12px;text-decoration:none;transition:transform .1s}
 .amt:hover{transform:translateY(-1px)}
 .amt.pri{background:var(--green);border-color:var(--green);color:#fff}
-.amt.steady{background:transparent;border-color:#c98f63}
+.amt.bmc{background:transparent;border-color:#c98f63}
+/* Stoerer-Leisten */
+.stoerer{display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:14px;margin:1.6rem auto 0;max-width:728px;text-decoration:none;font-weight:600;font-size:14px;line-height:1.3;transition:opacity .18s}
+.stoerer:hover{opacity:.88}
+.stoerer-deals{background:var(--green);color:#fff}
+.stoerer-spenden{background:var(--teal);color:#fff}
+.stoerer svg{flex-shrink:0;opacity:.9}
+.stoerer strong{display:block;font-size:15.5px;margin-bottom:1px;font-family:'Fraunces',serif}
+.stoerer .sarr{margin-left:auto;flex-shrink:0;opacity:.75;font-size:18px}
+@media(max-width:620px){.stoerer{padding:14px 16px;gap:12px;font-size:13px}.stoerer strong{font-size:14.5px}}
 .amzn{display:inline-flex;align-items:center;gap:7px;font-family:'Bricolage Grotesque';font-weight:700;font-size:13.5px;color:#7a4a1a;background:rgba(229,152,117,.16);border:1px solid rgba(229,152,117,.5);padding:9px 15px;border-radius:11px;text-decoration:none;transition:all .14s}
 .amzn::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--terra)}
 .amzn:hover{background:var(--terra);color:#fff}
@@ -1426,9 +1435,44 @@ SUPPORT_BLOCK = f"""
     <a class="amt" href="{MAIN_SITE}/spenden/" target="_blank" rel="noopener">15 €</a>
     <a class="amt" href="{MAIN_SITE}/spenden/" target="_blank" rel="noopener">30 €</a>
     <a class="amt pri" href="{MAIN_SITE}/spenden/" target="_blank" rel="noopener">Jetzt spenden →</a>
-    <a class="amt steady" href="https://steadyhq.com/de/thisisvegan" target="_blank" rel="noopener">Monatlich über Steady</a>
+    <a class="amt bmc" href="https://buymeacoffee.com/thisisvegan" target="_blank" rel="noopener">Monatlich bei Buy Me a Coffee</a>
   </div>
 </section>"""
+
+_SVG_DEALS = ('<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+              'stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+              '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>'
+              '<line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>')
+_SVG_HEART = ('<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+              'stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+              '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78'
+              'l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>')
+
+STOERER_DEALS = (
+    f'<a class="stoerer stoerer-deals" href="{MAIN_SITE}/community-deals/" target="_blank" rel="noopener">'
+    f'{_SVG_DEALS}'
+    '<span><strong>Community Deals</strong>Aktuelle vegane Angebote &amp; Rabatte entdecken</span>'
+    '<span class="sarr">&#8594;</span>'
+    '</a>'
+)
+STOERER_SPENDEN = (
+    f'<a class="stoerer stoerer-spenden" href="{MAIN_SITE}/spenden/" target="_blank" rel="noopener">'
+    f'{_SVG_HEART}'
+    '<span><strong>This Is Vegan unterstützen</strong>Unabhängiger Journalismus für Tiere &amp; Pflanzenkost</span>'
+    '<span class="sarr">&#8594;</span>'
+    '</a>'
+)
+
+ADSENSE_UNIT_MID = (
+    '<div class="tiv-ad" style="margin:2rem auto 0;max-width:728px;text-align:center">'
+    '<div style="font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;'
+    'opacity:.45;margin-bottom:.3rem">Anzeige</div>'
+    '<ins class="adsbygoogle" style="display:block;text-align:center" '
+    'data-ad-layout="in-article" data-ad-format="fluid" '
+    'data-ad-client="ca-pub-7928547153517351" data-ad-slot="3289682355"></ins>'
+    '<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>'
+    '</div>'
+)
 
 
 def site_footer(meta, full_disclaimer=True):
@@ -1437,7 +1481,7 @@ def site_footer(meta, full_disclaimer=True):
         disc = '<p class="disc"><b>Angaben ohne Gewähr.</b> Die Einordnungen dienen der Orientierung. Bei vielen Stoffen hängt die Herkunft vom Hersteller ab und ist auf der Verpackung nicht erkennbar. Im Zweifel beim Hersteller nachfragen oder auf ein Vegan-Siegel achten. Klärhilfen, die im Endprodukt nicht mehr enthalten sind, müssen nicht deklariert werden.</p>'
     else:
         disc = f'<p class="disc">Alle Tools sind kostenlos, laufen direkt im Browser und speichern nichts. Stand: {esc(stand)}.</p>'
-    return ADSENSE_UNIT + SUPPORT_BLOCK + f"""
+    return STOERER_DEALS + STOERER_SPENDEN + ADSENSE_UNIT_MID + ADSENSE_UNIT + SUPPORT_BLOCK + f"""
 <footer class="site">
 <div class="frow">
   <a href="{MAIN_SITE}/" aria-label="This Is Vegan"><img class="flogo" src="{url('/logo-tiv.png')}" alt="This Is Vegan" width="160" height="60"></a>
