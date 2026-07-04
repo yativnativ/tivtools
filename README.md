@@ -60,6 +60,42 @@ zum Testen bevor es live geht.
 4. `python3 build.py` → neu deployen. Sitemap und interne Links entstehen
    automatisch, solange die Seiten über `pages[...]` registriert werden.
 
+## Jobs pflegen (tools.this-is-vegan.com/jobs/)
+
+Die Job-Seite wird komplett aus `data/jobs-data.json` generiert: Hub unter
+`/jobs/` plus eine Detailseite pro Stelle (mit JobPosting-Schema für Google
+for Jobs). Neue Stelle = neuen Eintrag ins `jobs`-Array, `lastUpdated` in
+`meta` anpassen, pushen — fertig. Abgelaufene Stellen einfach aus dem Array
+löschen, Hub-Karte, Sitemap und Zähler passen sich automatisch an.
+
+Felder pro Job (nur die ersten sieben sind Pflicht):
+
+```json
+{
+  "slug": "koch-beispielrestaurant-berlin",
+  "title": "Koch / Köchin (m/w/d)",
+  "company": "Beispielrestaurant",
+  "posted": "2026-07-04",
+  "summary": "Ein bis zwei Sätze für Karte und Meta-Description.",
+  "category": "Küche & Gastro",
+  "url": "https://…/bewerbung",
+  "company_url": "https://…",
+  "location": "Berlin",
+  "country": "DE",
+  "remote": "Remote | Hybrid | Vor Ort",
+  "type": "Vollzeit | Teilzeit | Werkstudent:in | Minijob | Praktikum | Ausbildung | Freelance | Ehrenamt",
+  "salary": "3.000–3.400 € / Monat",
+  "valid_through": "2026-09-30",
+  "description": ["Absatz 1", "Absatz 2"],
+  "aufgaben": ["…"],
+  "profil": ["…"],
+  "benefits": ["…"]
+}
+```
+
+`category` ist frei wählbar und erzeugt ab zwei verschiedenen Kategorien
+automatisch Filter-Buttons auf der Hub-Seite.
+
 ## Architektur-Entscheidungen
 
 - **Subdomain statt Subdirectory** (Option 2 aus HANDOFF.md): 80 % des

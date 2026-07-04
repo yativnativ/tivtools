@@ -1499,8 +1499,10 @@ def site_footer(meta, full_disclaimer=True):
 # ---------------------------------------------------------------- pages
 
 
-def build_hub(meta, adds, ings, nutrients):
+def build_hub(meta, adds, ings, nutrients, jobs):
     counts = {s: sum(1 for a in adds if a["status"] == s) for s in ("yes", "no", "maybe")}
+    jobs_line = (f"Aktuell {len(jobs)} offene Stelle{'n' if len(jobs) != 1 else ''}." if jobs
+                 else "Neue Stellen kommen laufend dazu.")
     body = site_header("Tools", "Gratis · ohne Anmeldung") + f"""
 <section class="hero left">
   <div class="eyebrow">Kleine Helfer für den veganen Alltag</div>
@@ -1611,6 +1613,12 @@ def build_hub(meta, adds, ings, nutrients):
       <h3>Vegan-Vokabeln</h3>
       <p>Begriffe rund um Tierschutz und Veganismus in 12 Sprachen lernen, mit Erklärung. Karteikarten zum Üben, Quiz zum Testen und ein Glossar zum Nachschlagen.</p>
       <span class="meta">Vokabeln lernen →</span>
+    </a>
+    <a class="toolcard" href="{url(JOBS_BASE)}">
+      <span class="badge">Neu</span>
+      <h3>Vegane Jobs</h3>
+      <p>Aktuelle Stellenangebote bei veganen und tierfreundlichen Unternehmen, von Küche und Handel bis Marketing und Tierschutz. {jobs_line}</p>
+      <span class="meta">Jobs ansehen →</span>
     </a>
     <div class="toolcard soon">
       <span class="badge">In Arbeit</span>
@@ -1793,6 +1801,12 @@ def build_hub(meta, adds, ings, nutrients):
                         "position": 20,
                         "name": "Vegan- & Tierschutz-Vokabeln in 12 Sprachen",
                         "url": BASE_URL + url(VOK_BASE),
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 21,
+                        "name": "Vegane Jobs: aktuelle Stellenangebote",
+                        "url": BASE_URL + url(JOBS_BASE),
                     },
                 ],
             },
@@ -5137,6 +5151,258 @@ def build_vokabeln(meta, data):
     )
 
 
+JOBS_BASE = "/jobs/"
+
+# Anstellungsart -> schema.org employmentType (Google for Jobs)
+JOB_EMPLOYMENT = {
+    "Vollzeit": "FULL_TIME",
+    "Teilzeit": "PART_TIME",
+    "Werkstudent:in": "PART_TIME",
+    "Werkstudent": "PART_TIME",
+    "Minijob": "PART_TIME",
+    "Praktikum": "INTERN",
+    "Ausbildung": "OTHER",
+    "Freelance": "CONTRACTOR",
+    "Ehrenamt": "VOLUNTEER",
+}
+
+JOBS_CSS = """
+.jobbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.jfbtn{border:1.5px solid var(--pill);background:#fff;color:var(--ink);font-family:'Bricolage Grotesque';font-weight:600;font-size:13.5px;padding:8px 16px;border-radius:999px;cursor:pointer;transition:all .14s}
+.jfbtn:hover{border-color:var(--green)}
+.jfbtn.on{background:var(--teal);border-color:var(--teal);color:var(--cream)}
+.joblist{display:grid;gap:14px;margin-top:24px}
+.jobcard{display:block;background:var(--card);border:1px solid var(--cardline);border-radius:18px;padding:20px 22px;text-decoration:none;box-shadow:0 14px 34px -26px rgba(0,0,0,.35);transition:transform .12s,box-shadow .12s}
+.jobcard:hover{transform:translateY(-2px);box-shadow:0 20px 40px -22px rgba(0,0,0,.42)}
+.jobcard.hide{display:none}
+.jco{font-weight:700;font-size:13.5px;letter-spacing:.02em;color:var(--green-deep);text-transform:uppercase}
+.jobcard h3{font-family:var(--serif);font-weight:600;font-size:21px;letter-spacing:-.2px;margin-top:3px}
+.jbadges{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+.jbadge{font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--green-deep);background:rgba(16,96,80,.09);padding:5px 11px;border-radius:8px}
+.jbadge.rem{color:#7a4f1a;background:rgba(214,138,58,.13)}
+.jsum{margin-top:11px;font-size:15px;color:#3a4f4b}
+.jmeta{margin-top:13px;font-size:13px;color:var(--ink2);display:flex;gap:14px;flex-wrap:wrap}
+.jmeta b{color:var(--green-deep)}
+.jempty{background:var(--card);border:1px solid var(--cardline);border-radius:18px;padding:38px 26px;text-align:center;margin-top:24px}
+.jempty h3{font-family:var(--serif);font-weight:600;font-size:22px}
+.jempty p{margin-top:8px;color:var(--ink2);font-size:15px;max-width:440px;margin-left:auto;margin-right:auto}
+.jdetail{background:var(--card);border:1px solid var(--cardline);border-radius:20px;padding:28px 30px;margin-top:22px;box-shadow:0 18px 44px -26px rgba(0,0,0,.35)}
+.jdetail h2{font-size:clamp(20px,3vw,25px);margin-top:0}
+.jsec{margin-top:26px}
+.jsec p{margin-top:10px;font-size:15.5px;color:#3a4f4b}
+.jsec ul{margin:10px 0 0 20px;font-size:15.5px;color:#3a4f4b;display:grid;gap:6px}
+.japply{margin-top:30px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.jnote{font-size:13px;color:var(--ink2)}
+@media(max-width:560px){.jdetail{padding:22px 20px}}
+"""
+
+JOBS_FILTER_JS = """
+(function(){
+  var btns=document.querySelectorAll('.jfbtn'),cards=document.querySelectorAll('.jobcard');
+  btns.forEach(function(b){b.addEventListener('click',function(){
+    btns.forEach(function(x){x.classList.remove('on')});b.classList.add('on');
+    var c=b.dataset.cat;
+    cards.forEach(function(k){k.classList.toggle('hide',c!=='*'&&k.dataset.cat!==c)});
+  })});
+})();
+"""
+
+
+def _job_badges(j):
+    out = []
+    if j.get("type"):
+        out.append(f'<span class="jbadge">{esc(j["type"])}</span>')
+    if j.get("location"):
+        out.append(f'<span class="jbadge">📍 {esc(j["location"])}</span>')
+    if j.get("remote"):
+        out.append(f'<span class="jbadge rem">{esc(j["remote"])}</span>')
+    if j.get("salary"):
+        out.append(f'<span class="jbadge">💶 {esc(j["salary"])}</span>')
+    return "".join(out)
+
+
+def _job_jsonld(j):
+    """schema.org JobPosting, damit die Stellen bei Google for Jobs auftauchen."""
+    desc = " ".join(j.get("description", [])) or j.get("summary", "")
+    for key, label in (("aufgaben", "Aufgaben"), ("profil", "Profil"), ("benefits", "Benefits")):
+        if j.get(key):
+            desc += f" {label}: " + " ".join(j[key])
+    ld = {
+        "@context": "https://schema.org",
+        "@type": "JobPosting",
+        "title": j["title"],
+        "description": desc,
+        "datePosted": j["posted"],
+        "hiringOrganization": {"@type": "Organization", "name": j["company"]},
+        "url": BASE_URL + url(JOBS_BASE + j["slug"] + "/"),
+    }
+    if j.get("company_url"):
+        ld["hiringOrganization"]["sameAs"] = j["company_url"]
+    if j.get("type") in JOB_EMPLOYMENT:
+        ld["employmentType"] = JOB_EMPLOYMENT[j["type"]]
+    if j.get("valid_through"):
+        ld["validThrough"] = j["valid_through"]
+    if j.get("remote") == "Remote":
+        ld["jobLocationType"] = "TELECOMMUTE"
+    if j.get("location"):
+        ld["jobLocation"] = {"@type": "Place", "address": {
+            "@type": "PostalAddress",
+            "addressLocality": j["location"],
+            "addressCountry": j.get("country", "DE"),
+        }}
+    return ld
+
+
+def build_jobs_hub(meta, jobs):
+    cats = sorted({j["category"] for j in jobs if j.get("category")})
+    filterbar = ""
+    if len(cats) >= 2:
+        btns = '<button class="jfbtn on" data-cat="*">Alle</button>' + "".join(
+            f'<button class="jfbtn" data-cat="{esc(c)}">{esc(c)}</button>' for c in cats
+        )
+        filterbar = f'<div class="jobbar" role="group" aria-label="Nach Bereich filtern">{btns}</div>'
+
+    if jobs:
+        cards = "\n".join(
+            f'''    <a class="jobcard" href="{url(JOBS_BASE + j["slug"] + "/")}" data-cat="{esc(j.get("category", ""))}">
+      <div class="jco">{esc(j["company"])}</div>
+      <h3>{esc(j["title"])}</h3>
+      <div class="jbadges">{_job_badges(j)}</div>
+      <p class="jsum">{esc(j.get("summary", ""))}</p>
+      <div class="jmeta"><span>Veröffentlicht: {esc(german_date(j["posted"]))}</span><b>Zur Stelle →</b></div>
+    </a>'''
+            for j in sorted(jobs, key=lambda x: x["posted"], reverse=True)
+        )
+        listing = f'<div class="joblist">\n{cards}\n  </div>'
+    else:
+        listing = ('<div class="jempty"><h3>Gerade keine offenen Stellen.</h3>'
+                   '<p>Schau bald wieder vorbei — hier landen laufend neue Jobs bei veganen '
+                   'und tierfreundlichen Unternehmen.</p></div>')
+
+    count_line = (f"{len(jobs)} offene Stelle{'n' if len(jobs) != 1 else ''}" if jobs
+                  else "Neue Stellen kommen laufend dazu")
+
+    body = site_header("Vegane Jobs") + f"""
+<style>{JOBS_CSS}</style>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>Vegane Jobs</nav>
+<section class="hero left">
+  <div class="eyebrow">Arbeiten für die gute Sache</div>
+  <h1>Vegane <span class="q">Jobs.</span></h1>
+  <p class="sub">Aktuelle Stellen bei veganen und tierfreundlichen Unternehmen und Organisationen — von Küche und Handel bis Marketing und Tierschutz. {count_line}.</p>
+</section>
+
+<section class="section">
+  {filterbar}
+  {listing}
+</section>
+
+<div class="cta">
+  <div>
+    <h2>Ihr habt eine vegane Stelle zu vergeben?</h2>
+    <p>Schreibt uns, wir nehmen euren Job kostenlos in die Liste auf.</p>
+  </div>
+  <a class="btn" href="https://www.instagram.com/thisisvegan.magazin/" target="_blank" rel="noopener">Stelle einreichen →</a>
+</div>
+""" + site_footer(meta, full_disclaimer=False) + (f"\n<script>{JOBS_FILTER_JS}</script>" if filterbar else "")
+
+    jsonld = [
+        {"@context": "https://schema.org", "@type": "CollectionPage",
+         "name": "Vegane Jobs: aktuelle Stellenangebote",
+         "description": "Stellenangebote bei veganen und tierfreundlichen Unternehmen und Organisationen, laufend aktualisiert.",
+         "url": BASE_URL + url(JOBS_BASE),
+         "isPartOf": {"@type": "WebSite", "name": "This Is Vegan", "url": MAIN_SITE}},
+        {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+            {"@type": "ListItem", "position": 2, "name": "Vegane Jobs", "item": BASE_URL + url(JOBS_BASE)},
+        ]},
+    ]
+    return page(
+        "Vegane Jobs: aktuelle Stellenangebote | This Is Vegan",
+        "Aktuelle Jobs bei veganen und tierfreundlichen Unternehmen: Stellen aus Küche, Handel, Marketing, Tierschutz und mehr. Kostenlos, laufend aktualisiert.",
+        JOBS_BASE,
+        body,
+        jsonld,
+    )
+
+
+def build_job_detail(j, meta, jobs):
+    path = JOBS_BASE + j["slug"] + "/"
+
+    secs = []
+    for p in j.get("description", []):
+        secs.append(f"<p>{esc(p)}</p>")
+    desc_html = f'<div class="jsec">{"".join(secs)}</div>' if secs else ""
+
+    def _list_sec(key, heading):
+        items = j.get(key)
+        if not items:
+            return ""
+        lis = "".join(f"<li>{esc(x)}</li>" for x in items)
+        return f'<div class="jsec"><h2>{heading}</h2><ul>{lis}</ul></div>'
+
+    others = [o for o in sorted(jobs, key=lambda x: x["posted"], reverse=True) if o["slug"] != j["slug"]][:4]
+    more = ""
+    if others:
+        cards = "\n".join(
+            f'''    <a class="jobcard" href="{url(JOBS_BASE + o["slug"] + "/")}">
+      <div class="jco">{esc(o["company"])}</div>
+      <h3>{esc(o["title"])}</h3>
+      <div class="jbadges">{_job_badges(o)}</div>
+    </a>'''
+            for o in others
+        )
+        more = f'<section class="section"><h2>Weitere offene Stellen</h2><div class="joblist">\n{cards}\n</div></section>'
+
+    body = site_header("Vegane Jobs") + f"""
+<style>{JOBS_CSS}</style>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span><a href="{url(JOBS_BASE)}">Vegane Jobs</a><span>›</span>{esc(j["title"])}</nav>
+<section class="hero left">
+  <div class="eyebrow">{esc(j["company"])}</div>
+  <h1 class="detail">{esc(j["title"])}</h1>
+  <p class="sub">{esc(j.get("summary", ""))}</p>
+</section>
+
+<section class="section">
+  <div class="jdetail">
+    <div class="jbadges">{_job_badges(j)}</div>
+{desc_html}
+{_list_sec("aufgaben", "Deine Aufgaben")}
+{_list_sec("profil", "Das bringst du mit")}
+{_list_sec("benefits", "Das bekommst du")}
+    <div class="japply">
+      <a class="btn" href="{esc(j["url"])}" target="_blank" rel="noopener">Jetzt bewerben →</a>
+      <span class="jnote">Veröffentlicht: {esc(german_date(j["posted"]))} · Bewerbung direkt beim Unternehmen</span>
+    </div>
+  </div>
+</section>
+{more}
+<div class="cta">
+  <div>
+    <h2>Nicht das Richtige dabei?</h2>
+    <p>Alle offenen Stellen bei veganen Unternehmen auf einen Blick.</p>
+  </div>
+  <a class="btn" href="{url(JOBS_BASE)}">Alle Jobs ansehen →</a>
+</div>
+""" + site_footer(meta, full_disclaimer=False)
+
+    jsonld = [
+        _job_jsonld(j),
+        {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
+            {"@type": "ListItem", "position": 2, "name": "Vegane Jobs", "item": BASE_URL + url(JOBS_BASE)},
+            {"@type": "ListItem", "position": 3, "name": j["title"], "item": BASE_URL + url(path)},
+        ]},
+    ]
+    loc = f" in {j['location']}" if j.get("location") else ""
+    return page(
+        f"{j['title']} bei {j['company']}{loc} | Vegane Jobs",
+        (j.get("summary") or f"Offene Stelle bei {j['company']}: {j['title']}.") + " Jetzt auf This Is Vegan ansehen und direkt bewerben.",
+        path,
+        body,
+        jsonld,
+    )
+
+
 def build_404(meta):
     body = site_header("Tools") + f"""
 <section class="hero">
@@ -5206,6 +5472,9 @@ def main():
 
     vok_data = json.loads((ROOT / "data" / "vokabeln-data.json").read_text(encoding="utf-8"))
 
+    jobs_data = json.loads((ROOT / "data" / "jobs-data.json").read_text(encoding="utf-8"))
+    jobs_meta, jobs = jobs_data["meta"], jobs_data["jobs"]
+
     if DIST.exists():
         shutil.rmtree(DIST)
     DIST.mkdir(parents=True)
@@ -5216,7 +5485,7 @@ def main():
         shutil.copy(f, DIST / f.name)
 
     pages = {}  # path -> html
-    pages["/"] = build_hub(meta, adds, ings, nutrients)
+    pages["/"] = build_hub(meta, adds, ings, nutrients, jobs)
     pages["/e-nummern/"] = build_checker(meta, adds)
     for a in adds:
         pages[f"/e-nummern/{slug(a['code'])}/"] = build_detail(a, meta, adds)
@@ -5288,6 +5557,11 @@ def main():
 
     # Vegan-Vokabeln
     pages[VOK_BASE] = build_vokabeln(vok_data["meta"], vok_data)
+
+    # Vegane Jobs
+    pages[JOBS_BASE] = build_jobs_hub(jobs_meta, jobs)
+    for j in jobs:
+        pages[JOBS_BASE + j["slug"] + "/"] = build_job_detail(j, jobs_meta, jobs)
 
     # Creator-Bereich
     pages[CREATOR_BASE] = build_creator_hub(CREATOR_META)
