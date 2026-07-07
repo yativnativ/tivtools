@@ -1,6 +1,61 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-04"
+    "lastUpdated": "2026-07-07"
   },
-  "jobs": []
+  "jobs": [
+    {
+      "slug": "wheaty-messe-braeter-weiling-hausmesse-coesfeld",
+      "title": "Messe-Aushilfe am Bräter – Weiling Hausmesse",
+      "company": "Wheaty",
+      "company_url": "https://wheaty.de",
+      "location": "Coesfeld",
+      "remote": "Vor Ort",
+      "type": "Aushilfe",
+      "category": "Messe & Events",
+      "posted": "2026-07-07",
+      "valid_through": "2026-09-13",
+      "summary": "Wheaty auf der Weiling Hausmesse unterstützen: am 12.–13. September in Coesfeld vegane Produkte am Stand braten und Messe-Energie mitbringen.",
+      "description": [
+        "Wheaty sucht für die Weiling Hausmesse in Coesfeld (12.–13. September) eine Person am Bräter. Nach kurzer Einweisung brätst du die veganen Produkte am Stand und sorgst mit für gute Stimmung bei den Besucher:innen."
+      ],
+      "profil": [
+        "Lust auf gute vegane Produkte",
+        "Nach kurzer Einweisung sicheres Braten am Stand",
+        "Ein bisschen Messe-Energie"
+      ],
+      "benefits": [
+        "Faire Bezahlung",
+        "Messe-Einblick hinter die Kulissen",
+        "Und natürlich genug Wheaty für gute Laune am Stand"
+      ],
+      "url": "mailto:kathrin.heidenwag@topasvegan.de"
+    },
+    {
+      "slug": "wheaty-messe-braeter-bionord-hamburg",
+      "title": "Messe-Aushilfe am Bräter – BioNord",
+      "company": "Wheaty",
+      "company_url": "https://wheaty.de",
+      "location": "Hamburg",
+      "remote": "Vor Ort",
+      "type": "Aushilfe",
+      "category": "Messe & Events",
+      "posted": "2026-07-07",
+      "valid_through": "2026-10-11",
+      "summary": "Wheaty auf der BioNord unterstützen: am 11. Oktober in Hamburg vegane Produkte am Stand braten und Messe-Energie mitbringen.",
+      "description": [
+        "Wheaty sucht für die BioNord in Hamburg (11. Oktober) eine Person am Bräter. Nach kurzer Einweisung brätst du die veganen Produkte am Stand und sorgst mit für gute Stimmung bei den Besucher:innen."
+      ],
+      "profil": [
+        "Lust auf gute vegane Produkte",
+        "Nach kurzer Einweisung sicheres Braten am Stand",
+        "Ein bisschen Messe-Energie"
+      ],
+      "benefits": [
+        "Faire Bezahlung",
+        "Messe-Einblick hinter die Kulissen",
+        "Und natürlich genug Wheaty für gute Laune am Stand"
+      ],
+      "url": "mailto:kathrin.heidenwag@topasvegan.de"
+    }
+  ]
 }

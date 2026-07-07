@@ -5160,6 +5160,7 @@ JOB_EMPLOYMENT = {
     "Werkstudent:in": "PART_TIME",
     "Werkstudent": "PART_TIME",
     "Minijob": "PART_TIME",
+    "Aushilfe": "TEMPORARY",
     "Praktikum": "INTERN",
     "Ausbildung": "OTHER",
     "Freelance": "CONTRACTOR",

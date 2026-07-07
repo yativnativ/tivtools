@@ -83,7 +83,7 @@ Felder pro Job (nur die ersten sieben sind Pflicht):
   "location": "Berlin",
   "country": "DE",
   "remote": "Remote | Hybrid | Vor Ort",
-  "type": "Vollzeit | Teilzeit | Werkstudent:in | Minijob | Praktikum | Ausbildung | Freelance | Ehrenamt",
+  "type": "Vollzeit | Teilzeit | Werkstudent:in | Minijob | Aushilfe | Praktikum | Ausbildung | Freelance | Ehrenamt",
   "salary": "3.000–3.400 € / Monat",
   "valid_through": "2026-09-30",
   "description": ["Absatz 1", "Absatz 2"],
