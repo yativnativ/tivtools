@@ -1381,6 +1381,7 @@ def page(title, desc, path, body, jsonld=None, og_type="website", og_image=None)
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="goDDojelnxvp5ZZ0cbrFsmKSMQ9wkDcZ-xnkVA3xXsA">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
 <link rel="canonical" href="{canonical}">
