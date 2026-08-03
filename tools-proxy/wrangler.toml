@@ -1,0 +1,9 @@
+name = "tiv-tools-proxy"
+main = "worker.js"
+compatibility_date = "2026-08-01"
+workers_dev = false
+
+routes = [
+  { pattern = "this-is-vegan.com/tools", zone_name = "this-is-vegan.com" },
+  { pattern = "this-is-vegan.com/tools/*", zone_name = "this-is-vegan.com" },
+]

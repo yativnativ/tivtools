@@ -13,6 +13,7 @@ Aufruf:  python3 build.py
 """
 import html
 import json
+import os
 import shutil
 import urllib.parse
 from datetime import date
@@ -22,10 +23,13 @@ ROOT = Path(__file__).parent
 DIST = ROOT / "dist"
 DATA_FILE = ROOT / "data" / "enummern-data.json"
 
-# Bei Wechsel auf Subdirectory-Deploy (this-is-vegan.com/tools) nur diese
-# beiden Werte anpassen und neu bauen.
-BASE_URL = "https://tools.this-is-vegan.com"
-PREFIX = ""  # z. B. "/tools" beim Reverse-Proxy-Setup
+# Bei Wechsel auf Subdirectory-Deploy (this-is-vegan.com/tools) reicht es, beim
+# Bauen zwei Umgebungsvariablen zu setzen, der Code bleibt unangetastet:
+#   TIV_TOOLS_BASE_URL=https://this-is-vegan.com TIV_TOOLS_PREFIX=/tools python3 build.py
+# Voraussetzung: der Cloudflare-Worker in ../tools-proxy laeuft, sonst zeigen die
+# internen Links auf Pfade, die es unter der Subdomain nicht gibt.
+BASE_URL = os.environ.get("TIV_TOOLS_BASE_URL", "https://tools.this-is-vegan.com")
+PREFIX = os.environ.get("TIV_TOOLS_PREFIX", "")
 
 MAIN_SITE = "https://this-is-vegan.com"
 
