@@ -1410,6 +1410,7 @@ def page(title, desc, path, body, jsonld=None, og_type="website", og_image=None)
 {body}
 </div>
 {sharebar}
+<script src="{url('/webmcp.js')}" defer></script>
 </body>
 </html>"""
 
@@ -5219,6 +5220,11 @@ def main():
     shutil.copytree(ROOT / "assets" / "fonts", DIST / "fonts")
     for f in (ROOT / "static").glob("*"):
         shutil.copy(f, DIST / f.name)
+
+    # slim additive dataset for the WebMCP check_e_number tool (webmcp.js)
+    (DIST / "enummern.json").write_text(json.dumps({
+        "additives": [{k: a[k] for k in ("code", "name", "class", "status", "info")} for a in adds]
+    }, ensure_ascii=False), encoding="utf-8")
 
     pages = {}  # path -> html
     pages["/"] = build_hub(meta, adds, ings, nutrients)
