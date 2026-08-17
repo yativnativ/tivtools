@@ -5348,6 +5348,19 @@ def main():
         for f in sorted(illu_src.glob("*.png")):
             shutil.copy2(f, illu_dir / f.name)
 
+    # Assets der Link-in-Bio-Seite (~/this-is-vegan/links-page). Die HTML liegt
+    # unter this-is-vegan.com/links/, Bilder und Schrift werden von hier
+    # ausgeliefert (GitHub Pages sendet Access-Control-Allow-Origin: *).
+    lib_src = ROOT / "linkinbio"
+    if lib_src.exists():
+        lib_dir = DIST / "linkinbio"
+        lib_dir.mkdir(parents=True, exist_ok=True)
+        for f in sorted(lib_src.rglob("*")):
+            if f.is_file():
+                target = lib_dir / f.relative_to(lib_src)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(f, target)
+
     (DIST / "404.html").write_text(build_404(meta), encoding="utf-8")
 
     # sitemap
