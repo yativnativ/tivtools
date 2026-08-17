@@ -256,6 +256,17 @@ footer{margin-top:34px; padding-top:18px; border-top:1px solid var(--line); text
 }
 .nlform button:hover{filter:brightness(1.06)}
 .nlform button:active{transform:scale(.97)}
+/* Einwilligung: nie vorausgewaehlt, Pflichtfeld, volle Zeile unter dem Formular */
+.consent{
+  flex:1 1 100%; display:flex; gap:9px; align-items:flex-start; cursor:pointer;
+  font-size:.76rem; line-height:1.45; color:rgba(245,237,225,.88);
+}
+.consent input{
+  flex:none; width:18px; height:18px; margin:1px 0 0; cursor:pointer;
+  accent-color:var(--accent);
+}
+.consent input:focus-visible{outline:2px solid var(--panel-ink); outline-offset:2px}
+.consent a{color:var(--panel-ink)}
 /* .75 statt weniger: darunter reisst der Kleintext die 4.5:1 der WCAG AA */
 .legal{margin:12px 0 0 !important; font-size:.72rem !important; line-height:1.5;
   color:rgba(245,237,225,.75) !important; max-width:none !important}
@@ -335,7 +346,7 @@ footer{margin-top:34px; padding-top:18px; border-top:1px solid var(--line); text
        aria-labelledby="sheet-h">
   <button class="close" type="button" id="sheet-x" aria-label="Schließen">&times;</button>
   <h2 id="sheet-h">Einmal pro Woche das Beste aus dem Magazin</h2>
-  <p>Rezepte, Recherchen und Deals, die es nicht auf Instagram schaffen. Kostenlos.</p>
+  <p>Rezepte, Recherchen und Deals. Kostenlos.</p>
   <form class="nlform" action="https://this-is-vegan.us19.list-manage.com/subscribe/post?u=2fbdb8085d9fdad303c73a1a0&amp;id=4752d525fc&amp;v_id=5302&amp;f_id=002aa5e6f0" method="post" target="_blank" id="nlform">
     <label class="sr" for="sheet-mail">E-Mail-Adresse</label>
     <input type="email" name="EMAIL" id="sheet-mail" placeholder="deine@email.de"
@@ -344,10 +355,16 @@ footer{margin-top:34px; padding-top:18px; border-top:1px solid var(--line); text
       <input type="text" name="b_2fbdb8085d9fdad303c73a1a0_4752d525fc" tabindex="-1" value="" autocomplete="off">
     </div>
     <button type="submit" name="subscribe">Rein da</button>
+    <label class="consent" for="sheet-ok">
+      <input type="checkbox" name="consent" id="sheet-ok" value="1" required>
+      <span>Ja, schickt mir den Newsletter mit Artikeln, Rezepten und Angeboten von uns
+      und unseren Partnern. Die
+      <a href="https://this-is-vegan.com/datenschutzerklaerung/" target="_blank" rel="noopener">Datenschutzerklärung</a>
+      habe ich gelesen, abmelden kann ich mich jederzeit.</span>
+    </label>
   </form>
-  <p class="legal">Mit dem Absenden meldest du dich zum Newsletter an. Abmeldung jederzeit
-  über den Link in jeder Mail. Mehr dazu in der
-  <a href="https://this-is-vegan.com/datenschutzerklaerung/" target="_blank" rel="noopener">Datenschutzerklärung</a>.</p>
+  <p class="legal">Versand über Mailchimp (Intuit Inc., USA). Du bekommst zuerst eine Mail
+  mit Bestätigungslink, eingetragen bist du erst danach.</p>
   <p class="thanks">Fast geschafft. Bestätige die Anmeldung im Postfach, dann bist du dabei.</p>
 </aside>
 <script>
