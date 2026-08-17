@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>This Is Vegan: alle Links aus Bio, Posts und Stories</title>
+<meta name="description" content="Podcast, Newsletter, Rezepte, Tools und alle Rabattcodes von This Is Vegan an einem Ort.">
+<link rel="canonical" href="https://this-is-vegan.com/links/">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="This Is Vegan: alle Links">
+<meta property="og:description" content="Podcast, Newsletter, Rezepte, Tools und alle Rabattcodes an einem Ort.">
+<meta property="og:url" content="https://this-is-vegan.com/links/">
+<meta property="og:image" content="https://this-is-vegan.com/wp-content/uploads/2026/05/TIV_OG-1.png">
+<meta property="og:locale" content="de_DE">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbf6ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#062725" media="(prefers-color-scheme: dark)">
+<link rel="preload" href="https://tools.this-is-vegan.com/linkinbio/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="icon" href="https://this-is-vegan.com/wp-content/uploads/2020/06/cropped-Incon_TIV-192x192.png">
+<style>
+@font-face{font-family:'Bricolage';src:url('https://tools.this-is-vegan.com/linkinbio/bricolage-latin.woff2') format('woff2');
+font-weight:200 800;font-display:swap;
+unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215}
+
+:root{
+  --paper:#fbf6ee; --card:#fff; --ink:#0a4a4a; --muted:#4d6f6b;
+  --accent:#29a579; --line:rgba(10,74,74,.12); --panel:#0a4a4a; --panel-ink:#f5ede1;
+  --cta-bg:#0a4a4a; --cta-ink:#f5ede1;
+  --shadow:0 1px 2px rgba(10,74,74,.05),0 8px 24px -12px rgba(10,74,74,.18);
+  --r-card:16px; --r-tile:12px;
+}
+/* Dunkelmodus: Seite, Karte und Panel brauchen drei klar getrennte Stufen,
+   sonst verschwimmt die Hierarchie im gleichen Gruenton. */
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#04201e; --card:#0d302d; --ink:#f2ebdf; --muted:#9dbdb6;
+    --accent:#43c493; --line:rgba(242,235,223,.13); --panel:#0f4b43; --panel-ink:#f2ebdf;
+    --cta-bg:#f2ebdf; --cta-ink:#0a3b35;
+    --shadow:0 1px 2px rgba(0,0,0,.34),0 10px 30px -14px rgba(0,0,0,.7);
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:'Bricolage',ui-sans-serif,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+/* Warme Farbwaesche, damit die Seite nicht wie ein leeres Template wirkt */
+body::before{
+  content:''; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(60vw 40vw at 12% -8%, rgba(41,165,121,.13), transparent 65%),
+    radial-gradient(50vw 40vw at 105% 12%, rgba(229,152,117,.14), transparent 62%);
+}
+a{color:inherit}
+img{max-width:100%; display:block}
+.wrap{max-width:620px; margin:0 auto; padding:20px 16px 56px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- Kopf ---------- */
+.head{
+  background:var(--panel); color:var(--panel-ink); border-radius:24px;
+  padding:22px 20px 18px; position:relative; overflow:hidden;
+}
+.head::after{
+  content:''; position:absolute; right:-70px; top:-90px; width:230px; height:230px;
+  border-radius:50%; background:rgba(41,165,121,.20);
+}
+.head-top{display:flex; align-items:center; gap:14px; position:relative}
+.avatar{
+  width:64px; height:64px; border-radius:20px; flex:none; background:#fff;
+  box-shadow:0 0 0 1px rgba(255,255,255,.25);
+}
+.name{font-size:1.32rem; font-weight:700; letter-spacing:-.02em; margin:0; line-height:1.15}
+.dot{color:var(--accent)}
+.handle{margin:2px 0 0; font-size:.86rem; color:rgba(245,237,225,.72)}
+.claim{margin:14px 0 0; font-size:.95rem; color:rgba(245,237,225,.88); position:relative; max-width:44ch}
+.socials{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; position:relative}
+.socials a{
+  width:34px; height:34px; border-radius:50%; display:grid; place-items:center;
+  background:rgba(255,255,255,.10); color:var(--panel-ink);
+  border:1px solid rgba(255,255,255,.14);
+  transition:background .18s ease, transform .18s ease;
+}
+.socials a:hover{background:rgba(255,255,255,.22)}
+.socials a:active{transform:scale(.94)}
+
+/* ---------- Filter ---------- */
+.filter{
+  position:sticky; top:0; z-index:5; margin:18px -16px 0; padding:10px 16px;
+  background:color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid transparent;
+}
+.filter.stuck{border-bottom-color:var(--line)}
+.chips{display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{
+  flex:none; border:1px solid var(--line); background:var(--card); color:var(--muted);
+  font:inherit; font-size:.86rem; font-weight:600; padding:7px 14px; border-radius:999px;
+  cursor:pointer; white-space:nowrap; transition:all .16s ease;
+}
+.chip:hover{color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--cta-bg); color:var(--cta-ink); border-color:var(--cta-bg)}
+.chip:focus-visible,a:focus-visible,button:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+/* ---------- Sektionen ---------- */
+section{margin-top:28px}
+.sec-h{
+  display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+  margin:0 0 12px;
+}
+.sec-h h2{font-size:1.05rem; font-weight:700; letter-spacing:-.01em; margin:0}
+.sec-h p{margin:0; font-size:.8rem; color:var(--muted)}
+
+/* ---------- Top-Karten ---------- */
+.feat{display:grid; gap:12px; grid-template-columns:1fr}
+@media (min-width:560px){.feat{grid-template-columns:1fr 1fr}}
+.fcard{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--r-card);
+  overflow:hidden; text-decoration:none; box-shadow:var(--shadow);
+  display:flex; flex-direction:column; transition:transform .18s ease, box-shadow .18s ease;
+}
+/* height:auto ist noetig, sonst schlaegt das height-Attribut die aspect-ratio */
+.fcard img{aspect-ratio:16/9; object-fit:cover; width:100%; height:auto}
+.fcard-block{
+  aspect-ratio:16/9; display:grid; place-items:center; text-align:center;
+  background:var(--panel); color:var(--panel-ink);
+  background-image:radial-gradient(circle at 78% 18%, rgba(41,165,121,.42), transparent 58%);
+}
+.fcard-block span{font-size:1.5rem; font-weight:700; letter-spacing:-.02em; line-height:1.15}
+.fcard-b{padding:13px 15px 15px; display:flex; flex-direction:column; gap:5px; flex:1}
+.fcard h3{margin:0; font-size:1rem; font-weight:700; letter-spacing:-.01em}
+.fcard p{margin:0; font-size:.85rem; color:var(--muted); flex:1}
+.go{
+  margin-top:8px; align-self:flex-start; font-size:.82rem; font-weight:700;
+  color:var(--cta-ink); background:var(--cta-bg); border-radius:999px; padding:7px 15px;
+}
+
+/* ---------- Link-Zeilen ---------- */
+.rows{display:flex; flex-direction:column; gap:9px}
+.row{
+  display:flex; align-items:center; gap:13px; text-decoration:none;
+  background:var(--card); border:1px solid var(--line); border-radius:var(--r-card);
+  padding:11px 14px 11px 11px; box-shadow:var(--shadow);
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.row img{width:56px; height:56px; border-radius:var(--r-tile); object-fit:cover; flex:none}
+.row-b{min-width:0; flex:1}
+.row-t{margin:0; font-size:.95rem; font-weight:650; letter-spacing:-.01em}
+.row-d{margin:2px 0 0; font-size:.82rem; color:var(--muted)}
+.arrow{flex:none; color:var(--muted); transition:transform .18s ease, color .18s ease}
+@media (hover:hover){
+  .row:hover,.fcard:hover{transform:translateY(-2px); box-shadow:0 2px 4px rgba(10,74,74,.06),0 14px 30px -14px rgba(10,74,74,.3)}
+  .row:hover{border-color:color-mix(in srgb, var(--accent) 45%, var(--line))}
+  .row:hover .arrow{transform:translateX(3px); color:var(--accent)}
+}
+.row:active,.fcard:active{transform:scale(.99)}
+
+/* ---------- Kompakte Liste ---------- */
+.mini{
+  display:flex; flex-wrap:wrap; gap:8px; list-style:none; margin:0; padding:0;
+}
+.mini a{
+  display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+  border:1px solid var(--line); background:transparent; border-radius:999px;
+  padding:9px 15px; font-size:.87rem; font-weight:600;
+  transition:background .16s ease, border-color .16s ease;
+}
+.mini a:hover{background:var(--card); border-color:color-mix(in srgb, var(--accent) 45%, var(--line))}
+.mini svg{color:var(--accent)}
+
+/* ---------- Deals ---------- */
+.deal{position:relative}
+.deal .row-b{display:flex; flex-direction:column; gap:6px}
+/* Titel deckt die ganze Karte ab, der Kopier-Button liegt darueber */
+a.stretch{text-decoration:none; display:inline-block; align-self:flex-start;
+  font-size:.95rem; font-weight:650; letter-spacing:-.01em}
+a.stretch::after{content:''; position:absolute; inset:0; z-index:0}
+.deal .row-d,.deal .code,.deal .arrow-box{position:relative; z-index:1}
+.deal .row-d{pointer-events:none}
+.arrow-box{flex:none; display:grid; place-items:center; pointer-events:none}
+.meta{display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-top:7px}
+.code{
+  display:inline-flex; align-items:center; gap:7px;
+  background:color-mix(in srgb, var(--accent) 15%, transparent);
+  border:1px dashed color-mix(in srgb, var(--accent) 55%, transparent);
+  color:var(--ink); border-radius:9px; padding:4px 9px; cursor:pointer;
+  font:inherit; font-size:.75rem;
+}
+.code:hover{background:color-mix(in srgb, var(--accent) 26%, transparent)}
+/* Der Code selbst wird nie gekuerzt, er ist der Zweck des Chips */
+.cval{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-weight:700;
+  letter-spacing:.01em; white-space:nowrap;
+}
+.cp{display:inline-flex; align-items:center; gap:3px; font-weight:600; color:var(--muted)}
+.cp svg{flex:none}
+.cp span{font-size:.72rem}
+.ad{
+  font-size:.6rem; font-weight:700; letter-spacing:.08em; white-space:nowrap;
+  text-transform:uppercase; color:var(--muted);
+  border:1px solid var(--line); border-radius:999px; padding:2px 7px;
+}
+.tile{
+  width:56px; height:56px; border-radius:var(--r-tile); flex:none;
+  display:grid; place-items:center; font-size:1.4rem; font-weight:700;
+  color:var(--ink); background:color-mix(in srgb, var(--accent) 26%, transparent);
+}
+.note{
+  margin:10px 0 0; font-size:.74rem; line-height:1.5; color:var(--muted);
+}
+
+/* ---------- Fuss ---------- */
+footer{margin-top:34px; padding-top:18px; border-top:1px solid var(--line); text-align:center}
+.fnav{display:flex; flex-wrap:wrap; justify-content:center; gap:6px 16px; margin:0 0 12px; padding:0; list-style:none}
+.fnav a{font-size:.82rem; color:var(--muted); text-decoration:none}
+.fnav a:hover{color:var(--ink); text-decoration:underline}
+.sig{font-size:.76rem; color:var(--muted); margin:0}
+
+/* ---------- Newsletter-Sheet ---------- */
+.scrim{
+  position:fixed; inset:0; z-index:20; background:rgba(6,39,37,.42);
+  opacity:0; transition:opacity .3s ease;
+}
+.sheet{
+  position:fixed; z-index:21; left:0; right:0; bottom:0;
+  max-width:620px; margin:0 auto;
+  background:var(--panel); color:var(--panel-ink);
+  border-radius:24px 24px 0 0; padding:22px 20px calc(22px + env(safe-area-inset-bottom));
+  box-shadow:0 -12px 40px rgba(6,39,37,.35);
+  transform:translateY(102%); transition:transform .42s cubic-bezier(.16,1,.3,1);
+}
+.scrim[hidden],.sheet[hidden]{display:none}
+.scrim.open{opacity:1}
+.sheet.open{transform:none}
+.sheet h2{margin:0 0 6px; padding-right:44px; font-size:1.18rem; font-weight:700;
+  letter-spacing:-.02em; max-width:28ch}
+.sheet p{margin:0 0 14px; font-size:.88rem; color:rgba(245,237,225,.86); max-width:42ch}
+.nlform{display:flex; gap:8px; flex-wrap:wrap}
+.nlform input[type=email]{
+  flex:1 1 190px; min-width:0; font:inherit; font-size:1rem;
+  padding:12px 15px; border-radius:12px; border:1px solid rgba(255,255,255,.28);
+  background:#fff; color:#0a4a4a;
+}
+.nlform input[type=email]::placeholder{color:#5e7d79}
+.nlform input[type=email]:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.nlform button{
+  flex:0 0 auto; font:inherit; font-size:.95rem; font-weight:700; cursor:pointer;
+  padding:12px 20px; border-radius:12px; border:0;
+  background:var(--panel-ink); color:var(--panel);
+  transition:transform .16s ease, filter .16s ease;
+}
+.nlform button:hover{filter:brightness(1.06)}
+.nlform button:active{transform:scale(.97)}
+/* .75 statt weniger: darunter reisst der Kleintext die 4.5:1 der WCAG AA */
+.legal{margin:12px 0 0 !important; font-size:.72rem !important; line-height:1.5;
+  color:rgba(245,237,225,.75) !important; max-width:none !important}
+.legal a{color:rgba(245,237,225,.86)}
+.close{
+  position:absolute; top:12px; right:12px; width:34px; height:34px; border-radius:50%;
+  display:grid; place-items:center; cursor:pointer;
+  background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.16);
+  color:var(--panel-ink); font-size:1.1rem; line-height:1; padding:0;
+}
+.close:hover{background:rgba(255,255,255,.22)}
+.hp{position:absolute; left:-5000px}
+.thanks{display:none}
+.sheet.done .nlform,.sheet.done .legal,.sheet.done>p{display:none}
+.sheet.done .thanks{display:block; font-size:.95rem; margin:0}
+@media (prefers-reduced-motion:reduce){
+  .sheet{transform:none; display:none}
+  .sheet.open{display:block}
+}
+
+.hide{display:none !important}
+.empty{text-align:center; color:var(--muted); font-size:.88rem; padding:26px 0; margin:0}
+
+/* ---------- Bewegung ---------- */
+@media (prefers-reduced-motion:no-preference){
+  .anim{opacity:0; transform:translateY(10px); animation:rise .5s cubic-bezier(.16,1,.3,1) forwards}
+  @keyframes rise{to{opacity:1; transform:none}}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important}
+}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "ProfilePage", "url": "https://this-is-vegan.com/links/", "name": "This Is Vegan: alle Links", "mainEntity": {"@type": "Organization", "name": "This Is Vegan", "url": "https://this-is-vegan.com/", "sameAs": ["https://www.instagram.com/thisisvegan.magazin/", "https://www.tiktok.com/@this_is_vegan", "https://www.youtube.com/@thisisvegan", "https://open.spotify.com/show/2FWDkL5SfNG9aeF9CvCpmU", "https://podcasts.apple.com/de/podcast/plantbased-podcast-by-this-is-vegan/id1621084378", "https://www.threads.com/@thisisvegan.magazin", "https://www.pinterest.de/this_is_vegan_official/", "https://www.twitch.tv/thisisvgn"]}, "hasPart": {"@type": "ItemList", "numberOfItems": 23, "itemListElement": [{"@type": "ListItem", "position": 1, "name": "PLANTBASED Podcast", "url": "https://this-is-vegan.com/podcast/"}, {"@type": "ListItem", "position": 2, "name": "Newsletter", "url": "https://this-is-vegan.com/newsletter/"}, {"@type": "ListItem", "position": 3, "name": "Vegan starten: 30-Tage-Plan", "url": "https://this-is-vegan.com/vegan-starten-30-tage-plan/"}, {"@type": "ListItem", "position": 4, "name": "Vegane Rezepte", "url": "https://this-is-vegan.com/vegane-rezepte/"}, {"@type": "ListItem", "position": 5, "name": "Robbie Lockie im Interview", "url": "https://this-is-vegan.com/robbie-lockie-interview/"}, {"@type": "ListItem", "position": 6, "name": "Captain Paul Watson im Interview", "url": "https://this-is-vegan.com/paul-watson-interview/"}, {"@type": "ListItem", "position": 7, "name": "Die besten Vegan-Dokus", "url": "https://this-is-vegan.com/die-besten-vegan-dokus/"}, {"@type": "ListItem", "position": 8, "name": "Das Magazin", "url": "https://this-is-vegan.com/"}, {"@type": "ListItem", "position": 9, "name": "Vegane Tools und Rechner", "url": "https://tools.this-is-vegan.com/"}, {"@type": "ListItem", "position": 10, "name": "YouTube", "url": "https://www.youtube.com/@thisisvegan?sub_confirmation=1"}, {"@type": "ListItem", "position": 11, "name": "WhatsApp-Kanal", "url": "https://chat.whatsapp.com/LWHZUiMm2e53IdlvQ91fia"}, {"@type": "ListItem", "position": 12, "name": "Unterstützen", "url": "https://this-is-vegan.com/spenden/"}, {"@type": "ListItem", "position": 13, "name": "Interviews mit der Vegan-Szene", "url": "https://this-is-vegan.com/interviews/"}, {"@type": "ListItem", "position": 14, "name": "Lebenshof-Atlas", "url": "https://this-is-vegan.com/lebenshoefe/"}, {"@type": "ListItem", "position": 15, "name": "Vegane Events und Festivals", "url": "https://this-is-vegan.com/events/"}, {"@type": "ListItem", "position": 16, "name": "Facebook-Gruppe", "url": "https://www.facebook.com/groups/586983159388633/"}, {"@type": "ListItem", "position": 17, "name": "Alle Deals und Rabattcodes", "url": "https://this-is-vegan.com/community-deals/"}, {"@type": "ListItem", "position": 18, "name": "Nutri+", "url": "https://tidd.ly/478St9o"}, {"@type": "ListItem", "position": 19, "name": "vesh collective", "url": "https://veshcollective.com/discount/THISISVEGAN"}, {"@type": "ListItem", "position": 20, "name": "ecodemy", "url": "https://ecodemy.de/veganer-ernaehrungsberater-ausbildung-fernstudium/?ref=435"}, {"@type": "ListItem", "position": 21, "name": "Lassie Tierversicherung", "url": "https://de.lassie.co/?utm_source=Podcast&utm_medium=Hostread&utm_campaign=This+is+vegan"}, {"@type": "ListItem", "position": 22, "name": "Veganer Onlineshop", "url": "https://www.awin1.com/awclick.php?gid=368779&mid=15953&awinaffid=581387&linkid=2443700&clickref=linkinbio"}, {"@type": "ListItem", "position": 23, "name": "Amazon", "url": "https://amzn.to/44AJwmx"}]}}</script>
+</head>
+<body>
+<main class="wrap">
+<header class="head anim">
+  <div class="head-top">
+    <img class="avatar" src="https://tools.this-is-vegan.com/linkinbio/img/avatar.webp" width="64" height="64"
+         alt="Logo von This Is Vegan" fetchpriority="high">
+    <div>
+      <h1 class="name">This Is Vegan<span class="dot">.</span></h1>
+      <p class="handle">Magazin, Podcast und Tools an einem Ort</p>
+    </div>
+  </div>
+  <p class="claim">Veganes Lifestyle-Magazin. News, Rezepte, Recherchen und der PLANTBASED-Podcast.</p>
+  <nav class="socials" aria-label="Soziale Netzwerke"><a href="https://www.instagram.com/thisisvegan.magazin/" rel="me noopener" target="_blank" aria-label="Instagram"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></a><a href="https://www.tiktok.com/@this_is_vegan" rel="me noopener" target="_blank" aria-label="TikTok"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a><a href="https://www.youtube.com/@thisisvegan" rel="me noopener" target="_blank" aria-label="YouTube"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a><a href="https://open.spotify.com/show/2FWDkL5SfNG9aeF9CvCpmU" rel="me noopener" target="_blank" aria-label="Spotify"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></a><a href="https://podcasts.apple.com/de/podcast/plantbased-podcast-by-this-is-vegan/id1621084378" rel="me noopener" target="_blank" aria-label="Apple Podcasts"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M5.34 0A5.328 5.328 0 000 5.34v13.32A5.328 5.328 0 005.34 24h13.32A5.328 5.328 0 0024 18.66V5.34A5.328 5.328 0 0018.66 0zm6.525 2.568c2.336 0 4.448.902 6.056 2.587 1.224 1.272 1.912 2.619 2.264 4.392.12.59.12 2.2.007 2.864a8.506 8.506 0 01-3.24 5.296c-.608.46-2.096 1.261-2.336 1.261-.088 0-.096-.091-.056-.46.072-.592.144-.715.48-.856.536-.224 1.448-.874 2.008-1.435a7.644 7.644 0 002.008-3.536c.208-.824.184-2.656-.048-3.504-.728-2.696-2.928-4.792-5.624-5.352-.784-.16-2.208-.16-3 0-2.728.56-4.984 2.76-5.672 5.528-.184.752-.184 2.584 0 3.336.456 1.832 1.64 3.512 3.192 4.512.304.2.672.408.824.472.336.144.408.264.472.856.04.36.03.464-.056.464-.056 0-.464-.176-.896-.384l-.04-.03c-2.472-1.216-4.056-3.274-4.632-6.012-.144-.706-.168-2.392-.03-3.04.36-1.74 1.048-3.1 2.192-4.304 1.648-1.737 3.768-2.656 6.128-2.656zm.134 2.81c.409.004.803.04 1.106.106 2.784.62 4.76 3.408 4.376 6.174-.152 1.114-.536 2.03-1.216 2.88-.336.43-1.152 1.15-1.296 1.15-.023 0-.048-.272-.048-.603v-.605l.416-.496c1.568-1.878 1.456-4.502-.256-6.224-.664-.67-1.432-1.064-2.424-1.246-.64-.118-.776-.118-1.448-.008-1.02.167-1.81.562-2.512 1.256-1.72 1.704-1.832 4.342-.264 6.222l.413.496v.608c0 .336-.027.608-.06.608-.03 0-.264-.16-.512-.36l-.034-.011c-.832-.664-1.568-1.842-1.872-2.997-.184-.698-.184-2.024.008-2.72.504-1.878 1.888-3.335 3.808-4.019.41-.145 1.133-.22 1.814-.211zm-.13 2.99c.31 0 .62.06.844.178.488.253.888.745 1.04 1.259.464 1.578-1.208 2.96-2.72 2.254h-.015c-.712-.331-1.096-.956-1.104-1.77 0-.733.408-1.371 1.112-1.745.224-.117.534-.176.844-.176zm-.011 4.728c.988-.004 1.706.349 1.97.97.198.464.124 1.932-.218 4.302-.232 1.656-.36 2.074-.68 2.356-.44.39-1.064.498-1.656.288h-.003c-.716-.257-.87-.605-1.164-2.644-.341-2.37-.416-3.838-.218-4.302.262-.616.974-.966 1.97-.97z"/></svg></a><a href="https://www.threads.com/@thisisvegan.magazin" rel="me noopener" target="_blank" aria-label="Threads"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.75-1.757-.513-.586-1.308-.883-2.359-.89h-.029c-.844 0-1.992.232-2.721 1.32L7.734 7.847c.98-1.454 2.568-2.256 4.478-2.256h.044c3.194.02 5.097 1.975 5.287 5.388.108.046.216.094.321.142 1.49.7 2.58 1.761 3.154 3.07.797 1.82.871 4.79-1.548 7.158-1.85 1.81-4.094 2.628-7.277 2.65Zm1.003-11.69c-.242 0-.487.007-.739.021-1.836.103-2.98.946-2.916 2.143.067 1.256 1.452 1.839 2.784 1.767 1.224-.065 2.818-.543 3.086-3.71a10.5 10.5 0 0 0-2.215-.221z"/></svg></a><a href="https://www.pinterest.de/this_is_vegan_official/" rel="me noopener" target="_blank" aria-label="Pinterest"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/></svg></a><a href="https://www.twitch.tv/thisisvgn" rel="me noopener" target="_blank" aria-label="Twitch"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg></a></nav>
+</header>
+<div class="filter anim" style="animation-delay:.05s"><div class="chips" role="group" aria-label="Links filtern"><button class="chip" type="button" data-cat="alle" aria-pressed="true">Alles</button><button class="chip" type="button" data-cat="lesen" aria-pressed="false">Lesen</button><button class="chip" type="button" data-cat="hoeren" aria-pressed="false">Hören</button><button class="chip" type="button" data-cat="tools" aria-pressed="false">Tools</button><button class="chip" type="button" data-cat="deals" aria-pressed="false">Deals</button><button class="chip" type="button" data-cat="mitmachen" aria-pressed="false">Mitmachen</button></div></div>
+<section id="top" aria-label="Empfehlungen"><div class="feat"><a class="fcard anim" style="animation-delay:0.10s" data-cat="hoeren" href="https://this-is-vegan.com/podcast/?utm_source=linkinbio&amp;utm_medium=social&amp;utm_campaign=featured"><img src="https://tools.this-is-vegan.com/linkinbio/img/podcast_wide.webp" width="640" height="360" alt="" fetchpriority="high" decoding="async"><div class="fcard-b"><h3>PLANTBASED Podcast</h3><p>Neue Folge jeden Donnerstag. Gespräche mit Menschen, die etwas bewegen.</p><span class="go">Reinhören</span></div></a><a class="fcard anim" style="animation-delay:0.15s" data-cat="mitmachen" href="https://this-is-vegan.com/newsletter/?utm_source=linkinbio&amp;utm_medium=social&amp;utm_campaign=featured"><div class="fcard-block" aria-hidden="true"><span>1 Mail<br>pro Woche</span></div><div class="fcard-b"><h3>Newsletter</h3><p>Einmal pro Woche das Beste aus dem Magazin. Kostenlos, jederzeit kündbar.</p><span class="go">Abonnieren</span></div></a></div></section>
+<section id="entdecken">
+  <div class="sec-h"><h2>Entdecken</h2></div>
+  <div class="rows"><a class="row anim" style="animation-delay:0.00s" data-cat="lesen" href="https://this-is-vegan.com/vegan-starten-30-tage-plan/?utm_source=linkinbio&amp;utm_medium=social&amp;utm_campaign=lesen"><img src="https://tools.this-is-vegan.com/linkinbio/img/starten.webp" width="56" height="56" alt="" loading="lazy" decoding="async"><div class="row-b"><p class="row-t">Vegan starten: 30-Tage-Plan</p><p class="row-d">Der kostenlose Einstieg mit Wochenplan und Einkaufsliste</p></div><svg class="arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a><a class="row anim" style="animation-delay:0.04s" data-cat="lesen" href="https://this-is-vegan.com/vegane-rezepte/?utm_source=linkinbio&amp;utm_medium=social&amp;utm_campaign=lesen"><img src="https://tools.this-is-vegan.com/linkinbio/img/rezepte.webp" width="56" height="56" alt="" loading="lazy" decoding="async"><div class="row-b"><p class="row-t">Vegane Rezepte</p><p class="row-d">Einfach, schnell, alltagstauglich</p></div><svg class="arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a><a class="row anim" style="animation-delay:0.08s" data-cat="lesen" href="https://this-is-vegan.com/robbie-lockie-interview/?utm_source=linkinbio&amp;utm_medium=social&amp;utm_campaign=lesen"><img src="https://tools.this-is-vegan.com/linkinbio/img/robbie.webp" width="56" height="56" alt="" loading="lazy" decoding="async"><div class="row-b"><p class="row-t">Robbie Lockie im Interview</p><p class="row-d">foodfacts.org, Fake News und warum es trotzdem Hoffnung gibt</p></div><svg class="arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a><a class="row anim" style="animation-delay:0.12s" data-cat="lesen" href="https://this-is-vegan.com/paul-watson-interview/?utm_source=linkinbio&amp;utm_medium=social&amp;utm_campaign=lesen"><img src="https://tools.this-is-vegan.com/linkinbio/img/watson.webp" width="56" height="56" alt="" loading="lazy" decoding="async"><div class="row-b"><p class="row-t">Captain Paul Watson im Interview</p><p class="row-d">Der Meeresschützer über Haft, Walfang und die Petition</p></div><svg class="arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a><a class="row anim" style="animation-delay:0.16s" data-cat="lesen" href="https://this-is-vegan.com/die-besten-vegan-dokus/?utm_source=linkinbio&amp;utm_medium=social&amp;utm_campaign=lesen"><img src="https://tools.this-is-vegan.com/linkinbio/img/dokus.webp" width="56" height="56" alt="" loading="lazy" decoding="async"><div class="row-b"><p class="row-t">Die besten Vegan-Dokus</p><p class="row-d">Filme, die den Blick auf Essen verändern</p></div><svg class="arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a><a class="row anim" style="animation-delay:0.20s" data-cat="lesen" href="https://this-is-vegan.com/?utm_source=linkinbio&amp;utm_medium=social&amp;utm_campaign=lesen"><img src="https://tools.this-is-vegan.com/linkinbio/img/magazin.webp" width="56" height="56" alt="" loading="lazy" decoding="async"><div class="row-b"><p class="row-t">Das Magazin</p><p class="row-d">Alle Artikel, News und Recherchen</p></div><svg class="arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a><a class="row anim" style="animation-delay:0.24s" data-cat="tools" href="https://tools.this-is-vegan.com/?utm_source=linkinbio&amp;utm_medium=social&amp;utm_campaign=tools"><img src="https://tools.this-is-vegan.com/linkinbio/img/tools.webp" width="56" height="56" alt="" loading="lazy" decoding="async"><div class="row-b"><p class="row-t">Vegane Tools und Rechner</p><p class="row-d">20 kostenlose Helfer: E-Nummern, Nährstoffe, Saisonkalender</p></div><svg class="arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a><a class="row anim" style="animation-delay:0.28s" data-cat="hoeren" href="https://www.youtube.com/@thisisvegan?sub_confirmation=1" target="_blank" rel="noopener"><img src="https://tools.this-is-vegan.com/linkinbio/img/youtube.webp" width="56" height="56" alt="" loading="lazy" decoding="async"><div class="row-b"><p class="row-t">YouTube</p><p class="row-d">Videopodcast und Reportagen</p></div><svg class="arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a><a class="row anim" style="animation-delay:0.32s" data-cat="mitmachen" href="https://chat.whatsapp.com/LWHZUiMm2e53IdlvQ91fia" target="_blank" rel="noopener"><img src="https://tools.this-is-vegan.com/linkinbio/img/whatsapp.webp" width="56" height="56" alt="" loading="lazy" decoding="async"><div class="row-b"><p class="row-t">WhatsApp-Kanal</p><p class="row-d">News zuerst, direkt aufs Handy</p></div><svg class="arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a><a class="row anim" style="animation-delay:0.36s" data-cat="mitmachen" href="https://this-is-vegan.com/spenden/?utm_source=linkinbio&amp;utm_medium=social&amp;utm_campaign=mitmachen"><img src="https://tools.this-is-vegan.com/linkinbio/img/spenden.webp" width="56" height="56" alt="" loading="lazy" decoding="async"><div class="row-b"><p class="row-t">Unterstützen</p><p class="row-d">Unabhängiger Journalismus kostet Geld, nicht dich</p></div><svg class="arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a></div>
+</section>
+<section id="mehr">
+  <div class="sec-h"><h2>Außerdem</h2></div>
+  <ul class="mini"><li data-cat="lesen"><a href="https://this-is-vegan.com/interviews/?utm_source=linkinbio&amp;utm_medium=social&amp;utm_campaign=mini"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M12 5v14M5 12h14"/></svg>Interviews mit der Vegan-Szene</a></li><li data-cat="lesen"><a href="https://this-is-vegan.com/lebenshoefe/?utm_source=linkinbio&amp;utm_medium=social&amp;utm_campaign=mini"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M12 5v14M5 12h14"/></svg>Lebenshof-Atlas</a></li><li data-cat="lesen"><a href="https://this-is-vegan.com/events/?utm_source=linkinbio&amp;utm_medium=social&amp;utm_campaign=mini"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M12 5v14M5 12h14"/></svg>Vegane Events und Festivals</a></li><li data-cat="mitmachen"><a href="https://www.facebook.com/groups/586983159388633/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M12 5v14M5 12h14"/></svg>Facebook-Gruppe</a></li></ul>
+</section>
+<section id="deals">
+  <div class="sec-h">
+    <h2>Deals und Rabattcodes</h2>
+    <p>Code antippen, dann ist er kopiert</p>
+  </div>
+  <div class="rows"><a class="row deal anim" style="animation-delay:0.00s" data-cat="deals" href="https://this-is-vegan.com/community-deals/?utm_source=linkinbio&amp;utm_medium=social&amp;utm_campaign=deals" target="_blank" rel="noopener"><img src="https://tools.this-is-vegan.com/linkinbio/img/deals.webp" width="56" height="56" alt="" loading="lazy" decoding="async"><div class="row-b"><p class="row-t">Alle Deals und Rabattcodes</p><p class="row-d">Die gesammelte Übersicht im Magazin</p></div><svg class="arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a><div class="row deal anim" style="animation-delay:0.03s" data-cat="deals"><img src="https://tools.this-is-vegan.com/linkinbio/img/nutriplus.webp" width="56" height="56" alt="" loading="lazy" decoding="async"><div class="row-b"><a class="row-t stretch" href="https://tidd.ly/478St9o" target="_blank" rel="sponsored noopener">Nutri+</a><p class="row-d">Protein und Supplements, 10 % Rabatt</p><div class="meta"><button class="code" type="button" data-code="THISISVEGAN" aria-label="Rabattcode THISISVEGAN kopieren"><span class="cval">THISISVEGAN</span><span class="cp"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 9.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667l0 -8.666"/><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1"/></svg><span>kopieren</span></span></button><span class="ad">Anzeige</span></div></div><span class="arrow-box"><svg class="arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></span></div><div class="row deal anim" style="animation-delay:0.06s" data-cat="deals"><img src="https://tools.this-is-vegan.com/linkinbio/img/vesh.webp" width="56" height="56" alt="" loading="lazy" decoding="async"><div class="row-b"><a class="row-t stretch" href="https://veshcollective.com/discount/THISISVEGAN" target="_blank" rel="sponsored noopener">vesh collective</a><p class="row-d">Faire vegane Mode, 5 % Rabatt</p><div class="meta"><button class="code" type="button" data-code="THISISVEGAN" aria-label="Rabattcode THISISVEGAN kopieren"><span class="cval">THISISVEGAN</span><span class="cp"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 9.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667l0 -8.666"/><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1"/></svg><span>kopieren</span></span></button><span class="ad">Anzeige</span></div></div><span class="arrow-box"><svg class="arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></span></div><div class="row deal anim" style="animation-delay:0.09s" data-cat="deals"><img src="https://tools.this-is-vegan.com/linkinbio/img/ecodemy.webp" width="56" height="56" alt="" loading="lazy" decoding="async"><div class="row-b"><a class="row-t stretch" href="https://ecodemy.de/veganer-ernaehrungsberater-ausbildung-fernstudium/?ref=435" target="_blank" rel="sponsored noopener">ecodemy</a><p class="row-d">Ausbildung zur veganen Ernährungsberatung, 10 % Rabatt</p><div class="meta"><button class="code" type="button" data-code="tiv-10" aria-label="Rabattcode tiv-10 kopieren"><span class="cval">tiv-10</span><span class="cp"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 9.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667l0 -8.666"/><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1"/></svg><span>kopieren</span></span></button><span class="ad">Anzeige</span></div></div><span class="arrow-box"><svg class="arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></span></div><div class="row deal anim" style="animation-delay:0.12s" data-cat="deals"><img src="https://tools.this-is-vegan.com/linkinbio/img/lassie.webp" width="56" height="56" alt="" loading="lazy" decoding="async"><div class="row-b"><a class="row-t stretch" href="https://de.lassie.co/?utm_source=Podcast&amp;utm_medium=Hostread&amp;utm_campaign=This+is+vegan" target="_blank" rel="sponsored noopener">Lassie Tierversicherung</a><p class="row-d">Kranken- und OP-Schutz für Hund und Katze, 15 € Rabatt</p><div class="meta"><button class="code" type="button" data-code="VEGAN15" aria-label="Rabattcode VEGAN15 kopieren"><span class="cval">VEGAN15</span><span class="cp"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 9.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667l0 -8.666"/><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1"/></svg><span>kopieren</span></span></button><span class="ad">Anzeige</span></div></div><span class="arrow-box"><svg class="arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></span></div><a class="row deal anim" style="animation-delay:0.15s" data-cat="deals" href="https://www.awin1.com/awclick.php?gid=368779&amp;mid=15953&amp;awinaffid=581387&amp;linkid=2443700&amp;clickref=linkinbio" target="_blank" rel="sponsored noopener"><span class="tile" aria-hidden="true">V</span><div class="row-b"><p class="row-t">Veganer Onlineshop</p><p class="row-d">Über 2.000 vegane Artikel an einem Ort</p><div class="meta"><span class="ad">Anzeige</span></div></div><svg class="arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a><a class="row deal anim" style="animation-delay:0.18s" data-cat="deals" href="https://amzn.to/44AJwmx" target="_blank" rel="sponsored noopener"><span class="tile" aria-hidden="true">A</span><div class="row-b"><p class="row-t">Amazon</p><p class="row-d">Unsere veganen Produktempfehlungen</p><div class="meta"><span class="ad">Anzeige</span></div></div><svg class="arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a></div>
+  <p class="note">Mit „Anzeige“ markierte Links sind Werbe- oder Partnerlinks. Kaufst du darüber
+  etwas, bekommen wir eine Provision. Für dich bleibt der Preis gleich, oft wird er mit dem Code
+  sogar günstiger. Damit finanzieren wir die Redaktion.</p>
+</section>
+<p class="empty hide" id="empty">Hier ist gerade nichts. Wähle oben eine andere Rubrik.</p>
+<footer>
+  <ul class="fnav"><li><a href="https://this-is-vegan.com/redaktion/">Redaktion</a></li><li><a href="https://this-is-vegan.com/work-with-us/">Werben</a></li><li><a href="https://this-is-vegan.com/impressum/">Impressum</a></li><li><a href="https://this-is-vegan.com/dateschutzerklaerung/">Datenschutz</a></li><li><a href="mailto:info@this-is-vegan.com">Kontakt</a></li></ul>
+  <p class="sig">This Is Vegan<span class="dot">.</span> Unabhängiges veganes Magazin.</p>
+</footer>
+</main>
+<div class="scrim" id="scrim" hidden></div>
+<aside class="sheet" id="sheet" hidden role="dialog" aria-modal="true"
+       aria-labelledby="sheet-h">
+  <button class="close" type="button" id="sheet-x" aria-label="Schließen">&times;</button>
+  <h2 id="sheet-h">Einmal pro Woche das Beste aus dem Magazin</h2>
+  <p>Rezepte, Recherchen und Deals, die es nicht auf Instagram schaffen. Kostenlos.</p>
+  <form class="nlform" action="https://this-is-vegan.us19.list-manage.com/subscribe/post?u=2fbdb8085d9fdad303c73a1a0&amp;id=4752d525fc&amp;v_id=5302&amp;f_id=002aa5e6f0" method="post" target="_blank" id="nlform">
+    <label class="sr" for="sheet-mail">E-Mail-Adresse</label>
+    <input type="email" name="EMAIL" id="sheet-mail" placeholder="deine@email.de"
+           required autocomplete="email" inputmode="email">
+    <div class="hp" aria-hidden="true">
+      <input type="text" name="b_2fbdb8085d9fdad303c73a1a0_4752d525fc" tabindex="-1" value="" autocomplete="off">
+    </div>
+    <button type="submit" name="subscribe">Rein da</button>
+  </form>
+  <p class="legal">Mit dem Absenden meldest du dich zum Newsletter an. Abmeldung jederzeit
+  über den Link in jeder Mail. Mehr dazu in der
+  <a href="https://this-is-vegan.com/datenschutzerklaerung/" target="_blank" rel="noopener">Datenschutzerklärung</a>.</p>
+  <p class="thanks">Fast geschafft. Bestätige die Anmeldung im Postfach, dann bist du dabei.</p>
+</aside>
+<script>
+(function(){
+  var chips=document.querySelectorAll('.chip');
+  // Die Chips tragen selbst ein data-cat und duerfen nicht mitgefiltert werden
+  var items=document.querySelectorAll('[data-cat]:not(.chip)');
+  var secs=document.querySelectorAll('section');
+  var bar=document.querySelector('.filter');
+
+  function apply(cat){
+    items.forEach(function(el){
+      el.classList.toggle('hide', cat!=='alle' && el.dataset.cat!==cat);
+    });
+    secs.forEach(function(s){
+      var n=s.querySelectorAll('[data-cat]:not(.chip):not(.hide)').length;
+      s.classList.toggle('hide', n===0);
+    });
+    document.getElementById('empty').classList.toggle(
+      'hide', document.querySelectorAll('[data-cat]:not(.chip):not(.hide)').length>0);
+  }
+
+  chips.forEach(function(c){
+    c.addEventListener('click', function(){
+      chips.forEach(function(o){o.setAttribute('aria-pressed', String(o===c));});
+      apply(c.dataset.cat);
+    });
+  });
+
+  // Rabattcode in die Zwischenablage
+  document.querySelectorAll('.code').forEach(function(b){
+    b.addEventListener('click', function(){
+      var label=b.querySelector('.cp'), old=label.textContent;
+      var done=function(){ label.textContent='kopiert'; setTimeout(function(){
+        label.textContent=old; }, 1600); };
+      if(navigator.clipboard && window.isSecureContext){
+        navigator.clipboard.writeText(b.dataset.code).then(done, function(){});
+      } else {
+        var t=document.createElement('textarea');
+        t.value=b.dataset.code; t.setAttribute('readonly','');
+        t.style.position='absolute'; t.style.left='-9999px';
+        document.body.appendChild(t); t.select();
+        try{ document.execCommand('copy'); done(); }catch(err){}
+        document.body.removeChild(t);
+      }
+    });
+  });
+
+  // Newsletter-Sheet: einmal pro Besucher, danach 30 Tage Ruhe
+  var sheet=document.getElementById('sheet'), scrim=document.getElementById('scrim');
+  var KEY='tiv_nl_sheet', WAIT=2500, QUIET=30*24*60*60*1000;
+  function seen(){
+    try{
+      var v=localStorage.getItem(KEY);
+      return v && (Date.now()-parseInt(v,10)) < QUIET;
+    }catch(err){ return false; }
+  }
+  function remember(){ try{ localStorage.setItem(KEY, String(Date.now())); }catch(err){} }
+  var lastFocus=null;
+  function open(){
+    lastFocus=document.activeElement;
+    sheet.hidden=false; scrim.hidden=false;
+    requestAnimationFrame(function(){
+      sheet.classList.add('open'); scrim.classList.add('open');
+      var f=document.getElementById('sheet-mail');
+      if(f && window.matchMedia('(min-width:768px)').matches){ f.focus(); }
+    });
+  }
+  function close(){
+    remember();
+    sheet.classList.remove('open'); scrim.classList.remove('open');
+    setTimeout(function(){ sheet.hidden=true; scrim.hidden=true; }, 420);
+    if(lastFocus && lastFocus.focus){ lastFocus.focus(); }
+  }
+  if(sheet && !seen()){
+    setTimeout(open, WAIT);
+    document.getElementById('sheet-x').addEventListener('click', close);
+    scrim.addEventListener('click', close);
+    document.addEventListener('keydown', function(ev){
+      if(ev.key==='Escape' && !sheet.hidden){ close(); }
+    });
+    // Fokus bleibt im Dialog, solange er offen ist
+    sheet.addEventListener('keydown', function(ev){
+      if(ev.key!=='Tab') return;
+      var f=sheet.querySelectorAll('button, input[type=email], a[href]');
+      if(!f.length) return;
+      var first=f[0], last=f[f.length-1];
+      if(ev.shiftKey && document.activeElement===first){ ev.preventDefault(); last.focus(); }
+      else if(!ev.shiftKey && document.activeElement===last){ ev.preventDefault(); first.focus(); }
+    });
+    document.getElementById('nlform').addEventListener('submit', function(){
+      remember();
+      sheet.classList.add('done');
+      setTimeout(close, 3200);
+    });
+  }
+
+  // Schatten unter der Filterleiste, sobald sie klebt
+  if(bar && 'IntersectionObserver' in window){
+    var probe=document.createElement('div');
+    bar.parentNode.insertBefore(probe, bar);
+    new IntersectionObserver(function(en){
+      bar.classList.toggle('stuck', !en[0].isIntersecting);
+    }, {threshold:1}).observe(probe);
+  }
+})();
+</script>
+</body>
+</html>
