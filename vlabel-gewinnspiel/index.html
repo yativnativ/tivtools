@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gewinnspiel „V-Label Awards 2026 – Verlosung Geschenkboxen“ | This Is Vegan</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Piazzolla:opsz,wght@8..30,400;8..30,500;8..30,600&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f7f4;
+    --paper: #ffffff;
+    --ink: #16211b;
+    --ink-soft: #4d5c53;
+    --ink-faint: #7c8a80;
+    --line: #dbe3dc;
+    --line-strong: #b9c6bd;
+    --accent: #007a4d;
+    --accent-soft: #e7f2ec;
+    --flag: #e2102f;
+    --flag-soft: #fdecee;
+    --code-bg: #eef2ee;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #10140f;
+      --paper: #171d16;
+      --ink: #eaf1e9;
+      --ink-soft: #b1beb2;
+      --ink-faint: #7f8c81;
+      --line: #2a332a;
+      --line-strong: #3c473a;
+      --accent: #4dbf8b;
+      --accent-soft: #1c2a20;
+      --flag: #ff5a70;
+      --flag-soft: #2c1417;
+      --code-bg: #1d241c;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #10140f;
+    --paper: #171d16;
+    --ink: #eaf1e9;
+    --ink-soft: #b1beb2;
+    --ink-faint: #7f8c81;
+    --line: #2a332a;
+    --line-strong: #3c473a;
+    --accent: #4dbf8b;
+    --accent-soft: #1c2a20;
+    --flag: #ff5a70;
+    --flag-soft: #2c1417;
+    --code-bg: #1d241c;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Source Sans 3", "Segoe UI", Arial, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+
+  header.letterhead {
+    border-bottom: 3px solid var(--ink);
+    padding: 28px 0 18px;
+    margin-bottom: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .brandmark {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .brandmark strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .doc-id {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--ink-faint);
+    text-align: right;
+  }
+
+  .ad-flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--flag-soft);
+    color: var(--flag);
+    border: 1px solid color-mix(in srgb, var(--flag) 35%, transparent);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    font-family: "Piazzolla", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(28px, 5vw, 40px);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 0 0 10px;
+    text-wrap: balance;
+  }
+
+  .subhead {
+    color: var(--ink-soft);
+    font-size: 16.5px;
+    max-width: 56ch;
+    margin: 0 0 28px;
+  }
+
+  .facts {
+    background: var(--line);
+    border: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    margin-bottom: 36px;
+  }
+
+  .fact {
+    background: var(--paper);
+    padding: 16px 18px;
+  }
+
+  .fact .k {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 6px;
+  }
+
+  .fact .v {
+    font-size: 15.5px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .fact .v.mono {
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .fact .note {
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-weight: 400;
+    margin-top: 3px;
+  }
+
+  nav.toc {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--line);
+    margin-bottom: 40px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+  }
+
+  nav.toc a {
+    flex: 1;
+    text-align: center;
+    padding: 12px 10px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-right: 1px solid var(--line);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  nav.toc a:last-child { border-right: none; }
+
+  nav.toc a:hover, nav.toc a:focus-visible {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  section.doc {
+    margin-bottom: 56px;
+    scroll-margin-top: 20px;
+  }
+
+  .doc-title {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    border-bottom: 1px solid var(--line-strong);
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+  }
+
+  .doc-title h2 {
+    font-family: "Piazzolla", Georgia, serif;
+    font-weight: 600;
+    font-size: 24px;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  .doc-title .tag {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 3px 9px;
+    white-space: nowrap;
+  }
+
+  ol.clauses {
+    list-style: none;
+    counter-reset: clause;
+    padding: 0;
+    margin: 0;
+  }
+
+  ol.clauses > li {
+    counter-increment: clause;
+    position: relative;
+    padding: 14px 0 14px 44px;
+    border-top: 1px solid var(--line);
+    font-size: 15.5px;
+    color: var(--ink);
+  }
+
+  ol.clauses > li::before {
+    content: counter(clause);
+    position: absolute;
+    left: 0;
+    top: 14px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .privacy h3 {
+    font-family: "Source Sans 3", sans-serif;
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 28px 0 10px;
+    padding-top: 4px;
+  }
+
+  .privacy h3:first-child { margin-top: 0; }
+
+  .privacy p {
+    font-size: 15.5px;
+    color: var(--ink);
+    margin: 0 0 12px;
+  }
+
+  .privacy ul {
+    margin: 0 0 14px;
+    padding-left: 20px;
+  }
+
+  .privacy li {
+    font-size: 15.5px;
+    margin-bottom: 6px;
+  }
+
+  .party-block {
+    background: var(--code-bg);
+    border: 1px solid var(--line-strong);
+    padding: 14px 16px;
+    font-size: 14.5px;
+    margin: 14px 0 20px;
+  }
+
+  .party-block .who {
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .party-block a { color: var(--accent); }
+
+  code, .mono-inline {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.92em;
+    background: var(--code-bg);
+    padding: 1px 5px;
+  }
+
+  footer.colophon {
+    border-top: 3px solid var(--ink);
+    margin-top: 20px;
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    color: var(--ink-faint);
+  }
+
+  a { color: var(--accent); }
+
+  @media (max-width: 540px) {
+    .facts { grid-template-columns: 1fr; }
+    nav.toc { flex-direction: column; }
+    nav.toc a { border-right: none; border-bottom: 1px solid var(--line); }
+    nav.toc a:last-child { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="letterhead">
+    <div class="brandmark"><strong>@vegan.alarm</strong> × V-Label Deutschland</div>
+    <div class="doc-id">Gewinnspiel-Unterlagen<br>Stand 09.09.2026</div>
+  </header>
+
+  <span class="ad-flag">Werbung · Kooperation mit V-Label Deutschland</span>
+
+  <h1>Gewinnspiel „V-Label Awards 2026 – Verlosung Geschenkboxen“</h1>
+  <p class="subhead">Offizielle Teilnahmebedingungen und Datenschutzhinweise zum Instagram-Gewinnspiel von @vegan.alarm in Kooperation mit ProVeg e.V. / V-Label Deutschland.</p>
+
+  <div class="facts">
+    <div class="fact">
+      <div class="k">Veranstalter</div>
+      <div class="v">ProVeg e.V. (V-Label)</div>
+      <div class="note">in Kooperation mit @vegan.alarm</div>
+    </div>
+    <div class="fact">
+      <div class="k">Teilnahmezeitraum</div>
+      <div class="v mono">09.09.–30.09.2026</div>
+      <div class="note">Public Voting der V-Label Awards</div>
+    </div>
+    <div class="fact">
+      <div class="k">Gewinn</div>
+      <div class="v">1× Überraschungsbox</div>
+      <div class="note">Produkte der V-Label-Awards-Shortlist, Auswahl kann vom Beitragsbild abweichen</div>
+    </div>
+    <div class="fact">
+      <div class="k">Versand</div>
+      <div class="v">Nur innerhalb Deutschlands</div>
+      <div class="note">Teilnahmeberechtigt: Wohnsitz DE / AT / CH, ab 18 Jahren</div>
+    </div>
+  </div>
+
+  <nav class="toc">
+    <a href="#teilnahmebedingungen">Teilnahmebedingungen</a>
+    <a href="#datenschutz">Datenschutzhinweise</a>
+  </nav>
+
+  <section class="doc" id="teilnahmebedingungen">
+    <div class="doc-title">
+      <h2>Teilnahmebedingungen</h2>
+      <span class="tag">Version 1.0 · Stand 28.08.2026</span>
+    </div>
+
+    <ol class="clauses">
+      <li>Das Gewinnspiel wird durch @vegan.alarm (Yannick Haldenwanger) in Kooperation mit ProVeg e.V., Genthiner Straße 48, 10785 Berlin, im Rahmen der V-Label Awards 2026 durchgeführt.</li>
+      <li>Das Gewinnspiel richtet sich ausschließlich an Privatpersonen, die das 18. Lebensjahr vollendet haben und ihren Wohnsitz in Deutschland, Österreich oder der Schweiz haben. Ausgeschlossen von der Teilnahme sind Mitarbeiter:innen von ProVeg e. V. sowie deren Angehörige.</li>
+      <li>Eine Teilnahme ist im Zeitraum des Public Votings der V-Label Awards vom 01.09.2026 bis 30.09.2026 möglich. Der genaue Teilnahmezeitraum sowie die konkrete Teilnahmehandlung (z. B. Liken, Kommentieren, Folgen) sind der Caption des jeweiligen Instagram-Beitrags zu entnehmen. Die Teilnahme erfolgt ausschließlich über Instagram.</li>
+      <li>Die Gewinnermittlung erfolgt zufällig.</li>
+      <li>Der/die Gewinner:in wird per Instagram-Direktnachricht kontaktiert. Erfolgt innerhalb von 48 Stunden keine Reaktion, verfällt der Gewinner:innenstatus und es kann eine neue Ziehung erfolgen.</li>
+      <li>Der Gewinn ist eine Produktbox mit V-Label-Produkten, die an den V-Label Awards 2026 teilgenommen haben und auf der Shortlist standen. Eine Übertragung des Gewinns auf Dritte ist nicht möglich. Der Versand erfolgt ausschließlich an Adressen in Deutschland.</li>
+      <li>Der Gewinn wird durch @vegan.alarm oder durch ProVeg e.V. versendet.</li>
+      <li>Die zwecks Versendung des Gewinns erhobenen Adressdaten werden unverzüglich nach Versand des Gewinns gelöscht.</li>
+      <li>ProVeg e.V. behält sich vor, das Gewinnspiel jederzeit ohne Ankündigung und ohne Angabe von Gründen abzubrechen oder zu beenden.</li>
+      <li>Auf diese Teilnahmebedingungen findet deutsches Recht Anwendung, soweit diese Regelung nicht gegen zwingende gesetzliche Bestimmungen verstößt.</li>
+      <li>Die Promotion steht in keiner Verbindung zu Instagram und ist in keiner Weise von Instagram gesponsert, unterstützt oder organisiert.</li>
+      <li>Etwaige rechtliche Ansprüche aus dem Gewinnspiel sind ausschließlich an den/die Veranstalter:in zu richten, keinesfalls an Instagram selbst. Der Rechtsweg zur Überprüfung der Auslosung ist ausgeschlossen.</li>
+      <li>Detaillierte Informationen zum Umgang mit personenbezogenen Daten enthalten die nachfolgenden Datenschutzhinweise.</li>
+    </ol>
+  </section>
+
+  <section class="doc privacy" id="datenschutz">
+    <div class="doc-title">
+      <h2>Datenschutzhinweise</h2>
+      <span class="tag">Version 1.1 · Stand 08.10.2025</span>
+    </div>
+
+    <p>Diese Hinweise informieren gemäß Art. 13 und Art. 14 DSGVO über die Verarbeitung personenbezogener Daten im Zusammenhang mit dem Gewinnspiel „V-Label Awards 2026 – Verlosung Geschenkboxen“. Sie gelten für Personen, die am Gewinnspiel teilnehmen oder deren Daten im Zusammenhang mit der Gewinnabwicklung verarbeitet werden.</p>
+
+    <h3>1. Gemeinsam Verantwortliche</h3>
+    <p>Für die Verarbeitung sind die folgenden Stellen gemeinsam Verantwortliche im Sinne von Art. 26 DSGVO:</p>
+    <div class="party-block">
+      <div class="who">ProVeg e.V.</div>
+      Genthiner Straße 48, 10785 Berlin<br>
+      Datenschutzfragen: <a href="mailto:datenschutz@v-label.de">datenschutz@v-label.de</a>
+    </div>
+    <div class="party-block">
+      <div class="who">Yannick Haldenwanger (@vegan.alarm)</div>
+      Kanal: <a href="https://www.instagram.com/vegan.alarm/" target="_blank" rel="noopener">instagram.com/vegan.alarm</a><br>
+      E-Mail: <a href="mailto:yannick@this-is-vegan.com">yannick@this-is-vegan.com</a>
+    </div>
+    <p>Die gemeinsame Verantwortlichkeit betrifft ausschließlich die hier beschriebene Gewinnspielverarbeitung. Für sonstige eigene Verarbeitungen von ProVeg e.V., von @vegan.alarm oder der jeweiligen Social-Media-Plattform gelten deren eigene Datenschutzhinweise.</p>
+
+    <h3>2. Aufteilung der Zuständigkeiten</h3>
+    <p>@vegan.alarm übernimmt die Kommunikation und Durchführung des Gewinnspiels über den eigenen Instagram-Account sowie die erste Sichtung eingehender Teilnahmen. ProVeg e.V. stellt die Produktboxen bereit, wirkt an Festlegung und Dokumentation der Abwicklung mit und verarbeitet die für die Gewinnabwicklung erforderlichen Daten. Beide stimmen sich bei Gewinnermittlung, datenschutzrechtlichen Anfragen und etwaigen Datenschutzverletzungen ab. ProVeg e.V. ist zentrale Kontaktstelle, ohne dass dies das Recht einschränkt, sich auch direkt an @vegan.alarm zu wenden.</p>
+
+    <h3>3. Herkunft der Daten</h3>
+    <p>Werden Daten unmittelbar im Rahmen der Teilnahme über den Account von @vegan.alarm mitgeteilt, erfolgt die Information nach Art. 13 DSGVO. Erhält ProVeg e.V. Daten von Gewinner:innen über @vegan.alarm (z. B. zur Kontaktaufnahme, Bestätigung oder Versandabwicklung), erfolgt die Information nach Art. 14 DSGVO. Wer eine abweichende Lieferadresse Dritter angibt, ist selbst dafür verantwortlich, dazu berechtigt zu sein und die betroffene Person informiert zu haben.</p>
+
+    <h3>4. Datenkategorien</h3>
+    <ul>
+      <li>Teilnahmedaten: Accountname, Profilname, öffentlich sichtbarer Beitrag (Kommentar, Antwort, Markierung, Nachricht), Zeitpunkt der Teilnahme</li>
+      <li>Kommunikationsdaten: Name, Accountname, Direktnachrichten, E-Mail-Adresse und weitere Angaben aus dem Austausch zur Gewinnabwicklung</li>
+      <li>Gewinner- und Versanddaten: Name, E-Mail-Adresse, Versandanschrift, Angaben zur Zustellung — die vollständige Anschrift nur, soweit für den Versand erforderlich</li>
+      <li>Dokumentationsdaten zur Durchführung, Ermittlung, Benachrichtigung und Abwicklung des Gewinns</li>
+      <li>Ggf. Altersbestätigung oder Nachweis der Teilnahmeberechtigung</li>
+    </ul>
+
+    <h3>5. Zwecke der Verarbeitung</h3>
+    <ul>
+      <li>Entgegennahme, Prüfung und Verwaltung der Teilnahmen, Ermittlung und Benachrichtigung der Gewinner:innen</li>
+      <li>Organisation und Durchführung von Gewinnübergabe bzw. Versand</li>
+      <li>Beantwortung von Anfragen, Abwehr oder Durchsetzung rechtlicher Ansprüche</li>
+      <li>Dokumentation der ordnungsgemäßen Durchführung sowie Erfüllung gesetzlicher Aufbewahrungspflichten</li>
+    </ul>
+
+    <h3>6. Rechtsgrundlagen</h3>
+    <p>Durchführung, Prüfung, Ermittlung und Benachrichtigung erfolgen auf Grundlage von Art. 6 Abs. 1 S. 1 lit. b DSGVO. Berechtigte Interessen (Missbrauchsverhinderung, Dokumentation, Rechtsdurchsetzung) stützen sich auf Art. 6 Abs. 1 S. 1 lit. f DSGVO. Gesetzliche Aufbewahrungs- oder Offenlegungspflichten stützen sich auf Art. 6 Abs. 1 S. 1 lit. c DSGVO. Eine Veröffentlichung von Gewinnernamen erfolgt ausschließlich mit gesonderter Einwilligung nach Art. 6 Abs. 1 S. 1 lit. a DSGVO — sie ist im Rahmen dieses Gewinnspiels nicht vorgesehen.</p>
+
+    <h3>7. Empfänger</h3>
+    <p>Die Teilnahme erfolgt über den Instagram-Account von @vegan.alarm; Accountname und Teilnahmebeitrag sind dort im jeweils gewählten Umfang sichtbar. @vegan.alarm erhält die im Rahmen des Gewinnspiels sichtbaren oder mitgeteilten Daten. ProVeg e.V. erfährt, wer gewonnen hat, und erhält die für Gewinnabwicklung und Dokumentation nötigen Daten, ggf. inklusive vollständiger Versandanschrift — diese wird nur an ProVeg e.V. und einen beauftragten Versanddienstleister weitergegeben, soweit für den Versand erforderlich. Eine Veröffentlichung von Adressen oder Kontaktdaten erfolgt nicht.</p>
+
+    <h3>8. Verantwortung der Plattform</h3>
+    <p>Für die Verarbeitung durch Instagram selbst (Netzwerkbetrieb, technische Auslieferung, Messungen, Sicherheitsfunktionen, eigene Datenverarbeitung) ist die Plattform nach ihren eigenen Bedingungen verantwortlich. Beiträge, Kommentare oder andere Teilnahmehandlungen können je nach Privatsphäre-Einstellungen für andere sichtbar sein.</p>
+
+    <h3>9. Drittlandübermittlungen</h3>
+    <p>Eine Übermittlung in Staaten außerhalb der EU/des EWR ist für die eigentliche Gewinnabwicklung nicht beabsichtigt. Soweit eingesetzte Dienstleister oder die Plattform selbst Daten in Drittländern verarbeiten, gelten deren eigene Angaben und Schutzmaßnahmen. Von ProVeg e.V. oder @vegan.alarm veranlasste Drittlandübermittlungen erfolgen nur unter den Voraussetzungen der Art. 44 ff. DSGVO.</p>
+
+    <h3>10. Speicherdauer</h3>
+    <p>Daten nicht gewinnender Teilnehmender werden nach Abschluss des Gewinnspiels und einer angemessenen Frist für Rückfragen gelöscht — spätestens am <span class="mono-inline">31.10.2026</span>. Daten von Gewinner:innen werden für die Dauer der Gewinnabwicklung gespeichert und danach gelöscht, soweit keine gesetzlichen Aufbewahrungspflichten oder berechtigten Interessen eine längere Speicherung erfordern.</p>
+
+    <h3>11. Betroffenenrechte</h3>
+    <p>Es besteht das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) sowie Widerspruch (Art. 21 DSGVO) gegen Verarbeitungen nach Art. 6 Abs. 1 lit. e oder f. Beruht eine Verarbeitung auf einer Einwilligung, kann diese jederzeit mit Wirkung für die Zukunft widerrufen werden (Art. 7 Abs. 3 DSGVO). Diese Rechte können gegenüber jedem der beiden Verantwortlichen geltend gemacht werden — zentral über <a href="mailto:datenschutz@v-label.de">datenschutz@v-label.de</a> oder direkt bei @vegan.alarm.</p>
+
+    <h3>12. Beschwerderecht</h3>
+    <p>Es besteht das Recht, sich bei einer Datenschutzaufsichtsbehörde zu beschweren, insbesondere am gewöhnlichen Aufenthaltsort, Arbeitsplatz oder Ort des mutmaßlichen Verstoßes.</p>
+    <div class="party-block">
+      <div class="who">Datenschutzbeauftragter von ProVeg e.V.</div>
+      datenschutz nord GmbH, Kurfürstendamm 212, 10719 Berlin<br>
+      E-Mail: <a href="mailto:office@datenschutz-nord.de">office@datenschutz-nord.de</a>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    <span>Gewinnspiel @vegan.alarm × V-Label Deutschland</span>
+    <span>Teilnahmebed. v1.0 · Datenschutz v1.1</span>
+  </footer>
+
+</div>
+</body>
+</html>

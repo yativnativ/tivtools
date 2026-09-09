@@ -5361,6 +5361,20 @@ def main():
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(f, target)
 
+    # Einzelne unlisted Kampagnenseiten (nicht in `pages`, also nicht in der
+    # Sitemap; jede Seite traegt zusaetzlich <meta name="robots" content="noindex">).
+    # Committet als eigener Ordner mit index.html, hier nur 1:1 nach dist/ kopiert.
+    for unlisted_dir in ("vlabel-gewinnspiel",):
+        src = ROOT / unlisted_dir
+        if src.exists():
+            target_dir = DIST / unlisted_dir
+            target_dir.mkdir(parents=True, exist_ok=True)
+            for f in sorted(src.rglob("*")):
+                if f.is_file():
+                    target = target_dir / f.relative_to(src)
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(f, target)
+
     (DIST / "404.html").write_text(build_404(meta), encoding="utf-8")
 
     # sitemap
