@@ -129,8 +129,9 @@
       "title": "Honig ist doch okay, da leidet keine Biene",
       "aka": ["honig", "bienen", "imker", "süßungsmittel"],
       "category": "Tiere",
-      "konter": "Honig ist der Wintervorrat der Bienen, der oft durch Zuckerwasser ersetzt wird. In der Zucht werden Königinnen beschnitten und ganze Völker gehen verloren. Man muss es nicht dramatisieren, aber kein Tier betroffen stimmt eben nicht. Agavendicksaft oder Ahornsirup tun es genauso.",
-      "fakt": "Imkerei nutzt und ersetzt den Honig der Bienen und greift in die Völker ein. Pflanzliche Süßungsmittel sind unproblematische Alternativen.",
+      "konter": "Honig ist der Wintervorrat der Bienen und wird oft durch Zuckerwasser ersetzt. Manchen Königinnen wird ein Flügel gestutzt, damit sie nicht wegschwärmen. Legt eine Königin weniger Eier, wird sie „abgedrückt“, also vom Imker zwischen den Fingern zerquetscht. Kein Tier betroffen stimmt also nicht. Agavendicksaft oder Ahornsirup tun es genauso.",
+      "fakt": "Königinnen können rund fünf Jahre alt werden, werden aber oft schon nach zwei bis drei Jahren ausgetauscht und getötet, sobald die Legeleistung nachlässt oder sie nur noch Drohneneier legen. In der Zucht werden Königinnen außerdem instrumentell besamt: unter CO2-Betäubung, die Stachelkammer mit Häkchen geöffnet, das Sperma per Spritze eingeführt. Die Drohnen sterben bei der Spermagewinnung.",
+      "studie": ["Ethik in der Imkerei, Deutsches Bienen-Journal 8/2010", "https://imkerverein-donnersberg.de/wp-content/uploads/2017/04/G8-Ethik-in-der-Imkerei-red.pdf"],
       "links": [["Honig vegan ersetzen", "/vegan-ersetzen/honig/"]]
     },
     {
@@ -486,8 +487,9 @@
       "aka": ["warum kein honig", "honig warum nicht", "bienen honig"],
       "category": "Warum",
       "motif": "honig",
-      "konter": "Honig ist der Wintervorrat der Bienen, den der Imker entnimmt und oft durch Zuckerwasser ersetzt. In der Zucht werden Königinnen beschnitten und ganze Völker gehen verloren. Kein großes Drama, aber tierfrei ist Honig eben nicht. Agavendicksaft oder Ahornsirup süßen genauso.",
-      "fakt": "Imkerei nutzt den Honig der Bienen, ersetzt ihn durch Zuckerwasser und greift in die Völker ein.",
+      "konter": "Honig ist der Wintervorrat der Bienen, den der Imker entnimmt und oft durch Zuckerwasser ersetzt. Lässt die Königin nach zwei, drei Jahren nach, wird sie „abgedrückt“, also zwischen den Fingern zerquetscht, und durch eine neue ersetzt. In der Zucht werden Königinnen unter CO2-Betäubung künstlich besamt. Tierfrei ist Honig also nicht. Agavendicksaft oder Ahornsirup süßen genauso.",
+      "fakt": "Imkerei nutzt den Honig der Bienen, ersetzt ihn durch Zuckerwasser und greift tief in die Völker ein: Flügel stutzen, alte Königinnen töten, in der Zucht instrumentell besamen. Die Drohnen, deren Sperma dafür von Hand gewonnen wird, sterben dabei.",
+      "studie": ["Bienen-Besamungslehrgang, Tagesspiegel", "https://www.tagesspiegel.de/berlin/bienen-besamung-sperma-fur-honig-das-passiert-beim-bienen-besamungslehrgang-15886992.html"],
       "links": [["Honig vegan ersetzen", "/vegan-ersetzen/honig/"]]
     },
     {
