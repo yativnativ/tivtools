@@ -33,23 +33,6 @@ PREFIX = os.environ.get("TIV_TOOLS_PREFIX", "")
 
 MAIN_SITE = "https://this-is-vegan.com"
 
-# Google AdSense (Publisher ca-pub-7928547153517351). Loader kommt in den <head>,
-# ADSENSE_UNIT ist eine responsive Display-Anzeige (Unit "TIV Display"), die einmal
-# pro Seite zwischen Tool-Inhalt und Support-Block ausgeliefert wird.
-ADSENSE_LOADER = (
-    '<script async src="https://pagead2.googlesyndication.com/pagead/js/'
-    'adsbygoogle.js?client=ca-pub-7928547153517351" crossorigin="anonymous"></script>'
-)
-ADSENSE_UNIT = (
-    '<div class="tiv-ad" style="margin:2.5rem auto 0;max-width:728px;text-align:center">'
-    '<div style="font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;'
-    'opacity:.45;margin-bottom:.3rem">Anzeige</div>'
-    '<ins class="adsbygoogle" style="display:block" '
-    'data-ad-client="ca-pub-7928547153517351" data-ad-slot="7952111390" '
-    'data-ad-format="auto" data-full-width-responsive="true"></ins>'
-    '<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>'
-    '</div>'
-)
 
 READ_MORE = [
     ("Versteckte tierische Inhaltsstoffe", f"{MAIN_SITE}/versteckte-tierische-inhaltsstoffe/"),
@@ -1435,7 +1418,149 @@ def nl_popup():
         )
     return _NL_CACHE["html"]
 
+# ---------------------------------------------------------------- Einschübe zwischen den Inhalten
+# Ersatz für Google AdSense: selbst gehostete Awin-Banner (Nutri+, KoRo, Velivery), Newsletter-Boxen
+# mit Eintragfeld und Hinweise auf die Community Deals, abwechselnd zwischen den Abschnitten.
+# Bilder liegen in partner-ads/ (Kopien der Banner aus der WP-Mediathek, siehe Ad Engine #112),
+# geklickt wird über Awin cread.php. Beim Seitenaufruf gehen keine Requests an Awin.
+AWIN_PUB = "582755"
+AFF_BRANDS = ["Nutri+", "KoRo", "Velivery"]
+AFF_BANNERS = [
+    # (Marke, Awin v, Awin q, Creative s, Datei, Breite, Höhe, Alt-Text)
+    ("Nutri+", "31617", "440556", "3524971", "awin-31617-3524971.jpg", 300, 250, "Nutri+: vegane Supplemente und Proteine"),
+    ("Nutri+", "31617", "440556", "3524980", "awin-31617-3524980.jpg", 300, 250, "Nutri+: vegane Supplemente und Proteine"),
+    ("Nutri+", "31617", "440556", "3525001", "awin-31617-3525001.jpg", 300, 250, "Nutri+: vegane Supplemente und Proteine"),
+    ("Nutri+", "31617", "440556", "3525004", "awin-31617-3525004.jpg", 300, 250, "Nutri+: vegane Supplemente und Proteine"),
+    ("Nutri+", "31617", "440556", "3525006", "awin-31617-3525006.jpg", 300, 250, "Nutri+: vegane Supplemente und Proteine"),
+    ("KoRo", "107808", "504638", "3839508", "awin-107808-3839508.png", 300, 250, "KoRo: Lebensmittel in Großpackungen"),
+    ("Velivery", "15953", "0", "3300217", "awin-15953-3300217.gif", 250, 250, "Velivery: veganer Onlinesupermarkt"),
+    ("Velivery", "15953", "0", "3300235", "awin-15953-3300235.gif", 250, 250, "Velivery: veganer Onlinesupermarkt"),
+    ("Velivery", "15953", "0", "3300271", "awin-15953-3300271.gif", 250, 250, "Velivery: veganer Onlinesupermarkt"),
+]
+DEALS_URL = MAIN_SITE + "/community-deals/"
+UNIT_TYPES = ["banner", "newsletter", "banner", "deals"]
+UNIT_MAX = 3
 
+UNIT_CSS = """
+.affad,.nlbox,.dealbox{margin:34px auto;max-width:640px}
+.affad{text-align:center}
+.affad-l{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);margin-bottom:6px}
+.affad a{display:inline-block;line-height:0;border-radius:12px;overflow:hidden;box-shadow:0 12px 30px -24px rgba(0,0,0,.45)}
+.affad img{display:block;max-width:100%;height:auto}
+.nlbox{display:block;background:var(--teal);color:#f5ede1;border-radius:22px;padding:24px 22px;text-align:left;font-family:'Bricolage Grotesque',system-ui,sans-serif}
+.nlbox[hidden]{display:none}
+.nlbox-k{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--terra-light);margin-bottom:6px}
+.nlbox-h{font-family:var(--serif);font-weight:700;font-size:clamp(22px,3.4vw,28px);line-height:1.15;letter-spacing:-.3px;color:#f5ede1;margin:0 0 6px}
+.nlbox .nlsub{margin:0 0 14px;font-size:.92rem;line-height:1.45;color:rgba(245,237,225,.86)}
+.nlbox .nllegal{margin:12px 0 0;font-size:.72rem;line-height:1.5;color:rgba(245,237,225,.75)}
+.nlbox .nlthanks{display:none;margin:0;font-size:1rem}
+.nlbox.done .nlform,.nlbox.done .nllegal,.nlbox.done .nlsub{display:none}
+.nlbox.done .nlthanks{display:block}
+.dealbox{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--cardline);border-radius:20px;padding:18px 20px;text-decoration:none;color:var(--ink);box-shadow:0 12px 30px -26px rgba(0,0,0,.4);transition:transform .15s}
+.dealbox:hover{transform:translateY(-2px)}
+.dealbox-i{flex:none;width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:var(--peach);color:var(--ink)}
+.dealbox-b{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.dealbox-k{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green-deep)}
+.dealbox-t{font-family:var(--serif);font-weight:700;font-size:20px;line-height:1.2}
+.dealbox-s{font-size:14px;color:var(--ink2);line-height:1.4}
+.dealbox-c{flex:none;font-weight:700;font-size:14px;color:#fff;background:var(--teal);padding:10px 16px;border-radius:999px;white-space:nowrap}
+@media (max-width:560px){.dealbox{flex-wrap:wrap}.dealbox-i{display:none}.dealbox-c{width:100%;text-align:center}}
+@media print{.affad,.nlbox,.dealbox{display:none!important}}
+"""
+
+NLBOX_JS = """<script>(function(){var b=document.querySelectorAll('.nlbox');if(!b.length)return;var d=false;try{d=localStorage.getItem('tiv_tools_nl_done')==='1';}catch(e){}
+b.forEach(function(x){if(d){x.hidden=true;return;}x.querySelector('form').addEventListener('submit',function(){try{localStorage.setItem('tiv_tools_nl_done','1');}catch(e){}x.classList.add('done');});});})();</script>"""
+
+
+def _unit_banner(k, h):
+    brand = AFF_BRANDS[(h + k) % len(AFF_BRANDS)]
+    pool = [b for b in AFF_BANNERS if b[0] == brand]
+    b = pool[(h // 7 + k) % len(pool)]
+    href = f"https://www.awin1.com/cread.php?s={b[3]}&v={b[1]}&q={b[2]}&r={AWIN_PUB}"
+    return (
+        f'<aside class="affad" data-v="{b[1]}"><span class="affad-l">Anzeige</span>'
+        f'<a href="{esc(href)}" target="_blank" rel="sponsored nofollow noopener">'
+        f'<img src="{url("/partner/" + b[4])}" width="{b[5]}" height="{b[6]}" alt="{esc(b[7])}" loading="lazy" decoding="async"></a></aside>'
+    )
+
+
+def _unit_newsletter(k):
+    i = f"nlb{k}"
+    return (
+        f'<aside class="nlbox" aria-labelledby="{i}-h"><div class="nlbox-k">Newsletter</div>'
+        f'<div class="nlbox-h" id="{i}-h">Einmal pro Woche das Beste aus dem Magazin</div>'
+        '<p class="nlsub">Rezepte, Recherchen und Deals direkt ins Postfach. Kostenlos.</p>'
+        f'<form class="nlform" action="{esc(NL_ACTION)}" method="post" target="_blank">'
+        f'<label class="nlsr" for="{i}-mail">E-Mail-Adresse</label>'
+        f'<input type="email" name="EMAIL" id="{i}-mail" placeholder="deine@email.de" required autocomplete="email" inputmode="email">'
+        f'<div class="nlhp" aria-hidden="true"><input type="text" name="{NL_HONEYPOT}" tabindex="-1" value="" autocomplete="off"></div>'
+        '<button type="submit" name="subscribe">Rein da</button>'
+        f'<label class="nlconsent" for="{i}-ok"><input type="checkbox" name="consent" id="{i}-ok" value="1" required>'
+        '<span>Ja, schickt mir den Newsletter mit Artikeln, Rezepten und Angeboten von uns und unseren Partnern. '
+        f'Die <a href="{NL_PRIVACY}" target="_blank" rel="noopener">Datenschutzerklärung</a> habe ich gelesen, abmelden kann ich mich jederzeit.</span></label>'
+        '</form>'
+        '<p class="nllegal">Versand über Mailchimp (Intuit Inc., USA). Du bekommst zuerst eine Mail mit Bestätigungslink, eingetragen bist du erst danach.</p>'
+        '<p class="nlthanks">Fast geschafft. Bestätige die Anmeldung im Postfach, dann bist du dabei.</p></aside>'
+    )
+
+
+def _unit_deals():
+    return (
+        f'<a class="dealbox" href="{DEALS_URL}" target="_blank" rel="noopener">'
+        f'<span class="dealbox-i">{_SVG_DEALS}</span>'
+        '<span class="dealbox-b"><span class="dealbox-k">Community Deals</span>'
+        '<span class="dealbox-t">Rabattcodes für vegane Lieblingsmarken</span>'
+        '<span class="dealbox-s">Nutri+, KoRo, SIRPLUS und mehr: alle aktuellen Codes und Angebote auf einer Seite.</span></span>'
+        '<span class="dealbox-c">Zu den Deals →</span></a>'
+    )
+
+
+def place_units(body, path):
+    """Setzt Banner, Newsletter-Box und Deals-Hinweis zwischen die Abschnitte (<section class="section">).
+    Immer VOR einen Abschnitt, also über dessen Überschrift, nie direkt darunter."""
+    import re, zlib
+    starts = [m.start() for m in re.finditer(r'<section class="section', body)]
+    if not starts:
+        return body
+    points = starts[1:]
+    end = body.find("</section>", starts[-1])
+    last = end + len("</section>") if end != -1 else None
+    if last is not None:
+        points.append(last)
+
+    def next_to_amazon(pos):
+        prev = body.rfind("<section", 0, pos)
+        nxt = body.find("</section>", pos)
+        return 'class="afbox"' in body[prev:pos] or (pos in starts and 'class="afbox"' in body[pos:nxt])
+
+    chosen = points[::2]
+    if points and points[-1] not in chosen:
+        chosen.append(points[-1])
+    chosen = [p for p in chosen if not next_to_amazon(p)][:UNIT_MAX]
+    if not chosen:
+        return body
+    h = zlib.crc32(path.encode("utf-8"))
+    offset = h % len(UNIT_TYPES)
+    units, nb = [], 0
+    for i, pos in enumerate(chosen):
+        kind = UNIT_TYPES[(offset + i) % len(UNIT_TYPES)]
+        if kind == "deals" and pos == last:
+            kind = "newsletter"  # direkt danach folgt schon der Deals-Störer
+        if kind == "banner":
+            html = _unit_banner(nb, h); nb += 1
+        elif kind == "newsletter":
+            html = _unit_newsletter(i)
+        else:
+            html = _unit_deals()
+        units.append((pos, html))
+    for pos, html in sorted(units, reverse=True):
+        body = body[:pos] + "\n" + html + "\n" + body[pos:]
+    if "nlbox" in body:
+        body += NLBOX_JS
+    return body
+
+
+CSS = CSS + UNIT_CSS
 CSS = CSS + NL_CSS
 
 
@@ -1454,6 +1579,7 @@ def page(title, desc, path, body, jsonld=None, og_type="website", og_image=None)
         ex = page_extras(OG_MAP[path])
         if ex and '<section class="support">' in body:
             body = body.replace('<section class="support">', ex + '<section class="support">', 1)
+    body = place_units(body, path)
     if og_image:
         og_url = BASE_URL + url(f"/og/{og_image}.png")
         og_alt = esc(title)
@@ -1517,7 +1643,6 @@ def page(title, desc, path, body, jsonld=None, og_type="website", og_image=None)
 <meta name="twitter:description" content="{esc(desc)}">
 {fonts}
 <style>{CSS}</style>
-{ADSENSE_LOADER}
 {ld}</head>
 <body>
 <div class="wrap">
@@ -1584,16 +1709,6 @@ STOERER_SPENDEN = (
     '</a>'
 )
 
-ADSENSE_UNIT_MID = (
-    '<div class="tiv-ad" style="margin:2rem auto 0;max-width:728px;text-align:center">'
-    '<div style="font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;'
-    'opacity:.45;margin-bottom:.3rem">Anzeige</div>'
-    '<ins class="adsbygoogle" style="display:block;text-align:center" '
-    'data-ad-layout="in-article" data-ad-format="fluid" '
-    'data-ad-client="ca-pub-7928547153517351" data-ad-slot="3289682355"></ins>'
-    '<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>'
-    '</div>'
-)
 
 
 def site_footer(meta, full_disclaimer=True):
@@ -1602,7 +1717,7 @@ def site_footer(meta, full_disclaimer=True):
         disc = '<p class="disc"><b>Angaben ohne Gewähr.</b> Die Einordnungen dienen der Orientierung. Bei vielen Stoffen hängt die Herkunft vom Hersteller ab und ist auf der Verpackung nicht erkennbar. Im Zweifel beim Hersteller nachfragen oder auf ein Vegan-Siegel achten. Klärhilfen, die im Endprodukt nicht mehr enthalten sind, müssen nicht deklariert werden.</p>'
     else:
         disc = f'<p class="disc">Alle Tools sind kostenlos, laufen direkt im Browser und speichern nichts. Stand: {esc(stand)}.</p>'
-    return STOERER_DEALS + STOERER_SPENDEN + ADSENSE_UNIT_MID + ADSENSE_UNIT + SUPPORT_BLOCK + f"""
+    return STOERER_DEALS + STOERER_SPENDEN + SUPPORT_BLOCK + f"""
 <footer class="site">
 <div class="frow">
   <a href="{MAIN_SITE}/" aria-label="This Is Vegan"><img class="flogo" src="{url('/logo-tiv.png')}" alt="This Is Vegan" width="160" height="60"></a>
@@ -5348,6 +5463,7 @@ def main():
 
     # static assets
     shutil.copytree(ROOT / "assets" / "fonts", DIST / "fonts")
+    shutil.copytree(ROOT / "partner-ads", DIST / "partner")
     for f in (ROOT / "static").glob("*"):
         shutil.copy(f, DIST / f.name)
 
