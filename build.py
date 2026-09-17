@@ -640,7 +640,7 @@ function proteinRange(){
 }
 function targetFor(n){
   if(n.type==='protein') return proteinRange();
-  if(n.type==='sex') return String(sex==='f' ? n.tf : n.tm);
+  if(n.type==='sex') return String(sex==='f' ? n.tf : n.tm).replace('.', ',');
   return String(n.target);
 }
 function badge(n){
@@ -1325,6 +1325,120 @@ def hero_illu(slug):
     )
 
 
+# ---------------------------------------------------------------- Newsletter-Popup
+# Gleiches Mailchimp-Formular wie das Overlay auf this-is-vegan.com/links/ (Liste 4752d525fc,
+# Double-Opt-in, Pflicht-Checkbox). Erscheint beim ersten Seitenaufruf und danach bei jedem
+# 20. Aufruf (Zähler im localStorage), nach einer Anmeldung auf dem Gerät gar nicht mehr.
+NL_ACTION = "https://this-is-vegan.us19.list-manage.com/subscribe/post?u=2fbdb8085d9fdad303c73a1a0&id=4752d525fc&v_id=5302&f_id=002aa5e6f0"
+NL_HONEYPOT = "b_2fbdb8085d9fdad303c73a1a0_4752d525fc"
+NL_PRIVACY = "https://this-is-vegan.com/dateschutzerklaerung/"
+NL_EVERY = 20
+# Gleiche Accounts wie auf der Link-in-Bio-Seite, Icons aus Simple Icons (assets/social/)
+NL_SOCIALS = [
+    ("instagram", "Instagram", "https://www.instagram.com/thisisvegan.magazin/"),
+    ("tiktok", "TikTok", "https://www.tiktok.com/@this_is_vegan"),
+    ("youtube", "YouTube", "https://www.youtube.com/@thisisvegan"),
+    ("spotify", "Spotify", "https://open.spotify.com/show/2FWDkL5SfNG9aeF9CvCpmU"),
+    ("applepodcasts", "Apple Podcasts", "https://podcasts.apple.com/de/podcast/plantbased-podcast-by-this-is-vegan/id1621084378"),
+    ("threads", "Threads", "https://www.threads.com/@thisisvegan.magazin"),
+    ("pinterest", "Pinterest", "https://www.pinterest.de/this_is_vegan_official/"),
+    ("twitch", "Twitch", "https://www.twitch.tv/thisisvgn"),
+]
+
+NL_CSS = """
+.nlscrim{position:fixed;inset:0;z-index:90;background:rgba(6,39,37,.42);opacity:0;transition:opacity .3s ease}
+.nlsheet{position:fixed;z-index:91;left:0;right:0;bottom:0;max-width:620px;max-height:92vh;overflow-y:auto;margin:0 auto;background:#0a4a4a;color:#f5ede1;border-radius:24px 24px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom));box-shadow:0 -12px 40px rgba(6,39,37,.35);transform:translateY(102%);transition:transform .42s cubic-bezier(.16,1,.3,1);font-family:'Bricolage Grotesque',system-ui,sans-serif;text-align:left}
+.nlscrim[hidden],.nlsheet[hidden]{display:none}
+.nlscrim.open{opacity:1}
+.nlsheet.open{transform:none}
+.nlsheet h2{margin:0 0 6px;padding-right:44px;font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:1.18rem;font-weight:700;letter-spacing:-.02em;line-height:1.25;max-width:28ch;color:#f5ede1}
+.nlsheet .nlsub{margin:0 0 14px;font-size:.88rem;line-height:1.45;color:rgba(245,237,225,.86);max-width:42ch}
+.nlform{display:flex;gap:8px;flex-wrap:wrap}
+.nlform input[type=email]{flex:1 1 190px;min-width:0;font:inherit;font-size:1rem;padding:12px 15px;border-radius:12px;border:1px solid rgba(255,255,255,.28);background:#fff;color:#0a4a4a}
+.nlform input[type=email]::placeholder{color:#5e7d79}
+.nlform input[type=email]:focus-visible{outline:2px solid #3fbf8f;outline-offset:2px}
+.nlform button{flex:0 0 auto;font:inherit;font-size:.95rem;font-weight:700;cursor:pointer;padding:12px 20px;border-radius:12px;border:0;background:#f5ede1;color:#0a4a4a;transition:transform .16s ease,filter .16s ease}
+.nlform button:hover{filter:brightness(1.06)}
+.nlform button:active{transform:scale(.97)}
+.nlconsent{flex:1 1 100%;display:flex;gap:9px;align-items:flex-start;cursor:pointer;font-size:.76rem;line-height:1.45;color:rgba(245,237,225,.88)}
+.nlconsent input{flex:none;width:18px;height:18px;margin:1px 0 0;cursor:pointer;accent-color:#3fbf8f}
+.nlconsent a{color:#f5ede1}
+.nlsheet .nllegal{margin:12px 0 0;font-size:.72rem;line-height:1.5;color:rgba(245,237,225,.75)}
+.nlx{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;cursor:pointer;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);color:#f5ede1;font-size:1.1rem;line-height:1;padding:0}
+.nlx:hover{background:rgba(255,255,255,.22)}
+.nlhp{position:absolute;left:-5000px}
+.nlsr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.nlsheet .nlthanks{display:none;margin:0;font-size:.95rem}
+.nlsheet.done .nlform,.nlsheet.done .nllegal,.nlsheet.done .nlsub{display:none}
+.nlsheet.done .nlthanks{display:block}
+.nlfollow{margin-top:16px;padding-top:14px;border-top:1px solid rgba(245,237,225,.16)}
+.nlflabel{display:block;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(245,237,225,.75);margin-bottom:9px}
+.nlicons{display:grid;grid-template-columns:repeat(8,minmax(0,42px));gap:6px}
+.nlicons a{width:100%;aspect-ratio:1/1;border-radius:50%;display:grid;place-items:center;color:#f5ede1;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);transition:background .16s ease}
+.nlicons a:hover{background:rgba(255,255,255,.22)}
+@media (prefers-reduced-motion:reduce){.nlsheet,.nlscrim{transition:none}}
+@media print{.nlsheet,.nlscrim{display:none!important}}
+"""
+
+NL_JS = """(function(){
+var s=document.getElementById('nlsheet'),sc=document.getElementById('nlscrim');if(!s)return;
+var K='tiv_tools_nl_views',D='tiv_tools_nl_done',n;
+try{if(localStorage.getItem(D)==='1')return;n=(parseInt(localStorage.getItem(K),10)||0)+1;localStorage.setItem(K,String(n));}catch(e){return;}
+if((n-1)%__EVERY__!==0)return;
+var last=null;
+function open(){last=document.activeElement;s.hidden=false;sc.hidden=false;requestAnimationFrame(function(){s.classList.add('open');sc.classList.add('open');var f=document.getElementById('nlsheet-mail');if(f&&window.matchMedia('(min-width:768px)').matches)f.focus();});}
+function close(){s.classList.remove('open');sc.classList.remove('open');setTimeout(function(){s.hidden=true;sc.hidden=true;},420);if(last&&last.focus)last.focus();}
+document.getElementById('nlsheet-x').addEventListener('click',close);
+sc.addEventListener('click',close);
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!s.hidden)close();});
+s.addEventListener('keydown',function(e){if(e.key!=='Tab')return;var f=s.querySelectorAll('button, input:not([tabindex="-1"]), a[href]');if(!f.length)return;var a=f[0],b=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();b.focus();}else if(!e.shiftKey&&document.activeElement===b){e.preventDefault();a.focus();}});
+document.getElementById('nlsheet-form').addEventListener('submit',function(){try{localStorage.setItem(D,'1');}catch(e){}s.classList.add('done');setTimeout(close,3200);});
+setTimeout(open,2500);
+})();"""
+
+_NL_CACHE = {}
+
+
+def nl_popup():
+    if "html" not in _NL_CACHE:
+        import re as _re
+        icons = []
+        for key, label, href in NL_SOCIALS:
+            svg = (ROOT / "assets" / "social" / f"{key}.svg").read_text(encoding="utf-8")
+            d = _re.search(r'<path[^>]*\sd="([^"]+)"', svg).group(1)
+            icons.append(
+                f'<a href="{href}" target="_blank" rel="noopener" aria-label="{label}">'
+                f'<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">'
+                f'<path fill="currentColor" d="{d}"/></svg></a>'
+            )
+        _NL_CACHE["html"] = (
+            '<div class="nlscrim" id="nlscrim" hidden></div>\n'
+            '<aside class="nlsheet" id="nlsheet" hidden role="dialog" aria-modal="true" aria-labelledby="nlsheet-h">\n'
+            '  <button class="nlx" type="button" id="nlsheet-x" aria-label="Schließen">&times;</button>\n'
+            '  <h2 id="nlsheet-h">Einmal pro Woche das Beste aus dem Magazin</h2>\n'
+            '  <p class="nlsub">Rezepte, Recherchen und Deals. Kostenlos.</p>\n'
+            f'  <form class="nlform" action="{esc(NL_ACTION)}" method="post" target="_blank" id="nlsheet-form">\n'
+            '    <label class="nlsr" for="nlsheet-mail">E-Mail-Adresse</label>\n'
+            '    <input type="email" name="EMAIL" id="nlsheet-mail" placeholder="deine@email.de" required autocomplete="email" inputmode="email">\n'
+            f'    <div class="nlhp" aria-hidden="true"><input type="text" name="{NL_HONEYPOT}" tabindex="-1" value="" autocomplete="off"></div>\n'
+            '    <button type="submit" name="subscribe">Rein da</button>\n'
+            '    <label class="nlconsent" for="nlsheet-ok"><input type="checkbox" name="consent" id="nlsheet-ok" value="1" required>'
+            '<span>Ja, schickt mir den Newsletter mit Artikeln, Rezepten und Angeboten von uns und unseren Partnern. '
+            f'Die <a href="{NL_PRIVACY}" target="_blank" rel="noopener">Datenschutzerklärung</a> habe ich gelesen, abmelden kann ich mich jederzeit.</span></label>\n'
+            '  </form>\n'
+            '  <p class="nllegal">Versand über Mailchimp (Intuit Inc., USA). Du bekommst zuerst eine Mail mit Bestätigungslink, eingetragen bist du erst danach.</p>\n'
+            '  <p class="nlthanks">Fast geschafft. Bestätige die Anmeldung im Postfach, dann bist du dabei.</p>\n'
+            '  <div class="nlfollow"><span class="nlflabel">Oder folg uns</span>\n'
+            '    <div class="nlicons">' + "".join(icons) + '</div></div>\n'
+            '</aside>\n'
+            '<script>' + NL_JS.replace("__EVERY__", str(NL_EVERY)) + '</script>'
+        )
+    return _NL_CACHE["html"]
+
+
+CSS = CSS + NL_CSS
+
+
 def page(title, desc, path, body, jsonld=None, og_type="website", og_image=None):
     canonical = BASE_URL + url(path)
     if og_image is None:
@@ -1410,6 +1524,7 @@ def page(title, desc, path, body, jsonld=None, og_type="website", og_image=None)
 {body}
 </div>
 {sharebar}
+{nl_popup()}
 <script src="{url('/webmcp.js')}" defer></script>
 </body>
 </html>"""
@@ -1531,7 +1646,7 @@ def build_hub(meta, adds, ings, nutrients):
     <a class="toolcard" href="{url(NAEHR_BASE)}">
       <span class="badge">Live</span>
       <h3>Nährstoff-Rechner</h3>
-      <p>Gewicht und Aktivität eingeben und sofort sehen, wie viel Protein, B12, Jod, Eisen, Omega-3 und Calcium du brauchst, plus die besten pflanzlichen Quellen.</p>
+      <p>Gewicht und Aktivität eingeben und sofort sehen, wie viel Protein, B12, Jod, Eisen, Zink, Omega-3 und Calcium du brauchst, plus die besten pflanzlichen Quellen.</p>
       <span class="meta">Bedarf berechnen →</span>
     </a>
     <a class="toolcard" href="{url(IMPACT_BASE)}">
@@ -2357,9 +2472,9 @@ def build_naehrstoff_hub(meta, nutrients):
 </section>
 
 <section class="section">
-  <h2>Warum genau diese sechs?</h2>
-  <p class="lead">Die DGE nennt in ihrer <a href="https://www.dge.de/fileadmin/dok/wissenschaft/positionen/DGE_Position_Neubewertung_Vegane_Ern%C3%A4hrung_EU_2024_60-84.pdf" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">Position zur veganen Ernährung (2024)</a> eine ganze Reihe potenziell kritischer Nährstoffe. Zwei stechen heraus: B12 musst du immer supplementieren, bei Jod empfiehlt die DGE Veganern meist ein Supplement. Protein, Eisen, Omega-3 und Calcium bekommst du mit guter Auswahl über das Essen.</p>
-  <p class="prose" style="max-width:640px;margin-top:10px">Ebenfalls auf der DGE-Liste stehen Zink, Selen, Riboflavin (Vitamin B2) und Vitamin D. Vitamin D betrifft alle, die wenig Sonne abbekommen, unabhängig von der Ernährung. Diese Nährstoffe sind im Rechner noch nicht drin.</p>
+  <h2>Warum genau diese sieben?</h2>
+  <p class="lead">Die DGE nennt in ihrer <a href="https://www.dge.de/fileadmin/dok/wissenschaft/positionen/DGE_Position_Neubewertung_Vegane_Ern%C3%A4hrung_EU_2024_60-84.pdf" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">Position zur veganen Ernährung (2024)</a> eine ganze Reihe potenziell kritischer Nährstoffe. Zwei stechen heraus: B12 musst du immer supplementieren, bei Jod empfiehlt die DGE Veganern meist ein Supplement. Protein, Eisen, Zink, Omega-3 und Calcium bekommst du mit guter Auswahl über das Essen.</p>
+  <p class="prose" style="max-width:640px;margin-top:10px">Ebenfalls auf der DGE-Liste stehen Selen, Riboflavin (Vitamin B2) und Vitamin D. Vitamin D betrifft alle, die wenig Sonne abbekommen, unabhängig von der Ernährung. Diese Nährstoffe sind im Rechner noch nicht drin.</p>
   <div style="margin-top:16px;max-width:640px">
 {blurbs}
   </div>
@@ -2375,7 +2490,7 @@ def build_naehrstoff_hub(meta, nutrients):
             "applicationCategory": "HealthApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
-            "description": "Berechnet Richtwerte nach DGE für Protein, B12, Jod, Eisen, Omega-3 und Calcium bei veganer Ernährung, mit den besten pflanzlichen Quellen.",
+            "description": "Berechnet Richtwerte nach DGE für Protein, B12, Jod, Eisen, Zink, Omega-3 und Calcium bei veganer Ernährung, mit den besten pflanzlichen Quellen.",
             "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
         },
         {
@@ -2403,7 +2518,7 @@ def build_naehrstoff_hub(meta, nutrients):
     ]
     return page(
         "Veganer Nährstoff-Rechner: dein Bedarf in 10 Sekunden | This Is Vegan",
-        "Gewicht und Aktivität eingeben und sehen, wie viel Protein, B12, Jod, Eisen, Omega-3 und Calcium du vegan brauchst. Mit DGE-Werten und Quellen.",
+        "Gewicht und Aktivität eingeben und sehen, wie viel Protein, B12, Jod, Eisen, Zink, Omega-3 und Calcium du vegan brauchst. Mit DGE-Werten und Quellen.",
         NAEHR_BASE,
         body,
         jsonld,
@@ -2450,6 +2565,16 @@ def build_naehrstoff_detail(n, meta, nutrients):
             '<p class="lead">Wenn du ergänzt, achte auf rein pflanzliche Produkte. Unsere Empfehlung zuerst:</p>'
             '<div class="afbox">' + amazon_btn(amzn_terms[0], "Nutri+ bei Amazon")
             + amazon_btn(amzn_terms[1], "Weitere Optionen") + '</div>' + AFFILIATE_DISCLOSURE + '</section>'
+        )
+
+    # Jod: kein Nutri+-Produkt, deshalb nur eine neutrale Suche nach 100-µg-Tabletten (BfR-Höchstmenge)
+    if s == "jod":
+        af_block = (
+            '<section class="section"><h2>Passende Supplemente</h2>'
+            '<p class="lead">Die DGE rät Veganern zu 100 µg Jod pro Tag, am besten ärztlich abgesprochen. '
+            'Für Nahrungsergänzungsmittel schlägt das BfR höchstens 100 µg pro Tagesdosis vor, achte also auf die Dosierung.</p>'
+            '<div class="afbox">' + amazon_btn("Jod 100 µg vegan Tabletten", "Jod-Tabletten bei Amazon") + '</div>'
+            + AFFILIATE_DISCLOSURE + '</section>'
         )
 
     body = site_header("Nährstoff-Rechner") + f"""
@@ -2527,6 +2652,7 @@ def build_naehrstoff_detail(n, meta, nutrients):
         "protein": "Veganer Proteinbedarf: wie viel brauchst du wirklich? | This Is Vegan",
         "b12": "Vitamin B12 vegan: Bedarf, Quellen und Supplement | This Is Vegan",
         "jod": "Jod vegan: Bedarf, Jodsalz und Supplement | This Is Vegan",
+        "zink": "Zink vegan: Bedarf, Quellen und Phytat-Trick | This Is Vegan",
         "eisen": "Eisen vegan: Bedarf und die besten Quellen | This Is Vegan",
         "omega-3": "Omega-3 vegan: ALA, EPA, DHA und Algenöl | This Is Vegan",
         "calcium": "Calcium vegan: Bedarf ohne Milch decken | This Is Vegan",

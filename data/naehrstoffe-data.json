@@ -90,6 +90,29 @@
       "supplement": {"level": "bei Bedarf", "text": "Nur bei nachgewiesenem Mangel und am besten ärztlich begleitet. Eisen einfach so zu schlucken ist nicht sinnvoll."}
     },
     {
+      "slug": "zink",
+      "name": "Zink",
+      "short": "Zink",
+      "unit": "mg pro Tag",
+      "target_type": "sex",
+      "target_female": 10,
+      "target_male": 16,
+      "intro": "Zink steckt reichlich in Vollkorn, Hülsenfrüchten, Nüssen und Samen. Die Phytinsäure darin bremst allerdings die Aufnahme, mit ein paar Küchentricks holst du deutlich mehr raus.",
+      "why": "Zink braucht der Körper unter anderem für das Immunsystem, die Wundheilung und viele Enzyme. Vollkorn und Hülsenfrüchte enthalten Phytat, das Zink bindet. Laut DGE kann sehr viel Phytat die Zinkaufnahme um bis zu 45 Prozent senken.",
+      "targets": "Die DGE macht den Bedarf von der Phytatzufuhr abhängig. Wer viel unbehandeltes Vollkorn und Hülsenfrüchte isst, wie viele Veganer, sollte als Frau 10 mg und als Mann 16 mg pro Tag erreichen. Mit eher hellem Mehl, Sauerteigbrot oder gekeimtem Getreide reichen 8 mg bzw. 14 mg. Der Rechner zeigt vorsichtshalber den höheren Wert.",
+      "sources": [
+        {"food": "Kürbiskerne", "amount": "ca. 6 mg pro 100 g"},
+        {"food": "Haferflocken", "amount": "ca. 4,2 mg pro 100 g"},
+        {"food": "Sesam und Tahin", "amount": "ca. 7,7 mg pro 100 g Sesam"},
+        {"food": "Hanfsamen, geschält", "amount": "ca. 10 mg pro 100 g"},
+        {"food": "Cashewkerne", "amount": "ca. 5,8 mg pro 100 g"},
+        {"food": "Linsen, getrocknet", "amount": "ca. 3,4 mg pro 100 g"}
+      ],
+      "tip": "Hülsenfrüchte über Nacht einweichen und das Wasser wegschütten, Getreide keimen lassen, Sauerteigbrot statt Hefebrot: Das baut Phytat ab und verbessert die Zinkaufnahme. Tempeh und Miso sind durch die Fermentation ebenfalls im Vorteil.",
+      "supplement": {"level": "bei Bedarf", "text": "Über Lebensmittel meist gut machbar. Ein Supplement nur bei nachgewiesenem Mangel oder nach ärztlicher Rücksprache, denn dauerhaft zu viel Zink stört die Kupferaufnahme."},
+      "readmore": [["Zink vegan: Bedarf, beste Quellen und der Phytat-Trick", "/zink-vegan/"]]
+    },
+    {
       "slug": "omega-3",
       "name": "Omega-3",
       "short": "Omega-3",
