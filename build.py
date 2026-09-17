@@ -1225,7 +1225,7 @@ TOOLS = {
     "hub": ("/", "Alle Tools", "Die ganze Sammlung"),
     "e-nummern": ("/e-nummern/", "E-Nummern-Checker", "Ist der Zusatzstoff vegan?"),
     "vegan-ersetzen": ("/vegan-ersetzen/", "Vegan-Ersatz-Finder", "Die beste Alternative"),
-    "naehrstoffrechner": ("/naehrstoffrechner/", "Nährstoff-Rechner", "Protein, B12, Eisen & Co."),
+    "naehrstoffrechner": ("/naehrstoffrechner/", "Nährstoff-Rechner", "B12, Jod, Eisen & Co."),
     "ist-das-vegan": ("/ist-das-vegan/", "Ist das vegan?", "Der Lebensmittel-Check"),
     "impact-rechner": ("/impact-rechner/", "Impact-Rechner", "Was deine Ernährung bewegt"),
     "saisonkalender": ("/saisonkalender/", "Saisonkalender", "Was gerade Saison hat"),
@@ -1531,7 +1531,7 @@ def build_hub(meta, adds, ings, nutrients):
     <a class="toolcard" href="{url(NAEHR_BASE)}">
       <span class="badge">Live</span>
       <h3>Nährstoff-Rechner</h3>
-      <p>Gewicht und Aktivität eingeben und sofort sehen, wie viel Protein, B12, Eisen, Omega-3 und Calcium du brauchst, plus die besten pflanzlichen Quellen.</p>
+      <p>Gewicht und Aktivität eingeben und sofort sehen, wie viel Protein, B12, Jod, Eisen, Omega-3 und Calcium du brauchst, plus die besten pflanzlichen Quellen.</p>
       <span class="meta">Bedarf berechnen →</span>
     </a>
     <a class="toolcard" href="{url(IMPACT_BASE)}">
@@ -2326,7 +2326,7 @@ def build_naehrstoff_hub(meta, nutrients):
 <section class="hero">
   <div class="eyebrow">Dein veganer Nährstoff-Check</div>
   <h1>Deckst du deinen <span class="q">Bedarf?</span></h1>
-  <p class="sub">Gewicht und Aktivität eingeben, sofort deine Richtwerte für die fünf wichtigsten Nährstoffe sehen, mit den besten pflanzlichen Quellen.</p>
+  <p class="sub">Gewicht und Aktivität eingeben, sofort deine Richtwerte für die Nährstoffe sehen, auf die du vegan besonders achten solltest, mit den besten pflanzlichen Quellen.</p>
 
   <div class="calc">
     <div class="calc-grid">
@@ -2357,8 +2357,9 @@ def build_naehrstoff_hub(meta, nutrients):
 </section>
 
 <section class="section">
-  <h2>Die fünf, auf die es ankommt</h2>
-  <p class="lead">Bei veganer Ernährung lohnt der Blick auf diese fünf Nährstoffe. Vier davon deckst du leicht über Essen, einen musst du supplementieren.</p>
+  <h2>Warum genau diese sechs?</h2>
+  <p class="lead">Die DGE nennt in ihrer <a href="https://www.dge.de/fileadmin/dok/wissenschaft/positionen/DGE_Position_Neubewertung_Vegane_Ern%C3%A4hrung_EU_2024_60-84.pdf" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">Position zur veganen Ernährung (2024)</a> eine ganze Reihe potenziell kritischer Nährstoffe. Zwei stechen heraus: B12 musst du immer supplementieren, bei Jod empfiehlt die DGE Veganern meist ein Supplement. Protein, Eisen, Omega-3 und Calcium bekommst du mit guter Auswahl über das Essen.</p>
+  <p class="prose" style="max-width:640px;margin-top:10px">Ebenfalls auf der DGE-Liste stehen Zink, Selen, Riboflavin (Vitamin B2) und Vitamin D. Vitamin D betrifft alle, die wenig Sonne abbekommen, unabhängig von der Ernährung. Diese Nährstoffe sind im Rechner noch nicht drin.</p>
   <div style="margin-top:16px;max-width:640px">
 {blurbs}
   </div>
@@ -2374,7 +2375,7 @@ def build_naehrstoff_hub(meta, nutrients):
             "applicationCategory": "HealthApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
-            "description": "Berechnet Richtwerte für Protein, B12, Eisen, Omega-3 und Calcium bei veganer Ernährung, mit den besten pflanzlichen Quellen.",
+            "description": "Berechnet Richtwerte nach DGE für Protein, B12, Jod, Eisen, Omega-3 und Calcium bei veganer Ernährung, mit den besten pflanzlichen Quellen.",
             "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
         },
         {
@@ -2384,9 +2385,11 @@ def build_naehrstoff_hub(meta, nutrients):
                 {"@type": "Question", "name": "Wie viel Protein brauche ich vegan?",
                  "acceptedAnswer": {"@type": "Answer", "text": "Je nach Aktivität rund 0,8 bis 1,6 g pro Kilo Körpergewicht. Wenig aktiv 0,8 bis 1,0, aktiv 1,2 bis 1,4, bei Kraft- oder Ausdauersport 1,4 bis 1,6 g pro kg."}},
                 {"@type": "Question", "name": "Muss ich B12 supplementieren?",
-                 "acceptedAnswer": {"@type": "Answer", "text": "Ja. B12 ist der einzige Nährstoff, den du bei veganer Ernährung zwingend über ein Supplement zuführen musst, da Pflanzen es nicht in verlässlicher Form liefern."}},
+                 "acceptedAnswer": {"@type": "Answer", "text": "Ja. B12 musst du bei veganer Ernährung immer über ein Supplement zuführen, da Pflanzen es nicht in verlässlicher Form liefern. Die DGE rät außerdem, den B12-Status regelmäßig kontrollieren zu lassen."}},
                 {"@type": "Question", "name": "Welche Nährstoffe sind bei veganer Ernährung kritisch?",
-                 "acceptedAnswer": {"@type": "Answer", "text": "Vor allem B12 (Supplement nötig), außerdem lohnt der Blick auf Protein, Eisen, Omega-3 und Calcium. Diese vier lassen sich gut über die Ernährung decken."}},
+                 "acceptedAnswer": {"@type": "Answer", "text": "Laut DGE-Position von 2024 haben Vitamin B12 und Jod eine Sonderstellung: B12 muss immer supplementiert werden, bei Jod empfiehlt die DGE Veganern meist 100 µg pro Tag als Supplement. Potenziell kritisch sind außerdem Protein, langkettige Omega-3-Fettsäuren, Vitamin D, Riboflavin, Calcium, Eisen, Zink und Selen."}},
+                {"@type": "Question", "name": "Brauche ich als Veganer ein Jod-Supplement?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "In den meisten Fällen ja. Die DGE empfiehlt Veganern 100 µg Jod pro Tag als Supplement, wenn sie nicht genug jodhaltige Lebensmittel essen, am besten ärztlich abgesprochen. Jodsalz allein reicht laut DGE nicht aus. Der Referenzwert für Erwachsene liegt seit 2025 bei 150 µg pro Tag."}},
             ],
         },
         {
@@ -2400,7 +2403,7 @@ def build_naehrstoff_hub(meta, nutrients):
     ]
     return page(
         "Veganer Nährstoff-Rechner: dein Bedarf in 10 Sekunden | This Is Vegan",
-        "Gewicht und Aktivität eingeben und sehen, wie viel Protein, B12, Eisen, Omega-3 und Calcium du als Veganer brauchst, mit den besten pflanzlichen Quellen. Kostenlos.",
+        "Gewicht und Aktivität eingeben und sehen, wie viel Protein, B12, Jod, Eisen, Omega-3 und Calcium du vegan brauchst. Mit DGE-Werten und Quellen.",
         NAEHR_BASE,
         body,
         jsonld,
@@ -2523,6 +2526,7 @@ def build_naehrstoff_detail(n, meta, nutrients):
     titles = {
         "protein": "Veganer Proteinbedarf: wie viel brauchst du wirklich? | This Is Vegan",
         "b12": "Vitamin B12 vegan: Bedarf, Quellen und Supplement | This Is Vegan",
+        "jod": "Jod vegan: Bedarf, Jodsalz und Supplement | This Is Vegan",
         "eisen": "Eisen vegan: Bedarf und die besten Quellen | This Is Vegan",
         "omega-3": "Omega-3 vegan: ALA, EPA, DHA und Algenöl | This Is Vegan",
         "calcium": "Calcium vegan: Bedarf ohne Milch decken | This Is Vegan",
@@ -4942,7 +4946,7 @@ def build_einkaufsliste(meta, data):
                 {"@type": "Question", "name": "Was gehört auf eine vegane Einkaufsliste?",
                  "acceptedAnswer": {"@type": "Answer", "text": faq_answer}},
                 {"@type": "Question", "name": "Welche Supplemente brauche ich vegan?",
-                 "acceptedAnswer": {"@type": "Answer", "text": "Vitamin B12 ist bei veganer Ernährung Pflicht. Vitamin D3 (aus Flechten), Omega-3 aus Algenöl und jodiertes Salz sind je nach Bedarf sinnvoll."}},
+                 "acceptedAnswer": {"@type": "Answer", "text": "Vitamin B12 ist bei veganer Ernährung Pflicht. Bei Jod empfiehlt die DGE meist zusätzlich ein Supplement, weil Jodsalz allein nicht reicht. Vitamin D3 (aus Flechten) und Omega-3 aus Algenöl sind je nach Bedarf sinnvoll."}},
             ],
         },
         {

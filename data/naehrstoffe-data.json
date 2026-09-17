@@ -1,8 +1,8 @@
 {
   "meta": {
     "version": 1,
-    "lastUpdated": "2026-06-13",
-    "disclaimer": "Orientierung, keine medizinische Beratung. Die Werte sind Richtwerte für gesunde Erwachsene auf Basis gängiger Referenzwerte (EFSA, DGE). Bei Schwangerschaft, Stillzeit, Krankheit oder Unsicherheit lass deine Werte ärztlich checken, vor allem B12, Eisen und Vitamin D per Bluttest."
+    "lastUpdated": "2026-09-17",
+    "disclaimer": "Orientierung, keine medizinische Beratung. Die Werte sind Referenzwerte der DGE für gesunde Erwachsene (Stand 2025), bei EPA und DHA der EFSA. Die Protein-Spannen für Aktive sind unsere Einordnung. Bei Schwangerschaft, Stillzeit, Krankheit, für Kinder oder bei Unsicherheit lass dich fachlich beraten und deine Werte ärztlich checken, vor allem B12, Jod, Eisen und Vitamin D."
   },
   "nutrients": [
     {
@@ -13,7 +13,7 @@
       "target_type": "protein",
       "intro": "Protein ist vegan gut zu decken, der Bedarf liegt bei aktiven Menschen etwas höher als die oft zitierten 0,8 g pro Kilo.",
       "why": "Protein baut und erhält Muskeln, Enzyme und Hormone. Pflanzliche Quellen liefern alle nötigen Aminosäuren, wenn du über den Tag verteilt isst und Hülsenfrüchte mit Getreide kombinierst.",
-      "targets": "Wenig aktiv: 0,8 bis 1,0 g pro kg. Aktiv: 1,2 bis 1,4 g pro kg. Kraft- oder Ausdauersport: 1,4 bis 1,6 g pro kg.",
+      "targets": "Die DGE empfiehlt Erwachsenen 0,8 g pro kg Körpergewicht, ab 65 Jahren 1,0 g. Wer viel trainiert, liegt höher. Unsere Orientierung: aktiv 1,2 bis 1,4 g pro kg, bei Kraft- oder Ausdauersport 1,4 bis 1,6 g pro kg.",
       "sources": [
         {"food": "Tofu", "amount": "ca. 12 g pro 100 g"},
         {"food": "Tempeh", "amount": "ca. 19 g pro 100 g"},
@@ -35,9 +35,9 @@
       "unit": "µg pro Tag",
       "target_type": "fixed",
       "target": 4,
-      "intro": "B12 ist der einzige Nährstoff, den du bei veganer Ernährung zwingend supplementieren musst. Das ist kein Makel, sondern Fakt.",
+      "intro": "B12 musst du bei veganer Ernährung immer supplementieren. Pflanzen liefern es nicht in verlässlicher Form, daran ändert auch die beste Ernährung nichts.",
       "why": "B12 ist wichtig für Nerven und Blutbildung. Pflanzen produzieren es nicht in verlässlicher Form, deshalb ist ein Supplement bei veganer Ernährung Pflicht, nicht Option.",
-      "targets": "Referenzwert rund 4 µg pro Tag. Über ein Supplement gedeckt oft höher dosiert, da der Körper nur einen Teil aufnimmt.",
+      "targets": "Referenzwert der DGE: 4 µg pro Tag, in der Schwangerschaft 4,5 µg, in der Stillzeit 5,5 µg. Über ein Supplement gedeckt oft höher dosiert, da der Körper nur einen Teil aufnimmt.",
       "sources": [
         {"food": "B12-Supplement (Tropfen oder Tablette)", "amount": "der verlässliche Weg"},
         {"food": "Angereicherte Pflanzendrinks", "amount": "ergänzend, nicht ausreichend"},
@@ -48,16 +48,36 @@
       "readmore": [["Vitamin B12 vegan: alles zur Versorgung", "/vitamin-b12-vegan-2026/"]]
     },
     {
+      "slug": "jod",
+      "name": "Jod",
+      "short": "Jod",
+      "unit": "µg pro Tag",
+      "target_type": "fixed",
+      "target": 150,
+      "intro": "Jod ist neben B12 der Nährstoff, bei dem es vegan am ehesten knapp wird. Milch, Fisch und Eier fallen als Hauptquellen weg, und Jodsalz allein reicht meist nicht.",
+      "why": "Die Schilddrüse braucht Jod für ihre Hormone, die Stoffwechsel, Wachstum und die Entwicklung des Gehirns steuern. Deutschland gilt als mildes Jodmangelgebiet, laut Robert Koch-Institut nimmt fast ein Drittel der Erwachsenen zu wenig Jod auf. Dazu kommt: Brot und Fleischersatz werden nur selten mit Jodsalz hergestellt, laut Max Rubner-Institut rund 9 bzw. 6 Prozent der Produkte.",
+      "targets": "Die DGE empfiehlt seit 2025 für Erwachsene 150 µg pro Tag (vorher 200 µg), in der Schwangerschaft 220 µg und in der Stillzeit 230 µg. Dauerhaft mehr als 600 µg pro Tag solltest du nicht aufnehmen.",
+      "sources": [
+        {"food": "Jod-Supplement", "amount": "100 µg pro Tag, laut DGE für Veganer meist sinnvoll"},
+        {"food": "Jodiertes Speisesalz", "amount": "5 g liefern rund 75 bis 125 µg"},
+        {"food": "Pflanzendrinks mit Jod", "amount": "je nach Produkt, Etikett prüfen"},
+        {"food": "Nori-Algen", "amount": "stark schwankend, nur mit angegebenem Jodgehalt"}
+      ],
+      "tip": "Salz zu Hause nur jodiert kaufen, aber nicht mehr salzen als sonst. Von Kombu und anderen getrockneten Braunalgen ohne Jodangabe lieber die Finger lassen: Schon ein Gramm kann ein Vielfaches der Tageshöchstmenge enthalten.",
+      "supplement": {"level": "sinnvoll", "text": "Die DGE empfiehlt Veganern 100 µg Jod pro Tag als Supplement, wenn sie nicht genug jodhaltige Lebensmittel essen, am besten ärztlich abgesprochen. Mit Jodsalz allein kommst du laut DGE nicht hin. Bei Schilddrüsenerkrankungen vorher immer ärztlich klären."},
+      "readmore": [["Jod vegan: der kritische Nährstoff, den fast alle unterschätzen", "/jod-vegan/"]]
+    },
+    {
       "slug": "eisen",
       "name": "Eisen",
       "short": "Eisen",
       "unit": "mg pro Tag",
       "target_type": "sex",
-      "target_female": 15,
-      "target_male": 10,
+      "target_female": 16,
+      "target_male": 11,
       "intro": "Pflanzliches Eisen ist reichlich da, der Körper nimmt es nur etwas schlechter auf. Mit einem Trick gleichst du das locker aus.",
       "why": "Eisen transportiert Sauerstoff im Blut. Pflanzliches Eisen (Nicht-Häm) wird schlechter aufgenommen als tierisches, lässt sich aber mit Vitamin C deutlich besser verwerten.",
-      "targets": "Frauen im Menstruationsalter rund 15 mg, Männer rund 10 mg. Veganer profitieren von etwas mehr und guter Kombination.",
+      "targets": "Die DGE empfiehlt seit 2024 Frauen mit Periode 16 mg pro Tag, Frauen nach den Wechseljahren 14 mg und Männern 11 mg. Veganer nehmen oft genauso viel Eisen auf wie andere, haben aber häufiger kleinere Eisenspeicher. Deshalb lohnt die gute Kombination.",
       "sources": [
         {"food": "Linsen, gekocht", "amount": "ca. 3,3 mg pro 100 g"},
         {"food": "Kürbiskerne", "amount": "ca. 12 mg pro 100 g"},
@@ -76,10 +96,10 @@
       "unit": "g ALA pro Tag",
       "target_type": "sex",
       "target_female": 1.1,
-      "target_male": 1.6,
+      "target_male": 1.3,
       "intro": "Pflanzliches Omega-3 (ALA) ist einfach zu decken. Für die aktiven Formen EPA und DHA gibt es eine saubere vegane Lösung.",
       "why": "Omega-3-Fettsäuren sind wichtig für Herz und Gehirn. Die pflanzliche Form ALA steckt in Leinöl und Co., die direkt wirksamen EPA und DHA kommen aus Algenöl, ganz ohne Fisch.",
-      "targets": "ALA rund 1,1 g (Frauen) bis 1,6 g (Männer) pro Tag. Zusätzlich gilt Algenöl mit EPA und DHA als sinnvolle Ergänzung.",
+      "targets": "Die DGE empfiehlt 0,5 Prozent der Energiezufuhr als ALA, bei durchschnittlichem Energiebedarf rund 1,1 g (Frauen) bis 1,3 g (Männer) pro Tag. Für EPA und DHA nennt die DGE keinen eigenen Wert für Erwachsene, die EFSA geht von 250 mg pro Tag aus. In Schwangerschaft und Stillzeit empfiehlt die DGE Veganerinnen zusätzlich 200 mg DHA.",
       "sources": [
         {"food": "Leinöl", "amount": "1 EL deckt den ALA-Bedarf locker"},
         {"food": "Gemahlene Leinsamen", "amount": "1 bis 2 EL pro Tag"},
@@ -88,7 +108,7 @@
         {"food": "Hanfsamen", "amount": "gutes Fettsäureverhältnis"}
       ],
       "tip": "Leinöl immer kalt verwenden und gekühlt lagern, Hitze zerstört die Fettsäuren. Leinsamen gemahlen nehmen, ganze gehen oft unverdaut durch.",
-      "supplement": {"level": "sinnvoll", "text": "Ein Algenöl mit EPA und DHA (rund 250 mg pro Tag) ist die vegane Alternative zu Fischöl und für viele eine sinnvolle Ergänzung."}
+      "supplement": {"level": "sinnvoll", "text": "Ein Algenöl mit EPA und DHA (rund 250 mg pro Tag, EFSA-Wert) ist die vegane Alternative zu Fischöl und für viele eine sinnvolle Ergänzung. In Schwangerschaft und Stillzeit rät die DGE ausdrücklich dazu."}
     },
     {
       "slug": "calcium",
@@ -99,7 +119,7 @@
       "target": 1000,
       "intro": "Calcium geht auch ohne Milch problemlos, wenn du auf angereicherte Drinks und ein paar Calcium-Stars setzt.",
       "why": "Calcium hält Knochen und Zähne stabil. Pflanzliche Quellen liefern reichlich, angereicherte Drinks und calciumreiches Mineralwasser machen es einfach.",
-      "targets": "Rund 1000 mg pro Tag für Erwachsene.",
+      "targets": "Die DGE empfiehlt Erwachsenen 1000 mg pro Tag, auch in Schwangerschaft und Stillzeit.",
       "sources": [
         {"food": "Angereicherte Pflanzendrinks", "amount": "wie Kuhmilch, ca. 120 mg pro 100 ml"},
         {"food": "Tofu mit Calciumsulfat", "amount": "ca. 200 bis 350 mg pro 100 g"},
