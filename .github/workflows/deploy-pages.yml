@@ -30,6 +30,7 @@ jobs:
           TIV_TOOLS_BASE_URL=https://this-is-vegan.com TIV_TOOLS_PREFIX=/tools TIV_TOOLS_ASSET_ORIGIN=https://tools.this-is-vegan.com python3 build.py
           mv dist "$RUNNER_TEMP/tools-prefixed"
           python3 build.py
+          python3 make_redirect_stubs.py dist
           mv "$RUNNER_TEMP/tools-prefixed" dist/tools
       - name: Add Pages files (custom domain + disable Jekyll)
         run: |
