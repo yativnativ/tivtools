@@ -3,13 +3,15 @@
    No-op in browsers without WebMCP support. */
 
 (function () {
+  var cs = document.currentScript;
+  var BASE = cs && cs.src ? cs.src.replace(/\/webmcp\.js(\?.*)?$/, '') : '';
   var mc = document.modelContext || navigator.modelContext;
   if (!mc || typeof mc.registerTool !== 'function') return;
 
   var dataPromise = null;
   function loadAdditives() {
     if (!dataPromise) {
-      dataPromise = fetch('/enummern.json', { cache: 'no-cache' }).then(function (r) { return r.json(); });
+      dataPromise = fetch(BASE + '/enummern.json', { cache: 'no-cache' }).then(function (r) { return r.json(); });
     }
     return dataPromise;
   }

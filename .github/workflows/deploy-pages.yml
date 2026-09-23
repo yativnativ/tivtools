@@ -25,8 +25,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Build static site
-        run: python3 build.py
+      - name: Build static site (Subdomain-Root + /tools-Fassung fuer this-is-vegan.com/tools/)
+        run: |
+          TIV_TOOLS_BASE_URL=https://this-is-vegan.com TIV_TOOLS_PREFIX=/tools python3 build.py
+          mv dist "$RUNNER_TEMP/tools-prefixed"
+          python3 build.py
+          mv "$RUNNER_TEMP/tools-prefixed" dist/tools
       - name: Add Pages files (custom domain + disable Jekyll)
         run: |
           echo "tools.this-is-vegan.com" > dist/CNAME

@@ -483,6 +483,8 @@ footer.site{margin-top:46px;border-top:1px solid var(--line);padding:32px 0 90px
 @media(max-width:620px){.hero{padding:30px 24px}.go{padding:13px 16px}.listhead{align-items:flex-start}.support{padding:30px 24px}.cta{padding:28px 24px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 """.strip()
+# Unterordner-Build (/tools): Font-Pfade im CSS mitziehen
+CSS = CSS.replace("url(/fonts/", f"url({PREFIX}/fonts/")
 
 
 # ---------------------------------------------------------------- JS (Checker)
