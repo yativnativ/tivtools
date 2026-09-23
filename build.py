@@ -90,8 +90,21 @@ def slug(code):
     return code.lower()
 
 
+ASSET_ORIGIN = os.environ.get("TIV_TOOLS_ASSET_ORIGIN", "")
+
+
 def url(path):
+    # Im /tools-Build unter this-is-vegan.com liefert Kinstas nginx statische Dateien
+    # selbst aus (404), deshalb kommen Assets dort direkt von der Subdomain.
+    last = path.rsplit("/", 1)[-1]
+    if ASSET_ORIGIN and "." in last and not last.endswith((".html", ".xml", ".txt")):
+        return ASSET_ORIGIN + PREFIX + path
     return PREFIX + path
+
+
+def abs_url(path):
+    u = url(path)
+    return u if u.startswith("http") else BASE_URL + u
 
 
 # ---- Amazon-Affiliate (Tag tiv0f-21), direkte Suchlinks + Pflicht-Offenlegung
@@ -484,7 +497,7 @@ footer.site{margin-top:46px;border-top:1px solid var(--line);padding:32px 0 90px
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 """.strip()
 # Unterordner-Build (/tools): Font-Pfade im CSS mitziehen
-CSS = CSS.replace("url(/fonts/", f"url({PREFIX}/fonts/")
+CSS = CSS.replace("url(/fonts/", "url(" + url("/fonts/x.woff2")[:-len("x.woff2")])
 
 
 # ---------------------------------------------------------------- JS (Checker)
@@ -1567,7 +1580,7 @@ CSS = CSS + NL_CSS
 
 
 def page(title, desc, path, body, jsonld=None, og_type="website", og_image=None):
-    canonical = BASE_URL + url(path)
+    canonical = abs_url(path)
     if og_image is None:
         og_image = OG_MAP.get(path)
     # Hero-Emblem nur auf den Tool-Landingpages (genau die Pfade in OG_MAP):
@@ -1583,7 +1596,7 @@ def page(title, desc, path, body, jsonld=None, og_type="website", og_image=None)
             body = body.replace('<section class="support">', ex + '<section class="support">', 1)
     body = place_units(body, path)
     if og_image:
-        og_url = BASE_URL + url(f"/og/{og_image}.png")
+        og_url = abs_url(f"/og/{og_image}.png")
         og_alt = esc(title)
         og_tags = (
             f'<meta property="og:image" content="{og_url}">\n'
@@ -1593,7 +1606,7 @@ def page(title, desc, path, body, jsonld=None, og_type="website", og_image=None)
             f'<meta name="twitter:image" content="{og_url}">'
         )
     else:
-        d = f"{BASE_URL}{url('/og-image.png')}"
+        d = f"{abs_url('/og-image.png')}"
         og_tags = (
             f'<meta property="og:image" content="{d}">\n'
             f'<meta name="twitter:image" content="{d}">'
@@ -1907,7 +1920,7 @@ def build_hub(meta, adds, ings, nutrients):
             "@type": "CollectionPage",
             "name": "Vegane Tools von This Is Vegan",
             "description": "Kostenlose Web-Tools für den veganen Alltag, vom E-Nummern-Checker bis zu weiteren Helfern.",
-            "url": BASE_URL + url("/"),
+            "url": abs_url("/"),
             "isPartOf": {"@type": "WebSite", "name": "This Is Vegan", "url": MAIN_SITE},
             "mainEntity": {
                 "@type": "ItemList",
@@ -1916,121 +1929,121 @@ def build_hub(meta, adds, ings, nutrients):
                         "@type": "ListItem",
                         "position": 1,
                         "name": "E-Nummern-Checker: Ist das vegan?",
-                        "url": BASE_URL + url("/e-nummern/"),
+                        "url": abs_url("/e-nummern/"),
                     },
                     {
                         "@type": "ListItem",
                         "position": 2,
                         "name": "Vegan-Ersatz-Finder",
-                        "url": BASE_URL + url(ERSATZ_BASE),
+                        "url": abs_url(ERSATZ_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 3,
                         "name": "Veganer Nährstoff-Rechner",
-                        "url": BASE_URL + url(NAEHR_BASE),
+                        "url": abs_url(NAEHR_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 4,
                         "name": "Veganer Impact-Rechner",
-                        "url": BASE_URL + url(IMPACT_BASE),
+                        "url": abs_url(IMPACT_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 5,
                         "name": "Ist das vegan? Lebensmittel-Checker",
-                        "url": BASE_URL + url(FOOD_BASE),
+                        "url": abs_url(FOOD_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 6,
                         "name": "Vegan-Saisonkalender",
-                        "url": BASE_URL + url(SAISON_BASE),
+                        "url": abs_url(SAISON_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 7,
                         "name": "Pflanzendrink-Vergleich",
-                        "url": BASE_URL + url(PFLANZ_BASE),
+                        "url": abs_url(PFLANZ_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 8,
                         "name": "Vegane Protein-Tabelle",
-                        "url": BASE_URL + url(PROT_BASE),
+                        "url": abs_url(PROT_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 9,
                         "name": "CO2-Fußabdruck von Lebensmitteln",
-                        "url": BASE_URL + url(CO2_BASE),
+                        "url": abs_url(CO2_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 10,
                         "name": "Protein-pro-Mahlzeit-Rechner",
-                        "url": BASE_URL + url(MEAL_BASE),
+                        "url": abs_url(MEAL_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 11,
                         "name": "Veganizer: Antworten auf Anti-Vegan-Sprüche",
-                        "url": BASE_URL + url(VEG_BASE),
+                        "url": abs_url(VEG_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 12,
                         "name": "Schriftarten-Generator für Creator",
-                        "url": BASE_URL + url(FONT_BASE),
+                        "url": abs_url(FONT_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 13,
                         "name": "Bild freistellen",
-                        "url": BASE_URL + url(FREI_BASE),
+                        "url": abs_url(FREI_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 14,
                         "name": "Vegane Hashtags",
-                        "url": BASE_URL + url(HASH_BASE),
+                        "url": abs_url(HASH_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 15,
                         "name": "Versteckte tierische Zutaten erkennen",
-                        "url": BASE_URL + url(VZUT_BASE),
+                        "url": abs_url(VZUT_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 16,
                         "name": "Vegan auf Reisen: Sprach-Spickzettel",
-                        "url": BASE_URL + url(REISE_BASE),
+                        "url": abs_url(REISE_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 17,
                         "name": "Ist mein Getränk vegan? Wein, Bier und Co.",
-                        "url": BASE_URL + url(GET_BASE),
+                        "url": abs_url(GET_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 18,
                         "name": "Vegane Materialien: Stoff-Check",
-                        "url": BASE_URL + url(MAT_BASE),
+                        "url": abs_url(MAT_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 19,
                         "name": "Vegane Einkaufsliste: Starter-Küche",
-                        "url": BASE_URL + url(EINK_BASE),
+                        "url": abs_url(EINK_BASE),
                     },
                     {
                         "@type": "ListItem",
                         "position": 20,
                         "name": "Vegan- & Tierschutz-Vokabeln in 12 Sprachen",
-                        "url": BASE_URL + url(VOK_BASE),
+                        "url": abs_url(VOK_BASE),
                     },
                 ],
             },
@@ -2126,7 +2139,7 @@ def build_checker(meta, adds):
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "E-Nummern-Checker: Ist das vegan?",
-            "url": BASE_URL + url("/e-nummern/"),
+            "url": abs_url("/e-nummern/"),
             "applicationCategory": "UtilityApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
@@ -2163,8 +2176,8 @@ def build_checker(meta, adds):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "E-Nummern-Checker", "item": BASE_URL + url("/e-nummern/")},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "E-Nummern-Checker", "item": abs_url("/e-nummern/")},
             ],
         },
     ]
@@ -2297,9 +2310,9 @@ def build_detail(a, meta, adds):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "E-Nummern-Checker", "item": BASE_URL + url("/e-nummern/")},
-                {"@type": "ListItem", "position": 3, "name": code, "item": BASE_URL + url(path)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "E-Nummern-Checker", "item": abs_url("/e-nummern/")},
+                {"@type": "ListItem", "position": 3, "name": code, "item": abs_url(path)},
             ],
         },
     ]
@@ -2374,7 +2387,7 @@ def build_ersatz_hub(meta, ings):
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "Vegan-Ersatz-Finder",
-            "url": BASE_URL + url(ERSATZ_BASE),
+            "url": abs_url(ERSATZ_BASE),
             "applicationCategory": "LifestyleApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
@@ -2385,8 +2398,8 @@ def build_ersatz_hub(meta, ings):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Vegan-Ersatz-Finder", "item": BASE_URL + url(ERSATZ_BASE)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Vegan-Ersatz-Finder", "item": abs_url(ERSATZ_BASE)},
             ],
         },
     ]
@@ -2509,9 +2522,9 @@ def build_ersatz_detail(ing, meta, ings):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Vegan ersetzen", "item": BASE_URL + url(ERSATZ_BASE)},
-                {"@type": "ListItem", "position": 3, "name": name, "item": BASE_URL + url(path)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Vegan ersetzen", "item": abs_url(ERSATZ_BASE)},
+                {"@type": "ListItem", "position": 3, "name": name, "item": abs_url(path)},
             ],
         },
     ]
@@ -2603,7 +2616,7 @@ def build_naehrstoff_hub(meta, nutrients):
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "Veganer Nährstoff-Rechner",
-            "url": BASE_URL + url(NAEHR_BASE),
+            "url": abs_url(NAEHR_BASE),
             "applicationCategory": "HealthApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
@@ -2628,8 +2641,8 @@ def build_naehrstoff_hub(meta, nutrients):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Nährstoff-Rechner", "item": BASE_URL + url(NAEHR_BASE)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Nährstoff-Rechner", "item": abs_url(NAEHR_BASE)},
             ],
         },
     ]
@@ -2755,9 +2768,9 @@ def build_naehrstoff_detail(n, meta, nutrients):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Nährstoff-Rechner", "item": BASE_URL + url(NAEHR_BASE)},
-                {"@type": "ListItem", "position": 3, "name": name, "item": BASE_URL + url(path)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Nährstoff-Rechner", "item": abs_url(NAEHR_BASE)},
+                {"@type": "ListItem", "position": 3, "name": name, "item": abs_url(path)},
             ],
         },
     ]
@@ -2855,7 +2868,7 @@ def build_food_hub(meta, foods):
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "Ist das vegan? Lebensmittel-Checker",
-            "url": BASE_URL + url(FOOD_BASE),
+            "url": abs_url(FOOD_BASE),
             "applicationCategory": "UtilityApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
@@ -2866,8 +2879,8 @@ def build_food_hub(meta, foods):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Ist das vegan?", "item": BASE_URL + url(FOOD_BASE)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Ist das vegan?", "item": abs_url(FOOD_BASE)},
             ],
         },
     ]
@@ -2965,9 +2978,9 @@ def build_food_detail(f, meta, foods):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Ist das vegan?", "item": BASE_URL + url(FOOD_BASE)},
-                {"@type": "ListItem", "position": 3, "name": name, "item": BASE_URL + url(path)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Ist das vegan?", "item": abs_url(FOOD_BASE)},
+                {"@type": "ListItem", "position": 3, "name": name, "item": abs_url(path)},
             ],
         },
     ]
@@ -3026,7 +3039,7 @@ def build_impact(meta):
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "Veganer Impact-Rechner",
-            "url": BASE_URL + url(IMPACT_BASE),
+            "url": abs_url(IMPACT_BASE),
             "applicationCategory": "LifestyleApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
@@ -3047,8 +3060,8 @@ def build_impact(meta):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Impact-Rechner", "item": BASE_URL + url(IMPACT_BASE)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Impact-Rechner", "item": abs_url(IMPACT_BASE)},
             ],
         },
     ]
@@ -3127,7 +3140,7 @@ def build_saison_hub(meta, produce):
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "Vegan-Saisonkalender",
-            "url": BASE_URL + url(SAISON_BASE),
+            "url": abs_url(SAISON_BASE),
             "applicationCategory": "LifestyleApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
@@ -3138,8 +3151,8 @@ def build_saison_hub(meta, produce):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Saisonkalender", "item": BASE_URL + url(SAISON_BASE)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Saisonkalender", "item": abs_url(SAISON_BASE)},
             ],
         },
     ]
@@ -3215,9 +3228,9 @@ def build_saison_month(idx, meta, produce):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Saisonkalender", "item": BASE_URL + url(SAISON_BASE)},
-                {"@type": "ListItem", "position": 3, "name": month, "item": BASE_URL + url(path)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Saisonkalender", "item": abs_url(SAISON_BASE)},
+                {"@type": "ListItem", "position": 3, "name": month, "item": abs_url(path)},
             ],
         },
     ]
@@ -3283,7 +3296,7 @@ def build_drink_hub(meta, drinks, usecases):
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "Pflanzendrink-Vergleich",
-            "url": BASE_URL + url(PFLANZ_BASE),
+            "url": abs_url(PFLANZ_BASE),
             "applicationCategory": "LifestyleApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
@@ -3304,8 +3317,8 @@ def build_drink_hub(meta, drinks, usecases):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Pflanzendrink-Vergleich", "item": BASE_URL + url(PFLANZ_BASE)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Pflanzendrink-Vergleich", "item": abs_url(PFLANZ_BASE)},
             ],
         },
     ]
@@ -3402,9 +3415,9 @@ def build_drink_detail(d, meta, drinks, usecases):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Pflanzendrink-Vergleich", "item": BASE_URL + url(PFLANZ_BASE)},
-                {"@type": "ListItem", "position": 3, "name": name, "item": BASE_URL + url(path)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Pflanzendrink-Vergleich", "item": abs_url(PFLANZ_BASE)},
+                {"@type": "ListItem", "position": 3, "name": name, "item": abs_url(path)},
             ],
         },
     ]
@@ -3484,7 +3497,7 @@ def build_protein(meta, foods, categories):
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "Vegane Protein-Tabelle",
-            "url": BASE_URL + url(PROT_BASE),
+            "url": abs_url(PROT_BASE),
             "applicationCategory": "HealthApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
@@ -3505,8 +3518,8 @@ def build_protein(meta, foods, categories):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Protein-Tabelle", "item": BASE_URL + url(PROT_BASE)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Protein-Tabelle", "item": abs_url(PROT_BASE)},
             ],
         },
     ]
@@ -3582,7 +3595,7 @@ def build_co2(meta, foods):
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "CO2-Fußabdruck von Lebensmitteln",
-            "url": BASE_URL + url(CO2_BASE),
+            "url": abs_url(CO2_BASE),
             "applicationCategory": "LifestyleApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
@@ -3603,8 +3616,8 @@ def build_co2(meta, foods):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "CO2-Fußabdruck", "item": BASE_URL + url(CO2_BASE)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "CO2-Fußabdruck", "item": abs_url(CO2_BASE)},
             ],
         },
     ]
@@ -3674,7 +3687,7 @@ def build_meal(meta, foods):
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "Protein-pro-Mahlzeit-Rechner",
-            "url": BASE_URL + url(MEAL_BASE),
+            "url": abs_url(MEAL_BASE),
             "applicationCategory": "HealthApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
@@ -3685,8 +3698,8 @@ def build_meal(meta, foods):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Protein pro Mahlzeit", "item": BASE_URL + url(MEAL_BASE)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Protein pro Mahlzeit", "item": abs_url(MEAL_BASE)},
             ],
         },
     ]
@@ -3749,15 +3762,15 @@ def build_creator_hub(meta):
             "@type": "CollectionPage",
             "name": "Tools für vegane Content Creator",
             "description": "Kostenlose Tools für vegane, Tierschutz- und Food-Accounts auf Social Media.",
-            "url": BASE_URL + url(CREATOR_BASE),
+            "url": abs_url(CREATOR_BASE),
             "isPartOf": {"@type": "WebSite", "name": "This Is Vegan", "url": MAIN_SITE},
         },
         {
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Für Content Creator", "item": BASE_URL + url(CREATOR_BASE)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Für Content Creator", "item": abs_url(CREATOR_BASE)},
             ],
         },
     ]
@@ -3805,7 +3818,7 @@ def build_font_tool(meta):
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "Schriftarten-Generator",
-            "url": BASE_URL + url(FONT_BASE),
+            "url": abs_url(FONT_BASE),
             "applicationCategory": "DesignApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
@@ -3826,9 +3839,9 @@ def build_font_tool(meta):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Für Creator", "item": BASE_URL + url(CREATOR_BASE)},
-                {"@type": "ListItem", "position": 3, "name": "Schriftarten", "item": BASE_URL + url(FONT_BASE)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Für Creator", "item": abs_url(CREATOR_BASE)},
+                {"@type": "ListItem", "position": 3, "name": "Schriftarten", "item": abs_url(FONT_BASE)},
             ],
         },
     ]
@@ -3891,7 +3904,7 @@ def build_bgremove(meta):
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "Bild freistellen",
-            "url": BASE_URL + url(FREI_BASE),
+            "url": abs_url(FREI_BASE),
             "applicationCategory": "DesignApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
@@ -3912,9 +3925,9 @@ def build_bgremove(meta):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Für Creator", "item": BASE_URL + url(CREATOR_BASE)},
-                {"@type": "ListItem", "position": 3, "name": "Bild freistellen", "item": BASE_URL + url(FREI_BASE)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Für Creator", "item": abs_url(CREATOR_BASE)},
+                {"@type": "ListItem", "position": 3, "name": "Bild freistellen", "item": abs_url(FREI_BASE)},
             ],
         },
     ]
@@ -3972,7 +3985,7 @@ def build_hashtags(meta, topics):
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "Vegane Hashtags",
-            "url": BASE_URL + url(HASH_BASE),
+            "url": abs_url(HASH_BASE),
             "applicationCategory": "UtilityApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
@@ -3993,9 +4006,9 @@ def build_hashtags(meta, topics):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Für Creator", "item": BASE_URL + url(CREATOR_BASE)},
-                {"@type": "ListItem", "position": 3, "name": "Hashtags", "item": BASE_URL + url(HASH_BASE)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Für Creator", "item": abs_url(CREATOR_BASE)},
+                {"@type": "ListItem", "position": 3, "name": "Hashtags", "item": abs_url(HASH_BASE)},
             ],
         },
     ]
@@ -4131,7 +4144,7 @@ def build_veganizer_hub(meta, args, quiz):
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "Veganizer",
-            "url": BASE_URL + url(VEG_BASE),
+            "url": abs_url(VEG_BASE),
             "applicationCategory": "EducationalApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
@@ -4142,8 +4155,8 @@ def build_veganizer_hub(meta, args, quiz):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Veganizer", "item": BASE_URL + url(VEG_BASE)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Veganizer", "item": abs_url(VEG_BASE)},
             ],
         },
     ]
@@ -4224,9 +4237,9 @@ def build_veganizer_detail(a, meta, args):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Veganizer", "item": BASE_URL + url(VEG_BASE)},
-                {"@type": "ListItem", "position": 3, "name": title, "item": BASE_URL + url(path)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Veganizer", "item": abs_url(VEG_BASE)},
+                {"@type": "ListItem", "position": 3, "name": title, "item": abs_url(path)},
             ],
         },
     ]
@@ -4365,7 +4378,7 @@ def build_reise_hub(meta, data):
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "Vegan auf Reisen: Sprach-Spickzettel",
-            "url": BASE_URL + url(REISE_BASE),
+            "url": abs_url(REISE_BASE),
             "applicationCategory": "TravelApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
@@ -4376,8 +4389,8 @@ def build_reise_hub(meta, data):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Vegan auf Reisen", "item": BASE_URL + url(REISE_BASE)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Vegan auf Reisen", "item": abs_url(REISE_BASE)},
             ],
         },
     ]
@@ -4456,9 +4469,9 @@ def build_reise_detail(lang, meta, data):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Vegan auf Reisen", "item": BASE_URL + url(REISE_BASE)},
-                {"@type": "ListItem", "position": 3, "name": name, "item": BASE_URL + url(path)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Vegan auf Reisen", "item": abs_url(REISE_BASE)},
+                {"@type": "ListItem", "position": 3, "name": name, "item": abs_url(path)},
             ],
         },
     ]
@@ -4613,7 +4626,7 @@ def build_versteckte_hub(meta, ings):
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "Versteckte tierische Zutaten: der Checker",
-            "url": BASE_URL + url(VZUT_BASE),
+            "url": abs_url(VZUT_BASE),
             "applicationCategory": "UtilityApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
@@ -4624,8 +4637,8 @@ def build_versteckte_hub(meta, ings):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Versteckte tierische Zutaten", "item": BASE_URL + url(VZUT_BASE)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Versteckte tierische Zutaten", "item": abs_url(VZUT_BASE)},
             ],
         },
     ]
@@ -4725,9 +4738,9 @@ def build_versteckte_detail(i, meta, ings):
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Versteckte tierische Zutaten", "item": BASE_URL + url(VZUT_BASE)},
-                {"@type": "ListItem", "position": 3, "name": name, "item": BASE_URL + url(path)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Versteckte tierische Zutaten", "item": abs_url(VZUT_BASE)},
+                {"@type": "ListItem", "position": 3, "name": name, "item": abs_url(path)},
             ],
         },
     ]
@@ -4877,7 +4890,7 @@ def build_ampel_hub(cfg, items):
     jsonld = [
         {
             "@context": "https://schema.org", "@type": "WebApplication",
-            "name": cfg["schema_name"], "url": BASE_URL + url(base),
+            "name": cfg["schema_name"], "url": abs_url(base),
             "applicationCategory": "UtilityApplication", "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
             "description": cfg["schema_desc"].format(n=len(items)),
@@ -4886,8 +4899,8 @@ def build_ampel_hub(cfg, items):
         {
             "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": cfg["crumb"], "item": BASE_URL + url(base)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": cfg["crumb"], "item": abs_url(base)},
             ],
         },
     ]
@@ -4979,9 +4992,9 @@ def build_ampel_detail(cfg, item, items):
         {
             "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": cfg["crumb"], "item": BASE_URL + url(base)},
-                {"@type": "ListItem", "position": 3, "name": name, "item": BASE_URL + url(path)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": cfg["crumb"], "item": abs_url(base)},
+                {"@type": "ListItem", "position": 3, "name": name, "item": abs_url(path)},
             ],
         },
     ]
@@ -5195,8 +5208,8 @@ def build_einkaufsliste(meta, data):
         {
             "@context": "https://schema.org", "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-                {"@type": "ListItem", "position": 2, "name": "Vegane Einkaufsliste", "item": BASE_URL + url(EINK_BASE)},
+                {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+                {"@type": "ListItem", "position": 2, "name": "Vegane Einkaufsliste", "item": abs_url(EINK_BASE)},
             ],
         },
     ]
@@ -5376,8 +5389,8 @@ def build_vokabeln(meta, data):
     jsonld = [
         {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faqs},
         {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Tools", "item": BASE_URL + url("/")},
-            {"@type": "ListItem", "position": 2, "name": "Vegan-Vokabeln", "item": BASE_URL + url(VOK_BASE)},
+            {"@type": "ListItem", "position": 1, "name": "Tools", "item": abs_url("/")},
+            {"@type": "ListItem", "position": 2, "name": "Vegan-Vokabeln", "item": abs_url(VOK_BASE)},
         ]},
     ]
     return page(
@@ -5628,7 +5641,7 @@ def main():
     # sitemap
     today = date.today().isoformat()
     urls = "\n".join(
-        f"  <url><loc>{BASE_URL}{url(p)}</loc><lastmod>{today}</lastmod></url>" for p in pages
+        f"  <url><loc>{abs_url(p)}</loc><lastmod>{today}</lastmod></url>" for p in pages
     )
     (DIST / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
@@ -5638,7 +5651,7 @@ def main():
     )
 
     (DIST / "robots.txt").write_text(
-        f"User-agent: *\nAllow: /\n\nSitemap: {BASE_URL}{url('/sitemap.xml')}\n", encoding="utf-8"
+        f"User-agent: *\nAllow: /\n\nSitemap: {abs_url('/sitemap.xml')}\n", encoding="utf-8"
     )
 
     (DIST / "_headers").write_text(

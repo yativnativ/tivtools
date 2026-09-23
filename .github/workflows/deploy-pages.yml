@@ -27,7 +27,7 @@ jobs:
           python-version: "3.12"
       - name: Build static site (Subdomain-Root + /tools-Fassung fuer this-is-vegan.com/tools/)
         run: |
-          TIV_TOOLS_BASE_URL=https://this-is-vegan.com TIV_TOOLS_PREFIX=/tools python3 build.py
+          TIV_TOOLS_BASE_URL=https://this-is-vegan.com TIV_TOOLS_PREFIX=/tools TIV_TOOLS_ASSET_ORIGIN=https://tools.this-is-vegan.com python3 build.py
           mv dist "$RUNNER_TEMP/tools-prefixed"
           python3 build.py
           mv "$RUNNER_TEMP/tools-prefixed" dist/tools
