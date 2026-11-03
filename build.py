@@ -5621,6 +5621,12 @@ def main():
                 target = lib_dir / f.relative_to(lib_src)
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(f, target)
+        # Ausweich-Adresse tools.this-is-vegan.com/links/: der Kinsta-Bot-Schutz
+        # sperrt manche Safari-Besucher (403), GitHub Pages nicht. Canonical bleibt
+        # die Hauptdomain, alle URLs in page.html sind absolut.
+        if (lib_src / "page.html").exists():
+            (DIST / "links").mkdir(parents=True, exist_ok=True)
+            shutil.copy2(lib_src / "page.html", DIST / "links" / "index.html")
 
     # Einzelne unlisted Kampagnenseiten (nicht in `pages`, also nicht in der
     # Sitemap; jede Seite traegt zusaetzlich <meta name="robots" content="noindex">).
