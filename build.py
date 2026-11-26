@@ -1585,6 +1585,12 @@ CSS = CSS + UNIT_CSS
 CSS = CSS + NL_CSS
 
 
+# Mitglieder-Schranke (Mitgliederbereich der Hauptseite): fragt die Einstellung der Hauptseite ab
+# (GET /wp-json/tivw/v1/tools-tor, im Browser 6 bzw. 24 Stunden gemerkt) und laedt nur dann das
+# Schranken-Skript aus dem Theme, wenn der Mitgliederbereich dort eingeschaltet ist. Sonst passiert nichts.
+TOR_LADER = r"""<script>(function(){var k='tivTorCfg',n=Date.now(),z;try{z=JSON.parse(localStorage.getItem(k))}catch(e){}function los(c){if(!c||!c.aktiv||!/^\/wp-content\/themes\/[a-z0-9-]+\/assets\/js\/tools-tor\.js\?v=\d+$/.test(c.skript||''))return;window.tivTor=c;var s=document.createElement('script');s.src=c.skript;document.head.appendChild(s)}if(z&&z.t&&n-z.t<(z.c&&z.c.aktiv?216e5:864e5)){los(z.c);return}fetch('/wp-json/tivw/v1/tools-tor',{credentials:'same-origin'}).then(function(r){return r.ok?r.json():{aktiv:false}}).then(function(c){try{localStorage.setItem(k,JSON.stringify({t:n,c:c}))}catch(e){}los(c)}).catch(function(){})})();</script>"""
+
+
 def page(title, desc, path, body, jsonld=None, og_type="website", og_image=None):
     canonical = abs_url(path)
     if og_image is None:
@@ -1671,6 +1677,7 @@ def page(title, desc, path, body, jsonld=None, og_type="website", og_image=None)
 </div>
 {sharebar}
 {nl_popup()}
+{TOR_LADER}
 <script src="{url('/webmcp.js')}" defer></script>
 </body>
 </html>"""
