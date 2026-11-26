@@ -391,7 +391,11 @@ footer.site{margin-top:46px;border-top:1px solid var(--line);padding:32px 0 90px
 .iunit input{font-family:var(--serif);font-weight:700;font-size:24px;width:120px;text-align:center;border:2px solid var(--cream);border-radius:13px;padding:12px;background:var(--cream);color:var(--ink)}
 .iunit input:focus{outline:none;border-color:var(--green)}
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:30px auto 0;max-width:760px}
-@media(min-width:760px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat:nth-child(3):last-child{grid-column:1/-1}
+@media(max-width:419px){.stats{grid-template-columns:1fr}}
+@media(min-width:760px){.stats{grid-template-columns:repeat(3,1fr)}.stat:nth-child(3):last-child{grid-column:auto}}
+.infobox p+p{margin-top:10px}
+.infobox a{color:var(--green-deep);font-weight:700}
 .stat{background:#fff;color:var(--ink);border:1px solid var(--cardline);border-radius:18px;padding:22px 16px;text-align:center;box-shadow:0 14px 34px -28px rgba(0,0,0,.4)}
 .stat .snum{font-family:var(--serif);font-weight:700;font-size:clamp(26px,5vw,40px);letter-spacing:-.5px;line-height:1;color:var(--green-deep)}
 .stat .slabel{font-family:'Bricolage Grotesque';font-weight:700;font-size:14px;margin-top:9px;color:var(--ink)}
@@ -674,13 +678,15 @@ function fmt(x){ return Math.round(x).toLocaleString('de-DE'); }
 function card(n,l,e){ return '<div class="stat"><div class="snum">'+n+'</div><div class="slabel">'+l+'</div><div class="seq">'+e+'</div></div>'; }
 function render(){
   const d = days();
-  const animals = P.animals*d, co2 = P.co2_kg*d, water = P.water_l*d, land = P.land_m2*d;
-  const co2str = co2>=1000 ? fmt(co2/1000)+' t' : fmt(co2)+' kg';
+  // Klima summiert sich ueber die Tage. Landtiere: nur volle Tiere (abgerundet). Flaeche: feste Groesse, kein Tageswert.
+  const co2 = P.co2_kg_pro_tag*d;
+  const animals = Math.floor(P.landtiere_pro_jahr*d/365 + 1e-9);
+  const dec = x => x.toLocaleString('de-DE',{maximumFractionDigits:1});
+  const co2str = co2>=1000 ? dec(co2/1000)+' t' : (co2<10 ? dec(co2) : fmt(co2))+' kg';
   document.getElementById('stats').innerHTML =
-    card(fmt(animals), 'Tiere gerettet', 'die meisten davon Fische') +
-    card(co2str, 'CO2 gespart', 'wie rund '+fmt(co2/0.12)+' km im Auto') +
-    card(fmt(water)+' L', 'Wasser gespart', 'rund '+fmt(water/150)+' volle Badewannen') +
-    card(fmt(land)+' m²', 'Ackerland gespart', 'das sonst für Tierfutter draufginge');
+    card(co2str, 'Weniger Treibhausgase', dec(P.co2_kg_pro_tag)+' kg CO2e pro Tag, verglichen mit der durchschnittlichen Ernährung in Deutschland') +
+    card(fmt(animals), 'Landtiere, rechnerisch', 'rund '+fmt(P.landtiere_pro_jahr)+' pro Jahr, überwiegend Hühner. Fische sind nicht mitgezählt') +
+    card(fmt(P.flaeche_m2)+' m²', 'Weniger Agrarfläche', 'gerundet, dauerhaft. Feste Größe, die sich nicht über die Tage summiert');
 }
 const inp = document.getElementById('amt');
 if(inp){ inp.addEventListener('input', ()=>{ const v=parseFloat(inp.value); if(v>0 && v<100000){ amount=v; render(); } }); }
@@ -1782,7 +1788,7 @@ def build_hub(meta, adds, ings, nutrients):
     <a class="toolcard" href="{url(IMPACT_BASE)}">
       <span class="badge">Live</span>
       <h3>Impact-Rechner</h3>
-      <p>Sieh, was deine vegane Ernährung bewegt: gerettete Tiere, gespartes CO2, Wasser und Ackerland. Zeitraum eingeben, Ergebnis teilen.</p>
+      <p>Sieh, was deine vegane Ernährung rechnerisch bewegt: Klima, Landtiere und Agrarfläche, mit Quellen. Zeitraum eingeben, Ergebnis sehen.</p>
       <span class="meta">Wirkung sehen →</span>
     </a>
     <a class="toolcard" href="{url(FOOD_BASE)}">
@@ -2997,13 +3003,21 @@ IMPACT_BASE = "/impact-rechner/"
 
 
 def build_impact(meta):
-    js = IMPACT_JS.replace("__DATA__", json.dumps(meta["per_day"], ensure_ascii=False, separators=(",", ":")))
+    js = IMPACT_JS.replace("__DATA__", json.dumps(meta["werte"], ensure_ascii=False, separators=(",", ":")))
+    m = meta["methodik"]
+    methodik_html = f'<p><b>So rechnen wir:</b> {esc(m["einleitung"])}</p>' + "".join(
+        f'<p><b>{esc(g["name"])}:</b> {esc(g["text"])} Quelle: '
+        f'<a href="{esc(g["url"])}" target="_blank" rel="noopener">{esc(g["quelle"])}</a>.</p>'
+        for g in m["groessen"]
+    ) + "".join(
+        f'<p><b>{esc(h["name"])}:</b> {esc(h["text"])}</p>' for h in m["hinweise"]
+    ) + f'<p>Stand der Prüfung: {esc(german_date(meta["lastUpdated"]))}.</p>'
     body = site_header("Impact-Rechner") + f"""
 <nav class="crumbs" aria-label="Breadcrumb"><a href="{url('/')}">Tools</a><span>›</span>Impact-Rechner</nav>
 <section class="hero">
   <div class="eyebrow">Zahlen, die motivieren</div>
   <h1>Was du wirklich <span class="q">bewegst.</span></h1>
-  <p class="sub">Gib ein, wie lange du schon vegan lebst, und sieh, was das für Tiere, Klima, Wasser und Ackerland bedeutet.</p>
+  <p class="sub">Gib ein, wie lange du schon vegan lebst, und sieh, was das rechnerisch für Klima, Tiere und Agrarfläche bedeutet.</p>
 
   <div class="iunit">
     <input id="amt" type="number" value="1" min="1" max="99999" inputmode="numeric" aria-label="Zeitraum">
@@ -3015,13 +3029,13 @@ def build_impact(meta):
   </div>
 
   <div class="stats" id="stats"></div>
-  <div class="infobox" style="margin-left:auto;margin-right:auto"><b>So rechnen wir:</b> {esc(meta["methodik"])}</div>
+  <div class="infobox" style="margin-left:auto;margin-right:auto;text-align:left">{methodik_html}</div>
 </section>
 
 <section class="section">
-  <h2>Warum jeder Tag zählt</h2>
-  <p class="prose">Diese Zahlen sind keine Abrechnung, sondern eine Erinnerung. Jede Mahlzeit ohne tierische Produkte senkt die Nachfrage, und Nachfrage ist am Ende das Einzige, worauf die Lebensmittelindustrie reagiert. Du musst nicht perfekt sein, damit sich etwas bewegt.</p>
-  <p class="prose">Teil dein Ergebnis mit Leuten, die noch zögern. Konkrete Zahlen überzeugen oft mehr als jedes Argument.</p>
+  <h2>So liest du die Zahlen</h2>
+  <p class="prose">Klima und Landtiere summieren sich über die Zeit: Jeder vegane Tag zählt rechnerisch mit. Die Fläche summiert sich nicht. Eine vegane Ernährung beansprucht dauerhaft rund 990 m² weniger Agrarfläche, nach einem Monat genauso wie nach zehn Jahren.</p>
+  <p class="prose">Alle Werte sind Durchschnittswerte für Deutschland und bewusst vorsichtig gewählt. Beim Klima kommen andere Quellen auf mehr, etwa WWF Deutschland 2021 auf rund 3,4 kg CO2e pro Tag. Die Quellen und alles, was nicht mitgezählt ist, stehen oben unter „So rechnen wir“.</p>
 </section>
 
 <section class="section">
@@ -3043,17 +3057,21 @@ def build_impact(meta):
             "applicationCategory": "LifestyleApplication",
             "operatingSystem": "Web",
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
-            "description": "Zeigt, wie viele Tiere, wie viel CO2, Wasser und Ackerland eine vegane Ernährung über einen Zeitraum spart.",
+            "description": "Zeigt für einen Zeitraum, was eine vegane gegenüber der durchschnittlichen Ernährung in Deutschland rechnerisch bedeutet: Treibhausgase, Landtiere und Agrarfläche, mit Quellen.",
             "publisher": {"@type": "Organization", "name": "This Is Vegan", "url": MAIN_SITE},
         },
         {
             "@context": "https://schema.org",
             "@type": "FAQPage",
             "mainEntity": [
-                {"@type": "Question", "name": "Wie viele Tiere rettet man als Veganer?",
-                 "acceptedAnswer": {"@type": "Answer", "text": "Konservativ geschätzt rund 100 Tiere pro Jahr, der größte Teil davon Fische und Meerestiere. Die Zahl beruht auf vermiedener Nachfrage und schwankt je nach Quelle zwischen etwa 30 und über 400."}},
-                {"@type": "Question", "name": "Wie viel CO2 spart eine vegane Ernährung?",
-                 "acceptedAnswer": {"@type": "Answer", "text": "Im Vergleich zu einer durchschnittlichen Ernährung rund 2,5 kg CO2-Äquivalent pro Tag, also etwa 0,9 Tonnen im Jahr. Studien zur Ernährungs-Ökobilanz nennen je nach Annahmen unterschiedliche Werte."}},
+                {"@type": "Question", "name": "Wie viel CO2 verursacht eine vegane Ernährung weniger?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Im Vergleich zur durchschnittlichen Ernährung in Deutschland rund 2,2 kg CO2-Äquivalente pro Tag, also 0,81 Tonnen im Jahr. Grundlage ist der CO2-Rechner des Umweltbundesamts (Datenstand 2025): 1,57 Tonnen gegenüber 0,76 Tonnen pro Person und Jahr. Andere Studien nennen höhere Werte, WWF Deutschland 2021 etwa rund 3,4 kg pro Tag."}},
+                {"@type": "Question", "name": "Wie viele Landtiere entfallen rechnerisch auf die Ernährung einer Person in Deutschland?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Rechnerisch rund 7 Landtiere pro Person und Jahr, überwiegend Hühner. Grundlage sind die Schlachtzahlen des Statistischen Bundesamts für 2023 (rund 750 Millionen Landtiere), umgerechnet über den Verzehr pro Kopf laut BLE. Fische und männliche Küken sind nicht mitgezählt. Die Zahl ist ein Durchschnittswert, einem einzelnen Menschen lässt sich kein einzelnes Tier zuordnen."}},
+                {"@type": "Question", "name": "Wie viel Fläche braucht eine vegane Ernährung weniger?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Rund 990 m² Agrarfläche weniger, dauerhaft. WWF Deutschland (2021) nennt 2.022 m² pro Person und Jahr für die derzeitige und 1.030 m² für eine vegane Ernährungsweise. Das ist kein Tageswert, der sich aufsummiert, sondern eine feste Größe."}},
+                {"@type": "Question", "name": "Warum zeigt der Rechner keine Wasserzahl?",
+                 "acceptedAnswer": {"@type": "Answer", "text": "Weil es dafür keine belastbare Grundlage gibt. Belegt sind in britischen Daten 370 bis 480 Liter pro Tag beim gesamten Wasserverbrauch, überwiegend Regenwasser. Beim knappen Bewässerungswasser findet eine Meta-Analyse nur 11,6 % weniger, einzelne Studien für Deutschland gar keinen Vorteil."}},
             ],
         },
         {
@@ -3066,8 +3084,8 @@ def build_impact(meta):
         },
     ]
     return page(
-        "Veganer Impact-Rechner: Tiere, CO2 und Wasser, die du sparst | This Is Vegan",
-        "Sieh, wie viele Tiere, wie viel CO2, Wasser und Ackerland deine vegane Ernährung spart. Zeitraum eingeben, sofort dein persönliches Ergebnis sehen. Kostenlos.",
+        "Veganer Impact-Rechner: Klima, Tiere und Fläche in Zahlen | This Is Vegan",
+        "Was vegane Ernährung in Deutschland rechnerisch bedeutet: 2,2 kg CO2e weniger pro Tag, rund 7 Landtiere pro Jahr, rund 990 m² weniger Agrarfläche. Mit Quellen.",
         IMPACT_BASE,
         body,
         jsonld,
@@ -5434,7 +5452,7 @@ def main():
     impact_full = json.loads((ROOT / "data" / "impact-data.json").read_text(encoding="utf-8"))
     impact_cfg = {
         "lastUpdated": impact_full["meta"]["lastUpdated"],
-        "per_day": impact_full["per_day"],
+        "werte": impact_full["werte"],
         "methodik": impact_full["methodik"],
     }
 

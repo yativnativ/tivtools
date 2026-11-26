@@ -37,7 +37,7 @@ CARDS = {
     "vegan-ersetzen": ("TOOL · ERSETZEN", "Vegan-Ersatz-Finder", "Ei, Butter, Käse, Gelatine: die beste pflanzliche Alternative mit Menge."),
     "naehrstoffrechner": ("TOOL · NÄHRSTOFFE", "Nährstoff-Rechner", "Protein, B12, Eisen, Omega-3 und Calcium für deinen Bedarf."),
     "ist-das-vegan": ("TOOL · CHECK", "Ist das vegan?", "Lebensmittel eingeben und die versteckten tierischen Fallen sofort sehen."),
-    "impact-rechner": ("TOOL · IMPACT", "Impact-Rechner", "Gerettete Tiere, gespartes CO2, Wasser und Ackerland deiner Ernährung."),
+    "impact-rechner": ("TOOL · IMPACT", "Impact-Rechner", "Was vegane Ernährung rechnerisch bedeutet: Klima, Landtiere und Agrarfläche."),
     "saisonkalender": ("TOOL · SAISON", "Saisonkalender", "Welches Obst und Gemüse gerade regional Saison hat, Monat für Monat."),
     "pflanzendrink-vergleich": ("TOOL · VERGLEICH", "Pflanzendrink-Vergleich", "Hafer, Soja, Mandel und Co. für Kaffee, Backen, Protein und Klima."),
     "protein-tabelle": ("TOOL · PROTEIN", "Protein-Tabelle", "Die proteinreichsten pflanzlichen Lebensmittel, durchsuchbar pro 100 g."),

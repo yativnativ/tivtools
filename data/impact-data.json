@@ -1,13 +1,45 @@
 {
   "meta": {
-    "version": 1,
-    "lastUpdated": "2026-06-13"
+    "version": 2,
+    "lastUpdated": "2026-11-26",
+    "herleitung": "_data/fakten/wirkungszaehler_2026-11-26.md"
   },
-  "per_day": {
-    "animals": 0.27,
-    "co2_kg": 2.5,
-    "water_l": 2500,
-    "land_m2": 2.7
+  "werte": {
+    "co2_kg_pro_tag": 2.2,
+    "landtiere_pro_jahr": 7,
+    "flaeche_m2": 990
   },
-  "methodik": "Das sind Schätzwerte auf Basis von Ökobilanz-Studien zu Ernährungsweisen, Daten zum Wasser- und Flächenfußabdruck tierischer Lebensmittel und Statistiken zum Pro-Kopf-Verbrauch. Verglichen wird eine vegane mit einer durchschnittlichen Ernährung. Die Zahlen schwanken je nach Quelle und Lebensstil deutlich, deshalb rechnen wir bewusst eher konservativ. Pro Tag rund: 0,27 Tiere, 2,5 kg CO2-Äquivalent, 2.500 Liter Wasser und 2,7 m² Fläche. Die Tier-Zahl bezieht sich auf vermiedene Nachfrage, der größte Teil davon sind Fische und Meerestiere."
+  "methodik": {
+    "einleitung": "Verglichen wird eine vegane mit der durchschnittlichen Ernährung in Deutschland. Alle Zahlen sind Durchschnittswerte, dein persönlicher Wert kann abweichen. Wo mehrere Quellen vorliegen, zeigen wir den niedrigsten belegten Wert.",
+    "groessen": [
+      {
+        "name": "Klima",
+        "text": "2,2 kg CO2e weniger pro Tag. Der CO2-Rechner des Umweltbundesamts (Datenstand 2025) setzt für die durchschnittliche Ernährung 1,57 Tonnen CO2e pro Person und Jahr an, für die vegane 0,76 Tonnen. Die Differenz von 0,81 Tonnen pro Jahr ergibt 2,2 kg pro Tag. Andere Quellen liegen höher: WWF Deutschland 2021 bei rund 3,4 kg pro Tag, Scarborough et al. 2023 (Nature Food, britische Kohorte) bei 4,6 kg pro Tag gegenüber mittlerem Fleischkonsum.",
+        "quelle": "Umweltbundesamt, CO2-Rechner 2025 (Klimawaage: Annahmen, Berechnungen, Quellen, Abschnitt „Vegane Ernährung“)",
+        "url": "https://nachhaltigerkonsum.info/klimawaage-berechnungen"
+      },
+      {
+        "name": "Landtiere",
+        "text": "Rechnerisch rund 7 pro Person und Jahr, überwiegend Hühner. 2023 wurden in Deutschland rund 750 Millionen Landtiere geschlachtet: 47,9 Millionen Schweine, Rinder, Schafe, Ziegen und Pferde sowie 702,2 Millionen Hühner, Puten und Enten. Umgerechnet über den Verzehr pro Kopf (Versorgungsbilanz Fleisch der BLE) sind das rund 7 Landtiere pro Person und Jahr, wir verwenden die untere Grenze der Rechnung. „Rechnerisch“ heißt: Weniger Nachfrage senkt die Produktion im Durchschnitt über viele Menschen, einem einzelnen Menschen lässt sich kein einzelnes Tier zuordnen. Der Zähler zeigt nur volle Tiere und rundet ab.",
+        "quelle": "Statistisches Bundesamt, Pressemitteilung Nr. 049 vom 7. Februar 2024",
+        "url": "https://www.destatis.de/DE/Presse/Pressemitteilungen/2024/02/PD24_049_413.html"
+      },
+      {
+        "name": "Fläche",
+        "text": "Rund 990 m² Agrarfläche weniger, dauerhaft. WWF Deutschland beziffert den Flächenbedarf der derzeitigen Ernährung auf 2.022 m² pro Person und Jahr, den einer veganen Ernährungsweise (nach den Vorgaben von EAT-Lancet) auf 1.030 m². Die Differenz von 992 m² ist kein Tageswert, der sich aufsummiert: Die Ernährung beansprucht dauerhaft rund 990 m² weniger. Deshalb bleibt die Zahl gleich, egal welchen Zeitraum du eingibst.",
+        "quelle": "WWF Deutschland 2021, „So schmeckt Zukunft: Klimaschutz, landwirtschaftliche Fläche und natürliche Lebensräume“, S. 22 und 33 (PDF)",
+        "url": "https://www.wwf.de/fileadmin/fm-wwf/Publikationen-PDF/Landwirtschaft/kulinarische-kompass-klima.pdf"
+      }
+    ],
+    "hinweise": [
+      {
+        "name": "Warum Wasser fehlt",
+        "text": "Eine frühere Fassung dieses Rechners nannte eine Wasserzahl, die durch keine Primärquelle gedeckt war. Belegt sind in britischen Daten 370 bis 480 Liter pro Tag beim gesamten Wasserverbrauch, überwiegend Regenwasser (Scarborough et al. 2023). Beim knappen Bewässerungswasser findet die Meta-Analyse von Harris et al. 2020 nur 11,6 % weniger, einzelne Studien für Deutschland gar keinen Vorteil. Deshalb zeigen wir hier keine Zahl."
+      },
+      {
+        "name": "Nicht mitgezählt",
+        "text": "Fische und männliche Küken. Für Deutschland gibt es keine amtliche oder begutachtete Zahl einzelner Fische pro Kopf, amtlich erfasst ist nur das Fanggewicht von rund 13 kg pro Jahr."
+      }
+    ]
+  }
 }
